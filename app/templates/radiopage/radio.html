@@ -4,16 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
   <title>Index</title>
 </head>
 
-<body bgcolor=black>
-    <h3 align="center">x </h3> 
-    <h3 align="center">c</h3> 
-    <h3 align="center">c</h3> 
-    <h3 align="center">c </h3> 
+<body>   
+    <h1 align="center">online radio</h3> 
+    <h2 align="center">experimental electronic music</h3> 
+    <h3 align="center">electroacoustic, industrial online stream</h3> 
+    <h4 align="center">pagan folk, dark folk, apocalyptic folk and related</h3> 
     <p align="center" style="color:white">playing..</p> 
-
+    
+    <center><img src="{{ url_for('static', filename='img/pause.png') }}" height="50" width="50"></center>
 </body>
-
 </html>
