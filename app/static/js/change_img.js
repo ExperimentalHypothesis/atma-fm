@@ -1,8 +1,9 @@
-<script>
-function toggleImage() {
-   var img1 = "http://placehold.it/350x150";
-   var img2 = "http://placehold.it/200x200";
-   var imgElement = document.getElementById('toggleImage');
-   imgElement.src = (imgElement.src === img1)? img2 : img1;
-}
-</script>
+
+var imgSRC={'src1':'app\static\img\play.png','src2': 'app\static\img\pause.png' }
+
+$('.image1').toggle(function(){
+      $(this).attr('src',imgSRC.src2)
+   }, function() {
+       $(this).attr('src',imgSRC.src1)
+   }
+});
