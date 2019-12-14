@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
   <title>Index</title>
 
-  <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
+<!--   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
     <script>
         $(document).ready(function(){
           $("img").click(function(){
@@ -18,19 +18,21 @@
 
           });
         });
-        </script>
+        </script> -->
 </head>
 
 <body>   
 
   <div class="content">
     <h3>experimental broadcast</h3> 
-    <p>streaming eclectic mix of alternative, ambient & electroacoustic music</p> 
+    <p>streaming eclectic mix of alternative, ambient & electroacoustic folk music</p> 
      <audio controls>
           <source src="{{ url_for('stream') }}" type="">
           your browser does not support the audio element
      </audio>
 <!--     <img src="{{ url_for('static', filename='img/play.png') }}" height="50" width="50"> -->
+
+  <p>song info : {{ song }}</p> 
   </div>
   
   </body>
