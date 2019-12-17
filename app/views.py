@@ -16,9 +16,7 @@ for path, dirs, files in os.walk(root):
 		if file.endswith(".mp3"):
 			playlist.append(os.path.abspath(os.path.join(path,file)))
 random.shuffle(playlist)
-
 print(playlist)
-
 
 @app.route("/")
 def main():
@@ -28,10 +26,12 @@ def main():
 def stream():
 	def gen():
 		for song in cycle(playlist):
-			with open(song, "rb") as f:
+			with open(song, "rb") as f, open(f"{song}.log", "wb") as of:
+				breakpoint()
 				print(song) # DEBUG
 				data = f.read(1024)
 				while data:
+					of.write(data)
 					yield data
 					data = f.read(1024)
 	return Response(gen(), mimetype="audio/mp3")
