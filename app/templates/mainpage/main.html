@@ -7,39 +7,24 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
   <link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
   <title>Index</title>
-
-<!--   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>
-    <script>
-        $(document).ready(function(){
-          $("img").click(function(){
-            $("img").load("img/pause.png");
-
-            // action.. presmeruj na page kde se prehrava
-
-          });
-        });
-        </script> -->
 </head>
 
 <body>   
-
   <div class="content">
-    <h3>experimental broadcast</h3> 
-    <p>alternative, ambient & electroacoustic music</p> 
-     <audio controls>
-          <source src="{{ url_for('stream') }}" type="">
-          your browser does not support the audio element
-     </audio>
-<!--     <img src="{{ url_for('static', filename='img/play.png') }}" height="50" width="50"> -->
+    <h3>experimental broadcast</h12>   
+     <h5>[ still under construction, but working..  download <a href="http://167.172.122.236:8000/atma.fm.m3u" style="color:white; text-decoration:none">m3u file</a> and listen via audio player ] </h5>
+     <audio id="player" controls>
+          <source src="http://167.172.122.236:8000/radiostation2", type="">
+      </audio>
+   
 
-  <!-- <p>song info : {{ song }}</p>  -->
   </div>
-  
-  </body>
 
 
 
-  <script src="{{ url_for('static', filename='js/change_img.js') }}"></script>
-
+<br><br><br><br><br>
+<div style="text-align:center">
+  <img src="{{ url_for('static', filename='img/logofinal atma.png') }}" height="472" width="1238">
+</div>
 </body>
 </html>
