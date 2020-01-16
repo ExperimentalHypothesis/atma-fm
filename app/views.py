@@ -4,11 +4,11 @@ from flask import render_template, Response
 import random, time, os, random, vlc
 from itertools import cycle
 
-prefix = r"static/audio/"
-folder = r"C:\Users\nirvikalpa\source\repos\radio\app\static\audio"
-one_album_path = r"C:\Users\nirvikalpa\source\repos\radio\app\static\audio"
-one_album_playlist = [(prefix + i) for i in os.listdir(one_album_path) if i.endswith(".mp3")]
-print(random.shuffle(one_album_playlist))
+# prefix = r"static/audio/"
+# folder = r"C:\Users\nirvikalpa\source\repos\radio\app\static\audio"
+# one_album_path = r"C:\Users\nirvikalpa\source\repos\radio\app\static\audio"
+# one_album_playlist = [(prefix + i) for i in os.listdir(one_album_path) if i.endswith(".mp3")]
+# print(random.shuffle(one_album_playlist))
 
 # root = r"C:\Broadcast\Ambient Temple Of Imagination"
 # playlist = []

@@ -11,13 +11,11 @@ body{
 }
 
 .logo{
-    text-align:center;
+    text-align:right;
 }
 
-
-
-/* img {
+img {
     max-width: 100%;
     height: auto;
     width: auto\9; /* ie8 */
-} */
+}
