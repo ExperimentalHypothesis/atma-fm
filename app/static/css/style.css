@@ -3,15 +3,21 @@ body{
 }
 
 .content{
-    text-align: left;
+    text-align: center;
     color: rgb(231, 211, 211);
     padding-top: 125px;
     font-family: 'Tomorrow', sans-serif;
     font-size: 14px;
 }
 
-img {
+.logo{
+    text-align:center;
+}
+
+
+
+/* img {
     max-width: 100%;
     height: auto;
     width: auto\9; /* ie8 */
-}
+} */
