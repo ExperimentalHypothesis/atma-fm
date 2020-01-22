@@ -8,10 +8,15 @@
   <title>Index</title>
 </head>
 
+
 <body>
-    <div class = "content">
-        <p>playing..</p> 
-        <img src="{{ url_for('static', filename='img/pause.png') }}" height="50" width="50">
+  
+  <h2 class = "song_history">song history</h2>
+    <div class="songs"> 
+      {% for song in song_history %}
+      <li>{{ song }}<li>
+      <br>
+      {% endfor %}
     </div>
 </body>
 </html>

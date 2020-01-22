@@ -10,6 +10,22 @@ body{
     font-size: 14px;
 }
 
+/* .song_history{
+    text-align: center;
+    color: rgb(231, 211, 211);
+    font-family: 'Tomorrow', sans-serif;
+} */
+
+.songs{
+    text-align: left;
+    color: rgb(231, 211, 211);
+    padding-top: 255px;
+    padding-left: 255px;
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 14px; 
+    list-style-type: none;
+}
+
 .logo{
     text-align:right;
 }

@@ -23,6 +23,28 @@ from itertools import cycle
 def main():
 	return render_template("mainpage/main.html")
 
+
+
+
+def parse_song_history():
+    with open(r"C:\Broadcast\icegen1.log") as f:
+        last_ten = list(f)[-10:]
+    parsed_list = []
+    for line in last_ten:
+        if "Rotating queues and looping again..." in line:
+            continue
+        else:
+            parsed_list.append(line.replace("2020: Now playing ", ' -- ').strip(".mp3\n").lower())
+    return parsed_list
+
+@app.route("/playlist")
+def playlist():
+		song_history = parse_song_history()
+		print(song_history)
+		return render_template("playlist/playlist.html", song_history=song_history)
+
+
+
 # @app.route("/stream")
 # def stream():
 # 	def gen():
