@@ -16,6 +16,7 @@ copy_to = r"C:\Users\nirvikalpa\Desktop\novytest"
 copy_from =r"C:\Users\nirvikalpa\Desktop\novytest\complete"
 
 def move_audiofolders(src, dst):
+    """ helper function for transposing folders with music """
 
     import shutil
     for composer in os.listdir(src):
@@ -40,7 +41,7 @@ def move_audiofolders(src, dst):
 
 
 
-
+# if name == main
 
 
 # source = r"\\192.168.0.109\Public\Music\slsk\!TAGGED"
