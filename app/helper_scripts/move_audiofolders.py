@@ -40,10 +40,9 @@ def move_audiofolders(src, dst):
                     print(os.getcwd())
 
 
-
 # if name == main
-
 
 # source = r"\\192.168.0.109\Public\Music\slsk\!TAGGED"
 # dest = r"\\192.168.0.109\Public\Music"
 # move_audiofolders(source, dest)
+

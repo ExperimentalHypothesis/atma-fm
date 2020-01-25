@@ -6,22 +6,50 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
   <link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+
   <title>atma.fm</title>
 </head>
 
-<body>   
-  <div class="content">
-    <h3>experimental broadcast</h12>   
-     <h5>[ still under construction, but should be working... download <a href="http://167.172.122.236:8000/atma.fm.m3u" style="color:white; text-decoration:none">m3u file</a> to listen via audio player ] </h5>
-     <audio id="player" controls>
-          <source src="http://167.172.122.236:8000/atma.fm", type="">
-      </audio>
+<body>
+
+
+  <!--PLAYER-->
+  <div class="row">
+    <div class="three columns" style="border:1px #ccc groove">
+      <div class="player" >
+        <h6>experimental broadcast</h6>
+        <audio id="player" controls>
+          <source src="http://167.172.122.236:8000/atma.fm" , type="mp3"></audio>
+        <br>
+        <br>
+        <small>[ download <a href="http://167.172.122.236:8000/atma.fm.m3u"
+            style="color:white; text-decoration:none">m3u
+          </a> for an audio player ]
+        </small>
+        <br><br><br>
+      </div>
+    </div>
   </div>
 
-<br><br><br><br><br>
+  <br><br>
 
-  <div class="logo" style="text-align: center;">
-    <img src="{{ url_for('static', filename='img/logo.png') }}" height="472" width="1238">
+  <div class="container">
+    <!--IMAGE-->
+    <div class="logo" style="text-align: center;">
+      <img src="{{ url_for('static', filename='img/logo.png') }}">
+    </div>
+
+    <!--NAVBAR-->
+    <div class="menu" style="float: right;">
+      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none"><small>home</small></a>
+      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none; margin-left:30px"><small>about</small></a>
+      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none; margin-left:30px"><small>playlist</small></a>
+      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none; margin-left:30px"><small>archive</small></a>
+      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none; margin-left:30px"><small>contact</small></a>
+    </div>
+
   </div>
 </body>
+
 </html>

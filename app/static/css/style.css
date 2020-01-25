@@ -2,19 +2,13 @@ body{
     background-color: black
 }
 
-.content{
+.player{
     text-align: center;
     color: rgb(231, 211, 211);
-    padding-top: 125px;
+    padding-top: 50px;
     font-family: 'Tomorrow', sans-serif;
     font-size: 14px;
 }
-
-/* .song_history{
-    text-align: center;
-    color: rgb(231, 211, 211);
-    font-family: 'Tomorrow', sans-serif;
-} */
 
 .songs{
     text-align: left;
@@ -26,12 +20,36 @@ body{
     list-style-type: none;
 }
 
-.logo{
-    text-align:right;
+.menu{
+    float: right; 
+    border-top-style: groove; 
+    border-top-color: #fff; 
+    border-top-width: 1px
 }
 
+a{
+    color:white; 
+    text-decoration:none;
+}
+
+a:hover{
+    color:red;
+}
+
+
 img {
-    max-width: 100%;
+    text-align: center;
+    display:block;
+    /* max-width: 100%; */
     height: auto;
     width: auto\9; /* ie8 */
+    max-width:100%;
+    max-height:100%;
 }
+
+.full-width-container {
+    margin-top: 4cm;
+    margin-bottom: 4cm;
+    margin-right: 4cm;
+    margin-left: 4cm;
+    } 

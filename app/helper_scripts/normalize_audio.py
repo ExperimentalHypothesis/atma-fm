@@ -5,6 +5,8 @@
 import os
 
 def normalize_audiofile(path_to_file: str):
+""" normalmizes volume and loudness of files """
+
   from subprocess import check_output
   if path_to_file.endswith(".flac"):
     command = f'ffmpeg-normalize "{path_to_file}" -o "{path_to_file.strip(".flac")}.mp3" -c:a mp3 -b:a 192k'
@@ -16,6 +18,7 @@ def normalize_audiofile(path_to_file: str):
 
 
 def normalize_audioalbum(path_to_dir: str):
+
   #extension = ('.mp3', '.flac')
   for path, dirs, files in os.walk(path_to_dir):
     for file in files:
