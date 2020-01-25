@@ -7,6 +7,14 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
   <link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <script>
+    function play() {
+      var audio = document.getElementById("player");
+      audio.play();
+    }
+  </script>
 
   <title>atma.fm</title>
 </head>
@@ -16,40 +24,49 @@
 
   <!--PLAYER-->
   <div class="row">
-    <div class="three columns" style="border:1px #ccc groove">
-      <div class="player" >
-        <h6>experimental broadcast</h6>
-        <audio id="player" controls>
-          <source src="http://167.172.122.236:8000/atma.fm" , type="mp3"></audio>
-        <br>
-        <br>
-        <small>[ download <a href="http://167.172.122.236:8000/atma.fm.m3u"
-            style="color:white; text-decoration:none">m3u
-          </a> for an audio player ]
-        </small>
-        <br><br><br>
+    <div class="four columns">
+      <div class="container">
+        <div class="player">
+          <p>[ experimental online radio broadcast ]<p>
+             <div class="stream-container">
+                <button class="my-text" style="border: none" onclick="play()" >listen now</button>
+                <button class=button style="border: none" onclick="play()"><i class="fa fa-music fa-3x"></i></button>            
+              </div>
+
+              <div class="stream-container">
+                <button class="my-text" style="border: none" onclick=location.href="http://167.172.122.236:8000/atma.fm.m3u">download m3u</button>
+                <button class=button style="border: none" onclick=location.href="http://167.172.122.236:8000/atma.fm.m3u"><i class="fa fa-file-audio-o fa-3x" aria-hidden="true"></i></button>
+              </div>
+
+              <audio id="player"><source src="http://167.172.122.236:8000/atma.fm"></audio>
+              <hr width=50%>
+              <small>[ on air:   steve roach - structures of silence ]</small>
+              <br><br>
+        </div>
       </div>
     </div>
+  </div>
   </div>
 
   <br><br>
 
-  <div class="container">
+  <div class="full-container">
     <!--IMAGE-->
-    <div class="logo" style="text-align: center;">
+    <div class="logo">
       <img src="{{ url_for('static', filename='img/logo.png') }}">
     </div>
 
     <!--NAVBAR-->
-    <div class="menu" style="float: right;">
-      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none"><small>home</small></a>
-      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none; margin-left:30px"><small>about</small></a>
-      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none; margin-left:30px"><small>playlist</small></a>
-      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none; margin-left:30px"><small>archive</small></a>
-      <a href="#" style="color:rgb(231, 211, 211); text-decoration:none; margin-left:30px"><small>contact</small></a>
+    <div class="navbar">
+      <a href="#"><small>home</small></a>
+      <a href="#" style="margin-left:30px"><small>about</small></a>
+      <a href="#" style="margin-left:30px"><small>playlist</small></a>
+      <a href="#" style="margin-left:30px"><small>archive</small></a>
+      <a href="#" style="margin-left:30px"><small>contact</small></a>
     </div>
-
   </div>
+
+
 </body>
 
 </html>

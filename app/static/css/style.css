@@ -17,39 +17,64 @@ body{
     padding-left: 255px;
     font-family: 'Tomorrow', sans-serif;
     font-size: 14px; 
-    list-style-type: none;
+    list-style-type: n one;
 }
 
-.menu{
-    float: right; 
+.row{
+    border: olive;
+
+}
+
+.navbar{
+    position: absolute;
+    right: 35px;  
     border-top-style: groove; 
-    border-top-color: #fff; 
-    border-top-width: 1px
+    border-top-color: rgb(231, 211, 211); 
+    border-top-width: 1pt;
+    font-family: 'Tomorrow', sans-serif;
 }
 
 a{
-    color:white; 
-    text-decoration:none;
+    text-decoration: none;
+    color: rgb(231, 211, 211); 
 }
-
-a:hover{
-    color:red;
-}
-
 
 img {
-    text-align: center;
-    display:block;
-    /* max-width: 100%; */
-    height: auto;
-    width: auto\9; /* ie8 */
+    /* text-align: center; */
+    /* display:block; */
+    /* height: auto; */
+    /* width: auto\9; ie8 */
     max-width:100%;
     max-height:100%;
 }
 
-.full-width-container {
-    margin-top: 4cm;
-    margin-bottom: 4cm;
-    margin-right: 4cm;
-    margin-left: 4cm;
+
+.full-container {
+    max-width: 1500px;
+    position: absolute;
+    right: 1cm;   
+    padding-bottom: 1cm;
+    /* margin: auto; */
     } 
+
+.player {
+    border: 1px solid rgb(20, 20, 20);
+    background-color: rgb(18, 18, 18);
+    border-radius: 10px;
+    margin-top: 1cm;
+    /* margin-left: 1cm; */
+}
+
+.stream-container{
+        /* border: 1px solid rgb(50, 50, 50);  */
+    display: inline-block;
+    /* margin-top: 1px; */
+    /* padding: 1px; */
+    text-align: center;
+}
+
+.my-text{
+    display: block;
+    font-family: 'Tomorrow', sans-serif;
+}
+
