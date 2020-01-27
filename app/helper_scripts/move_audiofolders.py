@@ -1,48 +1,38 @@
+# this script sorts audio folders in a tree structure like this:
+# [a/name_of_composer_starting_from_letter_a/albums...]
+# [b/name_of_composer_starting_from_letter_b/albums...]
+# [c/name_of_composer_starting_from_letter_c/albums...]
+# etc..
+
 import os, shutil
 
-#tohl eje potreba dodelat protoze to nefunguje
-def move_audiofolders(source, dest):
-    from string import ascii_letters
-    import distutils.dir_util
-    for foder_name in os.listdir(source):
-        first_token = i[0]
-        for token in ascii_letters:
-            if token == first_token:
-                token = token.lower()
-                print('moving ', os.path.join(source, i), ' to ', dest+f"\{token}" )
-                distutils.dir_util.copy_tree(os.path.join(source, foder_name), os.path.join(dest+f"\{token}", folder_name))
+def sort_audiofolders(source: str, target: str) -> None:
+    """ move audio folders into correct path in alphabetical structure """
 
-copy_to = r"C:\Users\nirvikalpa\Desktop\novytest"
-copy_from =r"C:\Users\nirvikalpa\Desktop\novytest\complete"
-
-def move_audiofolders(src, dst):
-    """ helper function for transposing folders with music """
-
-    import shutil
-    for composer in os.listdir(src):
-        os.chdir(src)
+    for composer in os.listdir(source):
+        os.chdir(source)
         composer_path = os.path.abspath(composer)
         os.chdir(composer_path)
         for album in os.listdir(composer_path):
             if os.path.isdir(os.path.abspath(album)):
                 album_path = os.path.abspath(album)
-                album_name = os.path.basename(album_path)
-                source_dir = os.path.abspath(album_path)
-                target_dir = dst + '\\'+ composer[0].lower() + '\\' + composer + "\\" + album # tohle prepsat joi
-                print("moving..", source_dir)
-                print("to.. ", target_dir)
-
+                dir_path = os.path.dirname(album_path)
+                #print(album_path," -- ", dir_path, " -- ", album)
+                target_dir = os.path.join(target, composer[0].lower(), composer, album)
+                #print(target_dir)
                 if os.path.exists(target_dir):
-                    print(source_dir, " already exist..")
+                    print(f"album '{album}' on path '{album_path}' is existing on target path, skipping..")
                     continue
                 else:
-                    shutil.move(source_dir, target_dir)
-                    print(os.getcwd())
+                    print(f"album '{album}' on path '{album_path}' is not existing on target path '{target_dir}', moving now.. ")
+                    shutil.move(album_path, target_dir)
+                    
+    # TODO log how many folders were moved, how many were skipped (name which was which) 
 
-
-# if name == main
-
-# source = r"\\192.168.0.109\Public\Music\slsk\!TAGGED"
-# dest = r"\\192.168.0.109\Public\Music"
-# move_audiofolders(source, dest)
-
+if __name__ == "__main__":
+    source = r"\\192.168.0.109\Public\Music\slsk\!TAGGED"
+    target = r"\\192.168.0.109\Public\Music"
+    try:
+        sort_audiofolders(source, target)
+    except Exception as e:
+        print(e)

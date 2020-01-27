@@ -138,5 +138,8 @@ genres = {'avant-garde': 100,
  'deep':100,
  'microhouse':100,
  'anti-mainstream':100,
- 'xenharmonic':100
+ 'xenharmonic':100,
+ 'cinematic' :100,
+ 'theatrical' :100,
+ 'psychobillis':100
  }

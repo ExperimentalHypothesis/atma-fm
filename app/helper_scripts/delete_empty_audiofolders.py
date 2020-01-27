@@ -1,7 +1,6 @@
-# this script will delete all folders/subfolders/subbsubfoldes (recursively) where no audiofiles are left
-# it uses the audio_extensions.txt where all audio extensions are specified
-# this file was scrapped from wikipedia and is saved in the same folder as this script
-# in case it will be lost, the scrapping function will run to replace it
+# this script will delete all folders/subfolders/subbsubfoldes (recursively from down to up) where no audiofiles are left
+# it uses the audio_extensions.txt where all audio extensions are specified (this file was scrapped from wikipedia and is saved in the same folder as this script and in case it will be lost, the scrapping function will run to replace it)
+
 
 import os
 import shutil
@@ -81,11 +80,11 @@ def delete_folders_without_audio(directory: str) -> int:
 
 
 if __name__ == "__main__":
-    directory = r"C:\\audio"
+    source = r"\\192.168.0.109\Public\Music\slsk\!TAGGED"
 
-    if not os.path.exists(directory):
+    if not os.path.exists(source):
         print("directory doesnt exists, check the path")
 
     # delete recursively bottom up
-    while delete_folders_without_audio(directory) != 0:
-        delete_folders_without_audio(directory)
+    while delete_folders_without_audio(source) != 0:
+        delete_folders_without_audio(source)
