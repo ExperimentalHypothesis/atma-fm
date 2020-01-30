@@ -41,3 +41,5 @@
 .wv
 .webm
 .8svx
+
+ffmpeg-normalize "{filepath_old}" -o "{filepath_new}" -c:a mp3 -ar 44100
