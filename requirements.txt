@@ -1,8 +1,10 @@
-Flask==1.1.1
+paramiko==2.7.1
+python_vlc==3.0.7110
 requests==2.22.0
 matplotlib==3.1.2
 wordcloud==1.6.0
-numpy==1.17.4
-python_vlc==3.0.7110
+Flask==1.1.1
 pandas==0.25.3
+numpy==1.17.4
+beautifulsoup4==4.8.2
 Pillow==7.0.0
