@@ -24,7 +24,7 @@ def read_file_from_remote(host: str, user: str, pwd: str) -> list:
 		sftp_client = ssh_client.open_sftp()
 		remote_file = sftp_client.open(path_to_file)
 		try:
-			for line in list(remote_file)[-14:]:
+			for line in list(remote_file)[-7:]:
 				song_history.append(line)
 			return reversed(song_history) 
 		except Exception as e:
