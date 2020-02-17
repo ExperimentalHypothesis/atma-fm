@@ -1,11 +1,26 @@
 {% extends "layout.html" %}
 {% block content %}
-<body>
-  <h2 class = "song_history">song history</h2>
-    <div class="songs"> 
+ 
+<div class="row">
+  <div class="eight columns">
+
+    <table class="playlist">   
+      <tr>
+        <th>played at</th>
+        <th>artist</th>
+        <th>song</th>
+        <th>album</th>
+      </tr>
       {% for song in song_history %}
-      <p>{{ song }}</p>
-      {% endfor %}
-    </div>
-</body>
+      <tr>
+        <td> {{ song[0] }} </td>
+        <td> {{ song[1] }} </td>
+        <td> {{ song[2] }} </td>
+        <td> {{ song[3] }} </td>
+      </tr>
+        {%endfor%}
+    </table>
+</div>
+</div>
+
 {% endblock content %}

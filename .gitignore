@@ -1,2 +1,5 @@
-env/ 
-app/__pycache__/
+
+venv/
+app/static/css/style-working.css
+.vscode/
+__pycache__/

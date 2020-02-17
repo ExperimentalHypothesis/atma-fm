@@ -2,30 +2,36 @@ body{
     background-color: black
 }
 
+.full-container{
+    max-height: 1000px;
+}
+
 .player{
     text-align: center;
     color: rgb(231, 211, 211);
     padding-top: 50px;
     font-family: 'Tomorrow', sans-serif;
     font-size: 14px;
+    border: 1px solid rgb(30, 30, 30);
+    background-color: rgb(20, 20, 20);
+    border-radius: 5px;
+    margin-top: 1cm;
 }
 
-.songs{
-    text-align: left;
-    color: rgb(231, 211, 211);
-    padding-top: 255px;
-    padding-left: 255px;
+.player-button{
+    /* border: 1px solid rgb(50, 50, 50);  */
+    display: inline-block;
+    /* margin-top: 1px; */
+    /* padding: 1px; */
+    text-align: center;
+}
+
+.player-button-txt{
+    display: block;
     font-family: 'Tomorrow', sans-serif;
-    font-size: 14px; 
-    list-style-type: n one;
 }
 
-.row{
-    border: olive;
-
-}
-
-.navbar{
+nav {
     position: absolute;
     right: 35px;  
     border-top-style: groove; 
@@ -50,35 +56,53 @@ img {
     /* width: auto\9; ie8 */
     max-width:100%;
     max-height:100%;
-}
+    /* position: relative; */
+} 
 
 
-.full-container {
-    max-width: 1500px;
-    position: absolute;
-    right: 1cm;   
-    padding-bottom: 1cm;
-    /* margin: auto; */
-    } 
+.playlist{
+    width: 80%;
+    color: rgb(231, 211, 211);
+    padding-top: 200px;
+    padding-bottom: 50px;
+    padding-left: 40px;
 
-.player {
-    border: 1px solid rgb(30, 30, 30);
-    background-color: rgb(20, 20, 20);
-    border-radius: 5px;
-    margin-top: 1cm;
-    /* margin-left: 1cm; */
-}
-
-.stream-container{
-    /* border: 1px solid rgb(50, 50, 50);  */
-    display: inline-block;
-    /* margin-top: 1px; */
-    /* padding: 1px; */
-    text-align: center;
-}
-
-.my-text{
-    display: block;
     font-family: 'Tomorrow', sans-serif;
+    font-size: 12px;
+    font-weight: 200;
 }
 
+
+table{
+    border: 0px solid;
+}
+
+.playlist th {
+    color: rgb(231, 211, 211);
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 14px;
+    font-weight: 2000;
+    line-height: 12px;
+    padding: 10px 23px 10px 23px;
+
+    /* padding: 11px 21px; */
+    /* border-left: 0;
+    border-right: 0; */
+  }
+
+  .playlist td {
+      border-bottom: 0;
+      /* border-left: 0;
+      border-right: 0;
+      border: 0; */
+      padding: 4px 23px 4px 23px;
+  }
+
+  td {
+    border: none;
+}
+
+  /* tr:nth-of-type(odd) {
+    background-color: rgb(20, 20, 20);
+  }
+ */
