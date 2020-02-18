@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="box">
+  <!-- name and reason -->
+  <form>
+    <div class="row">
+      <div class="four columns">
+        <label for="exampleEmailInput">Your email</label>
+        <input class="u-full-width" type="email" placeholder="test@mailbox.com" id="exampleEmailInput">
+      </div>
+      <div class="four columns">
+        <label for="exampleRecipientInput">Reason for contacting</label>
+        <select class="u-full-width" id="exampleRecipientInput">
+          <option value="Option 1">Questions</option>
+          <option value="Option 2">Admiration</option>
+          <option value="Option 3">Can I get your number?</option>
+        </select>
+      </div>
+    </div>
+    <!-- message -->
+    <div class="row">
+      <div class="eight columns">
+        <label for="exampleMessage">Message</label>
+        <textarea class="u-full-width" placeholder="Hi Dave …" id="text-area" rows="10"></textarea>
+      </div>
+    <div>
+    <!-- button and checkbox -->
+    <div class="row">
+      <div class="eight columns">
+        <label class="example-send-yourself-copy">
+          <input type="checkbox">
+          <span class="label-body">Send a copy to yourself</span>
+        </label>
+        <input class="button" type="submit" value="Submit">
+      </div>
+    </div>
+    </div>
+  </form>
+</div>
+{% endblock content %}
