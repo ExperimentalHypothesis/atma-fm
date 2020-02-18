@@ -91,3 +91,10 @@ img {
     padding: 3px 23px 3px 23px;
   }
 
+  .form-label{
+    color: rgb(231, 211, 211);
+    font-size: 13px;
+    font-family: 'Tomorrow', sans-serif;
+    font-weight: 200;
+  }
+
