@@ -2,10 +2,6 @@ body{
     background-color: black
 }
 
-.full-container{
-    max-height: 1000px;
-}
-
 .player{
     text-align: center;
     color: rgb(231, 211, 211);
@@ -59,21 +55,28 @@ img {
     /* position: relative; */
 } 
 
-
 .box{
     padding-top: 350px;
     padding-left: 400px;
-
+    min-height: 300px;
     /* width: 80%; */
     /* color: rgb(231, 211, 211);
     font-family: 'Tomorrow', sans-serif;
     font-size: 12px;
     font-weight: 200; */
-    border: solid 1px;
+    /* border: solid 1px; */
+
+}
+
+.playlist{
+    padding-bottom: 50px;
+    padding-top: 50px;
+
 }
 
 .playlist th {
     color: rgb(231, 211, 211);
+    border-bottom: 1pt dashed;
     font-family: 'Tomorrow', sans-serif;
     font-size: 14px;
     font-weight: 2000;
@@ -91,10 +94,35 @@ img {
     padding: 3px 23px 3px 23px;
   }
 
-  .form-label{
+#contact-form{
+    padding-bottom: 100px;
+    padding-top: 50px;
+}
+
+#submit-btn{
+    padding: 3px, 4px;
+}
+
+#selection{
+    font-family: 'Tomorrow', sans-serif;
+}
+
+input[type="email"] {
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 13px;
+    font-weight: 200;
+  }
+
+textarea {
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 13px;
+    font-weight: 200;
+}
+
+.form-label{
     color: rgb(231, 211, 211);
     font-size: 13px;
     font-family: 'Tomorrow', sans-serif;
     font-weight: 200;
-  }
+ }
 

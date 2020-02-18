@@ -1,0 +1,30 @@
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+  <link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <title>atma.fm</title>
+</head>
+
+
+    {% block content %}{% endblock %}
+
+    
+
+  <nav class="main-navbar">
+    <a href="{{ url_for('home') }}"><small class="menu-link">home</small></a>
+    <a href="{{ url_for('about') }}" style="margin-left:30px"><small class="menu-link">about</small></a>
+    <a href="{{ url_for('playlist') }}" style="margin-left:30px"><small class="menu-link">playlist</small></a>
+    <a href="{{ url_for('archive') }}" style="margin-left:30px"><small class="menu-link">archive</small></a>
+    <a href="{{ url_for('contact') }}" style="margin-left:30px"><small class="menu-link">contact</small></a>
+  </nav>
+    <br>
+  <!-- </div> -->
+  <script src="{{ url_for('static', filename='js/play.js')}}"></script>
+</body>
+</html>

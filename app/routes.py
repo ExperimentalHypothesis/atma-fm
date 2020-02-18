@@ -25,7 +25,6 @@ def playlist():
 	song_history= [("jun 13, 08:32 2020", "steve roach", "structures of silence", "early man"),
 					("jun 13, 08:43 2020", "robert rich", "amala", "rainforest"),
 					("jun 13, 08:56 2020", "ambientum", "silence is noisy", "creative"),
-					("jun 13, 09:22 2020", "radiohead", "the bends", "kid a"),
 					("jun 13, 09:34 2020", "voice of eye", "rubadurs", "voice in the air"),]*3
 	return render_template("playlist.html", song_history=song_history)
 
