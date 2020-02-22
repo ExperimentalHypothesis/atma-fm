@@ -69,19 +69,20 @@ img {
 }
 
 .playlist{
+    /* position: absolute; */
     padding-bottom: 50px;
     padding-top: 50px;
-
+    /* padding-left: 200px; */
 }
 
 .playlist th {
     color: rgb(231, 211, 211);
-    border-bottom: 1pt dashed;
+    border-bottom: 1pt solid;
     font-family: 'Tomorrow', sans-serif;
     font-size: 14px;
     font-weight: 2000;
     line-height: 12px;
-    padding: 10px 23px 10px 23px;
+    padding: 10px 15px 10px 15px;
   }
 
 .playlist td {
@@ -91,7 +92,7 @@ img {
     font-size: 13px;
     font-weight: 300;
     line-height: 12px;
-    padding: 3px 23px 3px 23px;
+    padding: 3px 15px 3px 15px;
   }
 
 #contact-form{

@@ -2,6 +2,14 @@ import requests
 from app import app
 from flask import render_template, Response
 import random, time, os, random
+from app.helper_scripts.parse_song_history import get_last_n_songs
+	
+
+@app.context_processor
+def pass_current_song():
+	last_played = list(get_last_n_songs(1))
+	# last_song.author	
+	return dict(author=	last_played[0].author, title=last_played[0].title)
 
 @app.route("/")
 def home():
@@ -22,9 +30,6 @@ def archive():
 @app.route("/playlist")
 def playlist():
 	# song_history = parse_song_history(read_file_from_remote("167.172.122.236", "root", "emeraldincubus"))
-	song_history= [("jun 13, 08:32 2020", "steve roach", "structures of silence", "early man"),
-					("jun 13, 08:43 2020", "robert rich", "amala", "rainforest"),
-					("jun 13, 08:56 2020", "ambientum", "silence is noisy", "creative"),
-					("jun 13, 09:34 2020", "voice of eye", "rubadurs", "voice in the air"),]*3
+	song_history = get_last_n_songs(10)
 	return render_template("playlist.html", song_history=song_history)
 

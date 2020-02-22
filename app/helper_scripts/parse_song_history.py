@@ -1,6 +1,5 @@
 # was used as a testing  module for getting song history data from remote server 
 
-
 # def read_file_from_remote(host: str, user: str, pwd: str) -> list:
 # 	""" reads the playlist of last n songs from remote linux server """
 
@@ -36,3 +35,31 @@
 # 		else:
 # 			parsed_list.append(line.replace("2020: Now playing ", ' -- ').strip(".mp3\n").lower())
 # 	return parsed_list
+
+
+
+def get_last_n_songs(n: int) -> list:
+    """ create playlist from log file, to be printed on frontend """
+
+    import collections
+    Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
+
+    song_history = []
+    path_to_file =  r"C:\Users\nirvikalpa\Desktop\playlist.txt"
+    with open(path_to_file) as playlist:
+        for line in list(playlist)[-n:]:
+            if "Rotating queues and looping again..." in line:
+                   continue
+            else:
+                # new_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ')
+                # song_history.append(tuple(new_line))
+                cleared_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ') # TODO regex
+                print(cleared_line[1][3:])
+                cleared_line[1] = cleared_line[1][3:]
+                song_details = Song_details(*cleared_line)
+                song_history.append(song_details)
+    return(reversed(song_history))
+
+# songs = get_last_n_songs(10)
+# print(songs)
+
