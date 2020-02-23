@@ -1,10 +1,10 @@
-body{
+body {
     background-color: black
 }
 
-/* player box - global for each page the same*/
+/* player box - global for each page the same */
 
-.player-box{
+.player-box {
     width: 330px;
     height: 320px;
     margin-top: 30px;
@@ -15,18 +15,18 @@ body{
     text-align: center;
     color: rgb(231, 211, 211);
     font-family: 'Tomorrow', sans-serif;
-    font-size: 14px;   
+    font-size: 14px;
 }
 
-.player-txt{
+.player-txt {
     margin-top: 30px;
 }
 
-.player-button{
+.player-button {
     display: inline-block;
-} 
+}
 
-.player-button-txt{
+.player-button-txt {
     display: block;
     font-family: 'Tomorrow', sans-serif;
     border: none;
@@ -35,7 +35,8 @@ body{
 
 /* global wrapper for each page, the content will come inside - except index.html becaue there is the logo pic */
 
-.content-box{
+.content-box {
+    min-height: 300px;
     margin-top: 70px;
     margin-left: 300px;
     width: 60%;
@@ -45,7 +46,7 @@ body{
     font-weight: 200;
 }
 
-/* playlist table style */  
+/* playlist table style */
 
 .playlist th {
     color: rgb(231, 211, 211);
@@ -55,7 +56,7 @@ body{
     font-weight: 2000;
     line-height: 12px;
     padding: 4px 5px 4px 5px;
-  }
+}
 
 .playlist td {
     color: rgb(231, 211, 211);
@@ -65,15 +66,15 @@ body{
     font-weight: 300;
     line-height: 12px;
     padding: 3px 5px 3px 5px;
-  }
+}
 
 /* contact form style */
 
-#submit-btn{
+/* #submit-btn {
     padding: 1px, 2px;
-}
+} */
 
-#selection{
+#selection {
     font-family: 'Tomorrow', sans-serif;
 }
 
@@ -81,7 +82,7 @@ input[type="email"] {
     font-family: 'Tomorrow', sans-serif;
     font-size: 13px;
     font-weight: 200;
-  }
+}
 
 textarea {
     font-family: 'Tomorrow', sans-serif;
@@ -89,18 +90,54 @@ textarea {
     font-weight: 200;
 }
 
-.form-label{
+.form-label {
     color: rgb(231, 211, 211);
     font-size: 13px;
     font-family: 'Tomorrow', sans-serif;
     font-weight: 200;
- }
-
-
-@media (max-width:500px){
-    .content-box{
-        margin-left: 30px;
-        width: 330px;   
-    }
-
 }
+
+.form-button {
+    border: 0px;
+}
+
+
+/* archive - under construction page style */
+
+.under-construction {
+    min-height: 300px;
+    color: rgb(30, 30, 30);
+}
+
+@media (max-width:500px) {
+    .content-box {
+        margin-left: 30px;
+        width: 330px;
+    }
+}
+
+/* navbar menu style */
+
+nav {
+    position: absolute;
+    right: 35px;
+    border-top-style: groove;
+    border-top-color: rgb(231, 211, 211);
+    border-top-width: 1pt;
+    font-family: 'Tomorrow', sans-serif;
+}
+
+.menu-link {
+    text-decoration: none;
+    color: grey
+}
+
+a {
+    text-decoration: none;
+}
+
+img{
+    max-width:100%;
+    max-height:100%;
+}
+

@@ -1,4 +1,4 @@
-body{
+/* body{
     background-color: black
 }
 
@@ -22,7 +22,7 @@ body{
 .player-button-txt{
     display: block;
     font-family: 'Tomorrow', sans-serif;
-}
+} */
 
 nav {
     position: absolute;
@@ -111,6 +111,13 @@ input[type="email"] {
     font-weight: 200;
   }
 
+input[type="submit"] {
+    text-transform: lowercase; 
+    border-color: grey; 
+    font-weight: 100; 
+    padding: 2em, 5em;
+}
+/* style="text-transform: lowercase; border-color: grey; font-weight: 100; padding: 2em, 5em;" */
 textarea {
     font-family: 'Tomorrow', sans-serif;
     font-size: 13px;
