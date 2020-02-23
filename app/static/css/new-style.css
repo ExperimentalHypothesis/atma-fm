@@ -2,6 +2,8 @@ body{
     background-color: black
 }
 
+/* player box - global for each page the same*/
+
 .player-box{
     width: 330px;
     height: 320px;
@@ -31,37 +33,74 @@ body{
     text-align: center;
 }
 
+/* global wrapper for each page, the content will come inside - except index.html becaue there is the logo pic */
+
 .content-box{
     margin-top: 70px;
-    margin-left: 400px;
-    width: 50%;
+    margin-left: 300px;
+    width: 60%;
     font-family: 'Tomorrow', sans-serif;
     color: rgb(231, 211, 211);
     font-size: 13px;
     font-weight: 200;
-
-    /* min-height: 300px; */
-    /* width: 80%; */
-    /* color: rgb(231, 211, 211);
-    font-size: 12px;
-    font-weight: 200; */
-    /* border: solid 1px; */
-
 }
+
+/* playlist table style */  
+
+.playlist th {
+    color: rgb(231, 211, 211);
+    border-bottom: 1pt solid;
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 14px;
+    font-weight: 2000;
+    line-height: 12px;
+    padding: 4px 5px 4px 5px;
+  }
+
+.playlist td {
+    color: rgb(231, 211, 211);
+    border-bottom: 0;
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 12px;
+    padding: 3px 5px 3px 5px;
+  }
+
+/* contact form style */
+
+#submit-btn{
+    padding: 1px, 2px;
+}
+
+#selection{
+    font-family: 'Tomorrow', sans-serif;
+}
+
+input[type="email"] {
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 13px;
+    font-weight: 200;
+  }
+
+textarea {
+    font-family: 'Tomorrow', sans-serif;
+    font-size: 13px;
+    font-weight: 200;
+}
+
+.form-label{
+    color: rgb(231, 211, 211);
+    font-size: 13px;
+    font-family: 'Tomorrow', sans-serif;
+    font-weight: 200;
+ }
+
 
 @media (max-width:500px){
     .content-box{
         margin-left: 30px;
-        width: 330px;
-    
-        /* min-height: 300px; */
-        /* width: 80%; */
-        /* color: rgb(231, 211, 211);
-        font-family: 'Tomorrow', sans-serif;
-        font-size: 12px;
-        font-weight: 200; */
-        /* border: solid 1px; */
-    
+        width: 330px;   
     }
 
-} */
+}

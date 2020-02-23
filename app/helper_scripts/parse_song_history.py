@@ -53,7 +53,7 @@ def get_last_n_songs(n: int) -> list:
             else:
                 # new_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ')
                 # song_history.append(tuple(new_line))
-                cleared_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ') # TODO regex
+                cleared_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").strip("Fri").lower().split(' -- ') # TODO regex
                 print(cleared_line[1][3:])
                 cleared_line[1] = cleared_line[1][3:]
                 song_details = Song_details(*cleared_line)

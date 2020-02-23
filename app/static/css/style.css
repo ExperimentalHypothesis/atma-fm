@@ -51,7 +51,7 @@ img {
     max-height:100%;
     /* position: relative; */
 } 
-
+/* 
 .box{
     padding-top: 350px;
     padding-left: 400px;
@@ -63,34 +63,34 @@ img {
     font-weight: 200; */
     /* border: solid 1px; */
 
-}
+} */
 
-.playlist{
+/* .playlist{
     /* position: absolute; */
     padding-bottom: 50px;
     padding-top: 50px;
     /* padding-left: 200px; */
 }
 
-.playlist th {
+th {
     color: rgb(231, 211, 211);
     border-bottom: 1pt solid;
     font-family: 'Tomorrow', sans-serif;
     font-size: 14px;
     font-weight: 2000;
     line-height: 12px;
-    padding: 10px 15px 10px 15px;
+    padding: 20px 5px 20px 5px;
   }
 
-.playlist td {
+td {
     color: rgb(231, 211, 211);
     border-bottom: 0;
     font-family: 'Tomorrow', sans-serif;
     font-size: 13px;
     font-weight: 300;
     line-height: 12px;
-    padding: 3px 15px 3px 15px;
-  }
+    padding: 3px 5px 3px 5px;
+  } */
 
 #contact-form{
     padding-bottom: 100px;

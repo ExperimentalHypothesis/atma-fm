@@ -1,15 +1,15 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="box">
+<div class="content-box">
   <!-- name and reason -->
   <form id="contact-form">
     <div class="row">
-      <div class="four columns">
+      <div class="six columns">
         <label for="email" class="form-label">email</label>
         <input class="u-full-width" type="email" placeholder="your@email.com">
       </div>
-      <div class="four columns">
+      <div class="six columns">
         <label for="reason-for-contacting" class="form-label">reason for contacting</label>
         <select id="selection" class="u-full-width">
           <option class=option value="option 1">question</option>
@@ -20,21 +20,21 @@
     </div>
     <!-- message -->
     <div class="row">
-      <div class="eight columns">
+      <div class="twelve columns">
         <label for="message" class="form-label">message</label>
         <textarea class="u-full-width" placeholder="hi there …"></textarea> <!-- how to make it higher?-->
       </div>
     <div>
     <!-- button and checkbox -->
     <div class="row">
-      <div class="six columns">
+      <div class="ten columns">
         <label class="example-send-yourself-copy">
           <input type="checkbox">
           <span class="form-label">send a copy to yourself as a souvenir</span>
         </label>
       </div>
-      <div class="four columns">
-        <input id="submit-btn" class="button" type="submit" value="go ahead">
+      <div class="two columns">
+        <input id="submit-btn" class="button" type="submit" value="submit">
       </div>
     </div>
     </div>
