@@ -1,16 +1,16 @@
 {% extends "layout.html" %}
 {% block content %}
  
-<div class="box">
+<div class="content-box">
   <!-- <div class="row">
     <div class="ten columns"> -->
       <table class="playlist"> 
         <thead>  
           <tr>
-            <th>played at</th>
+            <th>started</th>
             <th>artist</th>
             <th>title</th>
-            <!-- <th>album</th> -->
+            <th>album</th>
           </tr>
         <thead>
         {% for song in song_history %}
@@ -19,7 +19,7 @@
             <td> {{ song.played_at }} </td>
             <td> {{ song.author }} </td>
             <td> {{ song.title }} </td>
-            <!-- <td> {{ song.album }} </td> -->
+            <td> {{ song.album }} </td>
           </tr>
         </tbody>
           {%endfor%}
