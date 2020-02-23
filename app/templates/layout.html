@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/new-style.css')}}">
   <link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
@@ -13,25 +13,24 @@
 
 <body>
   <!-- <div class="full-container"> -->
-    <section class="four columns">
-      <div class="container">
-        <div class="player">
-          <p>[ experimental underground radio broadcast ]<p>
+    <!-- <section class="four columns">
+      <div class="container"> -->
+        <section class="player-box">
+          <p class="player-txt">[ experimental underground radio broadcast ]<p>
              <div class="player-button">
-                <button class="player-button-txt" style="border: none" onclick="play()" >listen now</button>
-                <button class=button style="border: none" onclick="play()"><i class="fa fa-music fa-3x"></i></button>            
+                <button class="player-button-txt" onclick="play()" >listen now</button>
+                <button class="button" style="border: none;" onclick="play()"><i class="fa fa-music fa-3x"></i></button>            
               </div>
               <div class="player-button">
-                <button class="player-button-txt" style="border: none" onclick=location.href="http://64.227.34.185:8000/example1.ogg.m3u">download m3u</button>
-                <button class=button style="border: none" onclick=location.href="http://64.227.34.185:8000/example1.ogg.m3u"><i class="fa fa-file-audio-o fa-3x" aria-hidden="true"></i></button>
+                <button class="player-button-txt" onclick=location.href="http://64.227.34.185:8000/example1.ogg.m3u">download m3u</button>
+                <button class="button" style="border: none;" onclick=location.href="http://64.227.34.185:8000/example1.ogg.m3u"><i class="fa fa-file-audio-o fa-3x" aria-hidden="true"></i></button>
               </div>
               <audio id="player"><source src="http://64.227.34.185:8000/example1.ogg"></audio>
               <hr width=50%>
               <small> currently playing </small><br>
               <small>[ {{ author }} -  {{ title }} ]</small>
-              <br><br>
         <!-- </div> -->
-      </div>
+      <!-- </div> -->
   </section>
 
 
