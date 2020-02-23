@@ -15,10 +15,7 @@ body{
 }
 
 .player-button{
-    /* border: 1px solid rgb(50, 50, 50);  */
     display: inline-block;
-    /* margin-top: 1px; */
-    /* padding: 1px; */
     text-align: center;
 }
 
