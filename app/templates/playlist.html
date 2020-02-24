@@ -1,30 +1,25 @@
 {% extends "layout.html" %}
 {% block content %}
- 
 <div class="content-box">
-  <!-- <div class="row">
-    <div class="ten columns"> -->
-      <table class="playlist"> 
-        <thead>  
-          <tr>
-            <th>started</th>
-            <th>artist</th>
-            <th>title</th>
-            <th>album</th>
-          </tr>
-        <thead>
+  <table class="playlist">
+    <thead>
+      <tr>
+        <th>started</th>
+        <th>artist</th>
+        <th>title</th>
+        <th>album</th>
+      </tr>
+      <thead>
         {% for song in song_history %}
-        <tbody>
-          <tr>
-            <td> {{ song.played_at }} </td>
-            <td> {{ song.author }} </td>
-            <td> {{ song.title }} </td>
-            <td> {{ song.album }} </td>
-          </tr>
-        </tbody>
-          {%endfor%}
-      </table>
-   <!-- </div>
-  </div>  -->
+      <tbody>
+        <tr>
+          <td> {{ song.played_at }} </td>
+          <td> {{ song.author }} </td>
+          <td> {{ song.title }} </td>
+          <td> {{ song.album }} </td>
+        </tr>
+      </tbody>
+      {%endfor%}
+  </table>
 </div>
 {% endblock content %}

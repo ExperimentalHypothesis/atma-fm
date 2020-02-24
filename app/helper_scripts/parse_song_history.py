@@ -41,7 +41,7 @@ def get_last_n_songs_details(n: int) -> list:
     import collections, re
     Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
     song_history = []
-    path_to_file =  r"C:\Users\nirvikalpa\Desktop\playlist.txt"
+    path_to_file =  r"/var/log/icecast/songs-history.log"
     with open(path_to_file) as playlist:
         for line in list(playlist)[-10:]:
             print(line)
@@ -54,9 +54,9 @@ def get_last_n_songs_details(n: int) -> list:
                 song_history.append(song_details)
     return(reversed(song_history[-n:]))
 
-songs = get_last_n_songs_details(8)
-for i in songs:
-    print(i)
+# songs = get_last_n_songs_details(8)
+# for i in songs:
+#     print(i)
 
 
 
