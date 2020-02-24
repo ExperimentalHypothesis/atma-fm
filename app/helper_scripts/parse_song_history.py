@@ -37,7 +37,7 @@
 # 	return parsed_list
 
 
-def get_last_n_songs_details(n: int) -> list:
+def get_last_n_songs(n: int) -> list:
     import collections, re
     Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
     song_history = []
