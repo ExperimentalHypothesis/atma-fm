@@ -3,6 +3,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="description" content="online ambient radio playing underground electronic & experimental music">
+  <meta name="keywords" content="ambient, electronic, experimental, underground, alternative, avantgarde, electroacoustic music. online radio, online audio stream">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/new-style.css')}}">
   <link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
@@ -17,13 +19,13 @@
           <button class="button" style="border: none;" onclick="play()"><i class="fa fa-music fa-3x"></i></button>
         </div>
         <div class="player-button">
-          <button class="player-button-txt" onclick=location.href="http://167.172.97.31:7777/atma.fm.m3u">download
+          <button class="player-button-txt" onclick=location.href="http://144.91.73.167/atma.fm.m3u">download
             m3u</button>
-          <button class="button" style="border: none;" onclick=location.href="http://167.172.97.31:7777/atma.fm.m3u"><i
+          <button class="button" style="border: none;" onclick=location.href="http://144.91.73.167/atma.fm.m3u"><i
               class="fa fa-file-audio-o fa-3x" aria-hidden="true"></i></button>
         </div>
         <audio id="player">
-          <source src="http://167.172.97.31:7777/atma.fm"></audio>
+          <source src="http://144.91.73.167/atma.fm"></audio>
         <hr width=50%>
         <small> currently playing </small><br>
         <small>[ {{ author }} - {{ title }} ]</small>
