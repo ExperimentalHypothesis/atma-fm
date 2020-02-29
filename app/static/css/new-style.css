@@ -38,6 +38,7 @@ body {
 .content-box {
     min-height: 300px;
     margin-top: 70px;
+    margin-bottom: 70px;
     margin-left: 300px;
     width: 60%;
     font-family: 'Tomorrow', sans-serif;
