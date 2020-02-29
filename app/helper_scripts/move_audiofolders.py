@@ -4,6 +4,10 @@
 # [c/name_of_composer_starting_from_letter_c/albums...]
 # etc..
 
+# $if2(%albumartist%,%artist%)/
+# $if(%albumartist%,%album%/,)
+# $if($gt(%totaldiscs%,1),%discnumber%-,)$if($and(%albumartist%,%tracknumber%),$num(%tracknumber%,2) ,)$if(%_multiartist%,%artist% - ,) %artist% -- %album% -- %title%
+
 import os, shutil
 
 def sort_audiofolders(source: str, target: str) -> None:
@@ -29,10 +33,13 @@ def sort_audiofolders(source: str, target: str) -> None:
                     
     # TODO log how many folders were moved, how many were skipped (name which was which) 
 
-if __name__ == "__main__":
-    source = r"\\192.168.0.109\Public\Music\slsk\!TAGGED"
-    target = r"\\192.168.0.109\Public\Music"
-    try:
-        sort_audiofolders(source, target)
-    except Exception as e:
-        print(e)
+# if __name__ == "__main__":
+source = r"\\192.168.0.109\Public\Music\_temp"
+target = r"\\192.168.0.109\Public\Music\_temp"
+#     try:
+#         sort_audiofolders(source, target)
+#     except Exception as e:
+#         print(e)
+# # TODO
+
+sort_audiofolders(source, target)

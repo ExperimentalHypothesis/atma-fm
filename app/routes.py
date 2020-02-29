@@ -30,6 +30,6 @@ def archive():
 @app.route("/playlist")
 def playlist():
 	# song_history = parse_song_history(read_file_from_remote("167.172.122.236", "root", "emeraldincubus"))
-	song_history = get_last_n_songs(10)
+	song_history = get_last_n_songs(14)
 	return render_template("playlist.html", song_history=song_history)
 

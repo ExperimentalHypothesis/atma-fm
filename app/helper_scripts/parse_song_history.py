@@ -41,10 +41,10 @@ def get_last_n_songs(n: int) -> list:
     import collections, re
     Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
     song_history = []
-    path_to_file =  r"/var/log/icecast/songs-history.log"
+    path_to_file =  r"/var/log/icecast/song-history.log"
     with open(path_to_file) as playlist:
-        for line in list(playlist)[-10:]:
-            print(line)
+        for line in list(playlist)[-20:]:
+            # print(line)
             if "Now playing" not in line:
                 continue
             else:

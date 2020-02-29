@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 
 def scrap_audio_formats_table() -> list:
     """ scrap the table form wiki containing audioformat details """
+    
     data = []
     try:
         website = requests.get("https://en.wikipedia.org/wiki/Audio_file_format").text
