@@ -50,6 +50,7 @@ def get_last_n_songs(n: int) -> list:
             else:
                 cleared_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ') # TODO regex
                 cleared_line[1] = cleared_line[1][3:]
+                cleared_line[3].replace(" [lame]","")
                 song_details = Song_details(*cleared_line)
                 song_history.append(song_details)
     return(reversed(song_history[-n:]))
