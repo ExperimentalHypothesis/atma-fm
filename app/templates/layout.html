@@ -15,8 +15,8 @@
   <section class="player-box">
     <p class="player-txt">[ experimental underground radio broadcast ]<p>
         <div class="player-button">
-          <button class="player-button-txt" onclick="play()">listen now</button>
-          <button class="button" style="border: none;" onclick="play()"><i class="fa fa-music fa-3x"></i></button>
+          <button id="bt-txt" class="player-button-txt" onclick="toggle_play()">listen now</button>
+          <button  class="button" style="border: none;" onclick="toggle_play()"><i id="bt-icon" class="fa fa-volume-up  fa-3x"></i></button>
         </div>
         <div class="player-button">
           <button class="player-button-txt" onclick=location.href="http://144.91.73.167:7777/atma.fm.m3u">download
@@ -39,6 +39,7 @@
     <a href="{{ url_for('contact') }}" style="margin-left:30px"><small class="menu-link">contact</small></a>
   </nav>
   <br>
-  <script src="{{ url_for('static', filename='js/play.js')}}"></script>
+  <script src="{{ url_for('static', filename='js/play.js')}}"> </script>
+  <script src="https://kit.fontawesome.com/37c4968eb2.js" crossorigin="anonymous"></script>
 </body>
 </html>
