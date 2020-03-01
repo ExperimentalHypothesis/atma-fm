@@ -41,21 +41,23 @@ def get_last_n_songs(n: int) -> list:
     import collections, re
     Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
     song_history = []
-    path_to_file =  r"/var/log/icecast/song-history.log"
-    with open(path_to_file) as playlist:
+    p= r'C:\Users\nirvikalpa\Desktop\playlist.txt'
+    # path_to_file =  r"/var/log/icecast/song-history.log"
+    with open(p) as playlist:
         for line in list(playlist)[-20:]:
             # print(line)
             if "Now playing" not in line:
                 continue
             else:
                 cleared_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ') # TODO regex
-                cleared_line[1] = cleared_line[1][3:]
-                cleared_line[3].replace(" [lame]","")
-                song_details = Song_details(*cleared_line)
+                name = cleared_line[1].split(" ")
+                name = " ".join(name[1:])
+                album = cleared_line[3].replace(" [lame]","")
+                song_details = Song_details(cleared_line[0], name, cleared_line[2], album)
                 song_history.append(song_details)
     return(reversed(song_history[-n:]))
 
-# songs = get_last_n_songs_details(8)
+# songs = get_last_n_songs(8)
 # for i in songs:
 #     print(i)
 
