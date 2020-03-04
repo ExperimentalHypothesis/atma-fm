@@ -1,22 +1,19 @@
 {% extends "layout.html" %}
 {% block content %}
-
-
-
 <div class="content-box">
   <!-- name and reason -->
-  <form id="contact-form">
+  <form id="contact-form" action="#" , method="post">
     <div class="row">
       <div class="six columns">
         <label for="email" class="form-label">email</label>
-        <input class="u-full-width" type="email" placeholder="your@email.com">
+        <input class="u-full-width" type="email" placeholder="your@email.com" name="email">
       </div>
       <div class="six columns">
         <label for="reason-for-contacting" class="form-label">reason for contacting</label>
-        <select id="selection" class="u-full-width">
-          <option class=option value="option 1">question</option>
-          <option value="option 2">admiration</option>
-          <option value="option 3">other</option>
+        <select id="selection" class="u-full-width" name="selection">
+          <option class=option value="question">question</option>
+          <option value="admiration">admiration</option>
+          <option value="other">other</option>
         </select>
       </div>
     </div>
@@ -24,25 +21,32 @@
     <div class="row">
       <div class="twelve columns">
         <label for="message" class="form-label">message</label>
-        <textarea class="u-full-width" placeholder="hi there …"></textarea> <!-- how to make it higher?-->
+        <textarea style="height: 150px;" class="u-full-width" placeholder="hi there, how is it going …"
+          name="text"></textarea> <!-- how to make it higher?-->
       </div>
       <div>
         <!-- button and checkbox -->
         <div class="row">
           <div class="ten columns">
             <label class="example-send-yourself-copy">
-              <input type="checkbox">
+              <input type="checkbox" name="checked">
               <span class="form-label">send a copy to yourself as a souvenir</span>
             </label>
           </div>
           <div class="two columns">
-            <input class="button" type="submit" value="go ahead" style="text-transform: lowercase; border-color: grey; font-weight: 100; line-height: 10px; padding-top: 1px; padding-bottom: 1px;">
+            <input class="button" type="submit" value="go ahead"
+              style="text-transform: lowercase; border-color: grey; font-weight: 100; line-height: 10px; padding-top: 1px; padding-bottom: 1px;">
           </div>
         </div>
       </div>
     </div>
   </form>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      {% for message in messages %}
+        <p class="msg-sent">{{ message }}</p>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
 </div>
-
-
 {% endblock content %}

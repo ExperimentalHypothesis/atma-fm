@@ -98,6 +98,14 @@ textarea {
     border: 0px;
 }
 
+.msg-sent{
+    font-size: 14px; 
+    text-align: center;
+    border: 1px solid;
+    color: rgb(231, 211, 211);
+    border-radius: 2px;
+}
+
 /* archive - under construction page style */
 
 .under-construction {
