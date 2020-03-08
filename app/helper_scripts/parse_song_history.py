@@ -42,19 +42,22 @@ def get_last_n_songs(n: int) -> list:
     Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
     song_history = []
     p= r'C:\Users\nirvikalpa\Desktop\playlist.txt'
-    # path_to_file =  r"/var/log/icecast/song-history.log"
-    with open(p) as playlist:
-        for line in list(playlist)[-20:]:
-            # print(line)
-            if "Now playing" not in line:
-                continue
-            else:
-                cleared_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ') # TODO regex
-                name = cleared_line[1].split(" ")
-                name = " ".join(name[1:])
-                album = cleared_line[3].replace(" [lame]","")
-                song_details = Song_details(cleared_line[0], name, cleared_line[2], album)
-                song_history.append(song_details)
+    path_to_file =  r"/var/log/icecast/song-history.log"
+    try:
+        with open(path_to_file) as playlist:
+            for line in list(playlist)[-20:]:
+                # print(line)
+                if "Now playing" not in line:
+                    continue
+                else:
+                    cleared_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ') # TODO regex
+                    name = cleared_line[1].split(" ")
+                    name = " ".join(name[1:])
+                    album = cleared_line[3].replace(" [lame]","")
+                    song_details = Song_details(cleared_line[0], name, cleared_line[2], album)
+                    song_history.append(song_details)
+    except Exception as e:
+        print("there is no such filename")
     return(reversed(song_history[-n:]))
 
 # songs = get_last_n_songs(8)
