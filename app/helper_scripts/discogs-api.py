@@ -54,8 +54,6 @@ def get_release_versions_from_discogs_api(release_name:str) -> list:
 
 
 
-
-
 if __name__ == "__main__":
     root="/run/media/lukas/MULTIMEDIA"
 
