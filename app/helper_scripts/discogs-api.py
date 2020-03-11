@@ -59,9 +59,7 @@ def get_releases_from_local_filesystem(source:str) -> list:
 
 def get_release_versions_from_discogs_api_new(r:namedtuple) -> list:
     local_artist, local_album, local_tracklist = r.artist.title(), r.album.title(), r.songs
-
-    print(local_album,local_artist, local_tracklist)
-
+    print(f"Searching for Album: {local_album} from {local_artist}")
     Release = namedtuple("API_Release", ["api_artist", "api_album", "api_songs"])
     versions = [] 
     try:
@@ -74,29 +72,33 @@ def get_release_versions_from_discogs_api_new(r:namedtuple) -> list:
     else:
         if releases:
             for release in releases:
-                if local_album == release:
-                    # songs = []
-                    # for track in release.tracklist:
-                    #     songs.append(track.title)
-                    #     r = Release(local_artist, release.title, songs) 
-                    # versions.append(r)
-                    print(f"Album: {local_album} from Artist: {local_artist} found on discogs")
+                if local_album == release.title:
+                    print(f"Album: {local_album} from {local_artist} found! Looking up all its versions..")
+                    for version in release.versions:
+                        songs = []
+                        for track in version.tracklist:
+                            songs.append(track.title)
+                            r = Release(local_artist, release.title, songs) 
+                        versions.append(r)
+                    break        
                 else:
-                    print(f"Album: {local_album} from Artist: {local_artist} not found on discogs")
                     continue
-        # return versions
+            else:
+                print(f"NOT FOUND: {local_album} from {local_artist}" )
+
+        return versions
 
 
 
 
 
 if __name__ == "__main__":
-    root="/run/media/lukas/MULTIMEDIA"
+    root="/home/lukas/Music"
     local_releases = get_releases_from_local_filesystem(root)
 
     for i in local_releases:
-        get_release_versions_from_discogs_api_new(i)
-
+        versions = get_release_versions_from_discogs_api_new(i)
+        print(versions)
 
     # api_releases = get_release_versions_from_discogs_api_new(local_releases[0])
 
