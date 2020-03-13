@@ -78,19 +78,14 @@ def get_release_versions_from_discogs_api_new(r:namedtuple) -> list:
                         songs = []
                         for track in version.tracklist:
                             songs.append(track.title)
-                            r = Release(local_artist, release.title, songs) 
+                            r = Release(local_artist, release.title, songs)
                         versions.append(r)
                     break        
                 else:
                     continue
-            else:
-                print(f"NOT FOUND: {local_album} from {local_artist}" )
-
+            # else:
+            #     print(f"NOT FOUND: {local_album} from {local_artist}" )
         return versions
-
-
-
-
 
 if __name__ == "__main__":
     root="/home/lukas/Music"
