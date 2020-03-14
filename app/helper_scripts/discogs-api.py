@@ -1,11 +1,11 @@
-import discogs_client, os, pprint
+import discogs_client, os, pprint, difflib
 from collections import namedtuple
 
 def get_releases_from_local_filesystem(source:str) -> list:
     """ return list of releases from filesystem 
         the format of namedtuple(artist, album, [songs]) """
 
-    Release = namedtuple("Release", ["artist", "album", "songs"])
+    Release = namedtuple("Local_Release", ["artist", "album", "songs"])
     discographies = []
 
     audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt")
@@ -20,9 +20,9 @@ def get_releases_from_local_filesystem(source:str) -> list:
                 releases = []
                 songs = []
                 if os.path.isdir(os.path.join(composer_path, album)):
-                    comp = composer.replace("-", " ")
+                    comp = composer.replace("-", " ").title()
                     releases.append(comp)
-                    alb = album.replace("-", " ")
+                    alb = album.replace("-", " ").title()
                     releases.append(alb) 
                     album_path = os.path.join(composer_path, album)
                     for song in os.listdir(album_path):
@@ -30,7 +30,7 @@ def get_releases_from_local_filesystem(source:str) -> list:
                             song = " ".join(song.replace("-"," ").split()[1:])
                             song = song.split(".")[0].strip(" ")
                             songs.append(song.title())
-                r = Release(comp, alb, songs)
+                r = Release(comp, alb, songs.sort())
                 discographies.append(r)
     return(discographies)
 
@@ -56,17 +56,48 @@ def get_releases_from_local_filesystem(source:str) -> list:
     #             releases.append(r)
     #         return releases
 
+def validate_string_similarity(a:str, b:str) -> bool:
+    threshold = difflib.SequenceMatcher(None, a, b).ratio()
+    return True if threshold > 0.95 else False
 
-def get_release_versions_from_discogs_api_new(r:namedtuple) -> list:
-    local_artist, local_album, local_tracklist = r.artist.title(), r.album.title(), r.songs
+def check_if_releases_equal(local_release: namedtuple, api_release: namedtuple) -> bool:
+    """ check if release on filesystem is the same as release on discogs """
+
+    local_tracklist = set(local_release.songs)
+    api_tracklist = set(local_release.songs)
+
+    # kdyz nejsou stejny delky, urcite nejsou stejny traklisty
+    if len(local_tracklist) != len(api_tracklist):
+        print("Len not equal.. -> tracklist are notequal")
+        return False
+    # kdyz jsou stejny delky, udelej test setu
+    elif local_tracklist == api_tracklist:
+        print("Setlist are equal -> tracklist are equal -> FOUND MATCH")
+        return True
+    # kdyz jsou stejny delky ale nevysel test setu, je mozny ze je tam preklep.. udelej hlubsi test one-by-one
+    else:
+        for i, j in zip(local_release.songs.sort(), api_release.songs.sort()):
+            if validate_string_similarity(i, j): 
+                continue
+            else:
+                break
+        else:
+            return True
+    return False
+
+
+def get_release_versions_from_discogs_api_new(local_release:namedtuple) -> list:
+    """ find the release verison on discogs that match the version on filesystem and tags it """
+
+    local_artist, local_album, local_tracklist = local_release.artist, local_release.album, local_release.songs
     print(f"Searching for Album: {local_album} from {local_artist}")
-    Release = namedtuple("API_Release", ["api_artist", "api_album", "api_songs"])
+    API_Release = namedtuple("API_Release", ["artist", "album", "songs"])
     versions = [] 
     try:
         d = discogs_client.Client('atma-fm', user_token="XqVXtxTvsRtYoPaxmvqIfBXHKxyZEqlTVYVzvDPe")
         releases = d.search(local_artist, type='artist')[0].releases
     except IndexError:
-        print(f"Artist: {local_artist} not found on discogs.. skipping")
+        print(f"Artist {local_artist} NOT FOUND ON DISCOGS.. skipping")
     except Exception as e:
         print("error when connection to API:", e)
     else:
@@ -74,28 +105,34 @@ def get_release_versions_from_discogs_api_new(r:namedtuple) -> list:
             for release in releases:
                 if local_album == release.title:
                     print(f"Album: {local_album} from {local_artist} found! Looking up all its versions..")
+                    
+                    # make the list of all the versions
                     for version in release.versions:
                         songs = []
                         for track in version.tracklist:
                             songs.append(track.title)
-                            r = Release(local_artist, release.title, songs)
-                        versions.append(r)
-                    break        
-                else:
-                    continue
-            # else:
-            #     print(f"NOT FOUND: {local_album} from {local_artist}" )
+                            api_release = API_Release(local_artist, release.title, songs)
+                        versions.append(api_release)
+                    print(f"{len(versions)} versions of {release.title} from {local_artist} found:")
+
+                    # print each version
+                    for index, version in enumerate(versions, 1):
+                        print(f"\n{index}. version: {version}")
+                    break
+            else:
+                print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS")
         return versions
+
 
 if __name__ == "__main__":
     root="/home/lukas/Music"
     local_releases = get_releases_from_local_filesystem(root)
 
-    for i in local_releases:
-        versions = get_release_versions_from_discogs_api_new(i)
-        print(versions)
 
-    # api_releases = get_release_versions_from_discogs_api_new(local_releases[0])
+    for i in local_releases:
+        get_release_versions_from_discogs_api_new(i)
+        print("------------------------------------------")
+
 
     # pp = pprint.PrettyPrinter(indent=4)
     # pp.pprint(api_releases)
