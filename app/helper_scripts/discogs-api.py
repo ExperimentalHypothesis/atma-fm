@@ -30,7 +30,7 @@ def get_releases_from_local_filesystem(source:str) -> list:
                             song = " ".join(song.replace("-"," ").split()[1:])
                             song = song.split(".")[0].strip(" ")
                             songs.append(song.title())
-                r = Release(comp, alb, songs.sort())
+                r = Release(comp, alb, songs)
                 discographies.append(r)
     return(discographies)
 
@@ -60,29 +60,31 @@ def validate_string_similarity(a:str, b:str) -> bool:
     threshold = difflib.SequenceMatcher(None, a, b).ratio()
     return True if threshold > 0.95 else False
 
-def check_if_releases_equal(local_release: namedtuple, api_release: namedtuple) -> bool:
+def check_if_releases_equal(local_release: namedtuple, api_release: namedtuple, index:int) -> bool:
     """ check if release on filesystem is the same as release on discogs """
 
     local_tracklist = set(local_release.songs)
-    api_tracklist = set(local_release.songs)
+    api_tracklist = set(api_release.songs)
 
     # kdyz nejsou stejny delky, urcite nejsou stejny traklisty
     if len(local_tracklist) != len(api_tracklist):
-        print("Len not equal.. -> tracklist are notequal")
+        print(f"NO MATCH: {index}. api version has different tracklist length")
         return False
     # kdyz jsou stejny delky, udelej test setu
     elif local_tracklist == api_tracklist:
-        print("Setlist are equal -> tracklist are equal -> FOUND MATCH")
+        print(f"MATCH: {index}. api version equal to local version (set comparision)")
         return True
     # kdyz jsou stejny delky ale nevysel test setu, je mozny ze je tam preklep.. udelej hlubsi test one-by-one
     else:
-        for i, j in zip(local_release.songs.sort(), api_release.songs.sort()):
+        for i, j in zip(sorted(local_release.songs), sorted(api_release.songs)):
             if validate_string_similarity(i, j): 
                 continue
             else:
                 break
         else:
+            print(f"MATCH: {index}. api version equal to local version (one-by-one comparision)")
             return True
+    print(f"NO MATCH: {index}. api has the same tracklist length, but the song names are different")
     return False
 
 
@@ -116,12 +118,22 @@ def get_release_versions_from_discogs_api_new(local_release:namedtuple) -> list:
                     print(f"{len(versions)} versions of {release.title} from {local_artist} found:")
 
                     # print each version
-                    for index, version in enumerate(versions, 1):
-                        print(f"\n{index}. version: {version}")
+                    for index, api_release in enumerate(versions, 1):
+                        print(f"\n{index}. version: {api_release}")
+                    
+                    # check agains local version
+                    print(f"\nChecking for a match with: {local_release}\n")
+                    for index, api_release in enumerate(versions, 1):
+                        is_equal = check_if_releases_equal(local_release, api_release, index)
+                        if is_equal:
+                            print(f"API MATCH FOUND: {local_release} and {api_release} are equal.. -> skiping to another album\n")
+                            break
+                    else:
+                        print(f"NO API MATCH FOUND for: {local_release}")
                     break
             else:
                 print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS")
-        return versions
+        # return versions
 
 
 if __name__ == "__main__":
@@ -132,7 +144,7 @@ if __name__ == "__main__":
     for i in local_releases:
         get_release_versions_from_discogs_api_new(i)
         print("------------------------------------------")
-
+        # print(i)
 
     # pp = pprint.PrettyPrinter(indent=4)
     # pp.pprint(api_releases)
