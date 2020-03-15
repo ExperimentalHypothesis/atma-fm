@@ -81,7 +81,7 @@ def delete_folders_without_audio(directory: str) -> int:
 
 
 if __name__ == "__main__":
-    source = r"\\192.168.0.109\Public\Music\slsk\!TAGGED"
+    source = r"/home/lukas/Music/api-to_be_checked"
 
     if not os.path.exists(source):
         print("directory doesnt exists, check the path")
