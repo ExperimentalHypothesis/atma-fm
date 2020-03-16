@@ -40,11 +40,9 @@ def validate_string_similarity(a:str, b:str) -> bool:
     threshold = difflib.SequenceMatcher(None, a, b).ratio()
     return True if threshold > 0.85 else False
 
-def check_if_releases_equal(local_release: namedtuple, api_release: namedtuple, index:int) -> bool:
+def have_equal_tracklist_names(local_release: namedtuple, api_release: namedtuple, index:int) -> bool:
     """ check if release on filesystem is the same as release on discogs """
 
-    # local_tracklist = set(local_release.songs)
-    # api_tracklist = set(api_release.songs)
     if len(local_release.songs) != len(api_release.songs):
         print(f"NO MATCH: {index}. api version has different tracklist length")
         return False
@@ -63,13 +61,12 @@ def check_if_releases_equal(local_release: namedtuple, api_release: namedtuple, 
     print(f"NO MATCH: {index}. api version has the same tracklist length, but the song names are different")
     return False
 
-def tag_and_move_matched_folders(source_dir:str, id:int) -> None:
+def tag_and_move_matched_folders(source_dir:str, id:int, directory_name:str) -> None:
     """ move folders [album version] were matched with discogs api """
 
     for file in os.listdir(source_dir):
         src_filepath = os.path.join(source_dir, file)
-        # print(src_filepath)
-        dst_filepath = src_filepath.replace("api-to_be_checked", "api-already_checked") 
+        dst_filepath = src_filepath.replace("api-to_be_checked", directory_name) 
         dst_filepath = os.path.join(os.path.dirname(dst_filepath) + f' [api match {id}]', file)
         if not os.path.exists(os.path.dirname(dst_filepath)):
             os.makedirs(os.path.dirname(dst_filepath))
@@ -77,7 +74,8 @@ def tag_and_move_matched_folders(source_dir:str, id:int) -> None:
         else:
             os.rename(src_filepath, dst_filepath)
 
-def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) -> None:
+
+def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) -> None:
         """ find the release version [query by artist] match the version on filesystem tag it and move it a separate folder """
 
         local_artist, local_album, local_tracklist = local_release.artist, local_release.album, local_release.songs
@@ -98,6 +96,7 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
                     if difflib.SequenceMatcher(None, local_album, release.title).ratio() > 0.95:
                         print(f"Album: {local_album} from {local_artist} found! Looking up all its versions..")                  
                         one_release = release 
+                        
                         # make the list of all the versions 
                         try:
                             for version in release.versions:
@@ -106,6 +105,7 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
                                     songs.append(track.title)
                                     api_release = API_Release(local_artist, release.title, songs, version.id)
                                 versions.append(api_release)
+                       
                         # make the list when it has only one version
                         except AttributeError as ae:
                             songs = []
@@ -113,23 +113,42 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
                                 songs.append(track.title)
                             api_release = API_Release(local_album, one_release.title, songs, one_release.id)
                             versions.append(api_release)
+                       
                         # print the versions that you found
                         print(f"{len(versions)} versions of {release.title} from {local_artist} found:")
                         for index, api_release in enumerate(versions, 1):
                             print(f"\n{index}. version: {api_release}")
-
-                        
-                        print(f"\nChecking for a match with: {local_release}\n")
+                       
+                        # try to find match with an api version based on tracklist names
+                        match_found = False
+                        print(f"\nChecking for a match based on tracklist names with: {local_release}\n")
                         for index, api_release in enumerate(versions, 1):
-                            are_equal = check_if_releases_equal(local_release, api_release, index)
-                            if are_equal:
-                                print(f"\nFINAL: API MATCH FOUND: {local_release} and {api_release} are equal.. -> moving and skiping to another album\n")
-                                tag_and_move_matched_folders(local_release.path, api_release.id)
+                            if have_equal_tracklist_names(local_release, api_release, index):
+                                print(f"\n>> FINAL: API MATCH FOUND << on tracklist names: {local_release} and {api_release} are equaly named -> moving and skiping to another album\n")
+                                tag_and_move_matched_folders(local_release.path, api_release.id, "1] api match [by names]")
+                                match_found = True
                                 break
                         else:
-                            print(f"\nFINAL: NO API MATCH FOUND for: {local_release}")
+                            print(f"\nNo match based on tracklist names for: {local_release}")
+                                
+                        # if it did not find match on names, try find match with an api version based on tracklist length
+                        if not match_found:
+                            print(f"\n Checking for a match based on length only with: {local_release}\n")
+                            for index, api_release in enumerate(versions, 1): 
+                                if len(local_release.songs) == len(api_release.songs):
+                                    print(f"\n>> FINAL: API MATCH FOUND << on tracklist length: {local_release} and {api_release} are equally long -> moving and skiping to another album\n")
+                                    tag_and_move_matched_folders(local_release.path, api_release.id, "2] api match [by length]")
+                                    match_found = True
+                                    break
+                            else:
+                                print(f"\nNo match based on tracklist length for: {local_release}")
+                      
+                        # if not matched with names or length, it is probbaly incomplete..
+                        if not match_found:                      
                             print(f"Album {local_release.album} from {local_release.artist} is incomplete -> moving to INCOMPLETE FOLDER")
-                        break
+                            tag_and_move_matched_folders(local_release.path, 0, "3] api match [not found - incomplete tracklist]")
+                        
+                    break # this break needs to be here in order to jump out of the for loop and not to print the statement bellow
                 else:
                     print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS")
 
@@ -186,14 +205,6 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
 #         #         tag_and_move_matched_folders(local_release.path, api_release.id)
 #         #         break
  
-
-
-
-
-
- 
-
-    
     # 2] vypis prvnich 10 a projed forem, checkni kde se rovna autor
     # 3] ziskej id tohodle a udelej query na verze -> vytvor list
     # 4] projed list tedlech verzi udelej strukturu jako predtim
@@ -202,10 +213,10 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
 if __name__ == "__main__":
 
     root=r"C:\Users\nirvikalpa\Music\api\api-to_be_checked"
-    local_releases = get_releases_from_local_filesystem(root)
+    local_releases = match_releases_from_local_filesystem(root)
     for i in local_releases:
         get_release_versions_from_discogs_api_by_artist(i)
-        print("------------------------------------------")
+        print("-------------------------------------------------------------------------")
 
 
 
