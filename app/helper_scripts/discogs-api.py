@@ -1,4 +1,4 @@
-import discogs_client, os, pprint, difflib, shutil
+import discogs_client, os, pprint, difflib, shutil, re, time
 from collections import namedtuple
 
 def get_releases_from_local_filesystem(source:str) -> list:
@@ -23,6 +23,7 @@ def get_releases_from_local_filesystem(source:str) -> list:
                     comp = composer.replace("-", " ").title()
                     releases.append(comp)
                     alb = album.replace("-", " ").title()
+                    alb = re.sub("\d\d\d\d", "", alb).strip()
                     releases.append(alb) 
                     album_path = os.path.join(composer_path, album)
                     api_path = os.path.dirname(album_path)
@@ -86,6 +87,7 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
         try:
             d = discogs_client.Client('atma-fm', user_token="XqVXtxTvsRtYoPaxmvqIfBXHKxyZEqlTVYVzvDPe")
             releases = d.search(local_artist, type='artist')[0].releases
+            time.sleep(1)
         except IndexError:
             print(f"Artist {local_artist} NOT FOUND ON DISCOGS.. skipping")
         except Exception as e:
@@ -95,6 +97,7 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
                 for release in releases:
                     if difflib.SequenceMatcher(None, local_album, release.title).ratio() > 0.95:
                         print(f"Album: {local_album} from {local_artist} found! Looking up all its versions..")                  
+                        
                         # make the list of all the versions
                         try:
                             for version in release.versions:
@@ -105,11 +108,13 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
                                 versions.append(api_release)
                         except AttributeError as ae:
                             print(f"Album {local_album} from {local_artist} has only one version")
+                            
                         else:
                             print(f"{len(versions)} versions of {release.title} from {local_artist} found:")
                             # print each version
                             for index, api_release in enumerate(versions, 1):
                                 print(f"\n{index}. version: {api_release}")
+                           
                             # check agains local version
                             print(f"\nChecking for a match with: {local_release}\n")
                         for index, api_release in enumerate(versions, 1):
@@ -120,62 +125,63 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
                                 break
                         else:
                             print(f"\nFINAL: NO API MATCH FOUND for: {local_release}")
+                            print(f"Album {local_release.album} from {local_release.artist} is incomplete -> moving to INCOMPLETE FOLDER")
                         break
                 else:
                     print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS")
 
 
 
-def get_release_version_from_discogs_api_by_title(local_release:namedtuple) -> None:
-    """ tohle hleda podle nazvu alba - hlavne pro pripady, ze autor je kolaborce  Steve Roach & Byron Meatcalf """ 
+# def get_release_version_from_discogs_api_by_title(local_release:namedtuple) -> None:
+#     """ tohle hleda podle nazvu alba - hlavne pro pripady, ze autor je kolaborce  Steve Roach & Byron Meatcalf """ 
 
-    local_artist, local_album, local_tracklist = local_release.artist, local_release.album, local_release.songs
-    print(f"Searching for Album: {local_album} from {local_artist}")
-    API_Release = namedtuple("API_Release", ["artist", "album", "songs", "id"])
-    versions = []
+#     local_artist, local_album, local_tracklist = local_release.artist, local_release.album, local_release.songs
+#     print(f"Searching for Album: {local_album} from {local_artist}")
+#     API_Release = namedtuple("API_Release", ["artist", "album", "songs", "id"])
+#     versions = []
 
-    # 1] query na nazev alba
+#     # 1] query na nazev alba
     
-    # try:
-    d = discogs_client.Client('atma-fm', user_token="XqVXtxTvsRtYoPaxmvqIfBXHKxyZEqlTVYVzvDPe")
-    releases = d.search(local_album, type="release")
+#     # try:
+#     d = discogs_client.Client('atma-fm', user_token="XqVXtxTvsRtYoPaxmvqIfBXHKxyZEqlTVYVzvDPe")
+#     releases = d.search(local_album, type="release")
        
-    # except IndexError:
-    #     print(f"Index error, query returned list with only only {len(releases)} items")
-    # except Exception as e:
-    #     print("error when connection to API:", e)
-    # # 2] ziskej list vsech verzi tohodle releaseu
-    # else:
-    for i in range(10):
-        api_title = releases[i].title
-        local_title = local_artist + " " + local_album
-        string_matched = difflib.SequenceMatcher(None, local_title, api_title).ratio() > 0.90
-        if string_matched:
-            release = releases[i]
-            break
-    try:
-        print(f"{len(release.master.versions)} of {local_album} found: ")
-        for version in release.master.versions:
-            songs = []
-            for track in version.tracklist:
-                songs.append(track.title)
-                api_release = API_Release(local_artist, version.title, songs, version.id)
-            versions.append(api_release)
-    except UnboundLocalError as ale:
-        print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS")
-        # else:
-        #     print(f"{len(versions)} versions of {release.title} from {local_artist} found:")
-        #     # print each version
-        #     for index, api_release in enumerate(versions, 1):
-        #         print(f"\n{index}. version: {api_release}")
-        #     # check agains local version
-        #     print(f"\nChecking for a match with: {local_release}\n")
-        # for index, api_release in enumerate(versions, 1):
-        #     are_equal = check_if_releases_equal(local_release, api_release, index)
-        #     if are_equal:
-        #         print(f"\nFINAL: API MATCH FOUND: {local_release} and {api_release} are equal.. -> moving and skiping to another album\n")
-        #         tag_and_move_matched_folders(local_release.path, api_release.id)
-        #         break
+#     # except IndexError:
+#     #     print(f"Index error, query returned list with only only {len(releases)} items")
+#     # except Exception as e:
+#     #     print("error when connection to API:", e)
+#     # # 2] ziskej list vsech verzi tohodle releaseu
+#     # else:
+#     for i in range(10):
+#         api_title = releases[i].title
+#         local_title = local_artist + " " + local_album
+#         string_matched = difflib.SequenceMatcher(None, local_title, api_title).ratio() > 0.90
+#         if string_matched:
+#             release = releases[i]
+#             break
+#     try:
+#         print(f"{len(release.master.versions)} of {local_album} found: ")
+#         for version in release.master.versions:
+#             songs = []
+#             for track in version.tracklist:
+#                 songs.append(track.title)
+#                 api_release = API_Release(local_artist, version.title, songs, version.id)
+#             versions.append(api_release)
+#     except UnboundLocalError as ale:
+#         print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS")
+#         # else:
+#         #     print(f"{len(versions)} versions of {release.title} from {local_artist} found:")
+#         #     # print each version
+#         #     for index, api_release in enumerate(versions, 1):
+#         #         print(f"\n{index}. version: {api_release}")
+#         #     # check agains local version
+#         #     print(f"\nChecking for a match with: {local_release}\n")
+#         # for index, api_release in enumerate(versions, 1):
+#         #     are_equal = check_if_releases_equal(local_release, api_release, index)
+#         #     if are_equal:
+#         #         print(f"\nFINAL: API MATCH FOUND: {local_release} and {api_release} are equal.. -> moving and skiping to another album\n")
+#         #         tag_and_move_matched_folders(local_release.path, api_release.id)
+#         #         break
  
 
 
@@ -192,10 +198,10 @@ def get_release_version_from_discogs_api_by_title(local_release:namedtuple) -> N
 
 if __name__ == "__main__":
 
-    root="/home/lukas/Music/api-to_be_checked"
+    root=r"C:\Users\nirvikalpa\Music\api\api-to_be_checked"
     local_releases = get_releases_from_local_filesystem(root)
     for i in local_releases:
-        get_release_version_from_discogs_api_by_title(i)
+        get_release_versions_from_discogs_api_by_artist(i)
         print("------------------------------------------")
 
 
