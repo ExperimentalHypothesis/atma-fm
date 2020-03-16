@@ -97,8 +97,8 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
                 for release in releases:
                     if difflib.SequenceMatcher(None, local_album, release.title).ratio() > 0.95:
                         print(f"Album: {local_album} from {local_artist} found! Looking up all its versions..")                  
-                        
-                        # make the list of all the versions
+                        one_release = release 
+                        # make the list of all the versions 
                         try:
                             for version in release.versions:
                                 songs = []
@@ -106,17 +106,20 @@ def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) ->
                                     songs.append(track.title)
                                     api_release = API_Release(local_artist, release.title, songs, version.id)
                                 versions.append(api_release)
+                        # make the list when it has only one version
                         except AttributeError as ae:
-                            print(f"Album {local_album} from {local_artist} has only one version")
-                            
-                        else:
-                            print(f"{len(versions)} versions of {release.title} from {local_artist} found:")
-                            # print each version
-                            for index, api_release in enumerate(versions, 1):
-                                print(f"\n{index}. version: {api_release}")
-                           
-                            # check agains local version
-                            print(f"\nChecking for a match with: {local_release}\n")
+                            songs = []
+                            for track in one_release.tracklist:
+                                songs.append(track.title)
+                            api_release = API_Release(local_album, one_release.title, songs, one_release.id)
+                            versions.append(api_release)
+                        # print the versions that you found
+                        print(f"{len(versions)} versions of {release.title} from {local_artist} found:")
+                        for index, api_release in enumerate(versions, 1):
+                            print(f"\n{index}. version: {api_release}")
+
+                        
+                        print(f"\nChecking for a match with: {local_release}\n")
                         for index, api_release in enumerate(versions, 1):
                             are_equal = check_if_releases_equal(local_release, api_release, index)
                             if are_equal:
