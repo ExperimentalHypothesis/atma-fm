@@ -76,8 +76,8 @@ def tag_and_move_matched_folders(source_dir:str, id:int) -> None:
         else:
             os.rename(src_filepath, dst_filepath)
 
-def get_release_versions_from_discogs_api_new(local_release:namedtuple) -> None:
-        """ find the release version on discogs that match the version on filesystem, tag it and move it a separate folder """
+def get_release_versions_from_discogs_api_by_artist(local_release:namedtuple) -> None:
+        """ find the release version [query by artist] match the version on filesystem tag it and move it a separate folder """
 
         local_artist, local_album, local_tracklist = local_release.artist, local_release.album, local_release.songs
         print(f"Searching for Album: {local_album} from {local_artist}")
@@ -125,16 +125,79 @@ def get_release_versions_from_discogs_api_new(local_release:namedtuple) -> None:
                     print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS")
 
 
+
+def get_release_version_from_discogs_api_by_title(local_release:namedtuple) -> None:
+    """ tohle hleda podle nazvu alba - hlavne pro pripady, ze autor je kolaborce  Steve Roach & Byron Meatcalf """ 
+
+    local_artist, local_album, local_tracklist = local_release.artist, local_release.album, local_release.songs
+    print(f"Searching for Album: {local_album} from {local_artist}")
+    API_Release = namedtuple("API_Release", ["artist", "album", "songs", "id"])
+    versions = []
+
+    # 1] query na nazev alba
+    
+    # try:
+    d = discogs_client.Client('atma-fm', user_token="XqVXtxTvsRtYoPaxmvqIfBXHKxyZEqlTVYVzvDPe")
+    releases = d.search(local_album, type="release")
+       
+    # except IndexError:
+    #     print(f"Index error, query returned list with only only {len(releases)} items")
+    # except Exception as e:
+    #     print("error when connection to API:", e)
+    # # 2] ziskej list vsech verzi tohodle releaseu
+    # else:
+    for i in range(10):
+        api_title = releases[i].title
+        local_title = local_artist + " " + local_album
+        string_matched = difflib.SequenceMatcher(None, local_title, api_title).ratio() > 0.90
+        if string_matched:
+            release = releases[i]
+            break
+    try:
+        print(f"{len(release.master.versions)} of {local_album} found: ")
+        for version in release.master.versions:
+            songs = []
+            for track in version.tracklist:
+                songs.append(track.title)
+                api_release = API_Release(local_artist, version.title, songs, version.id)
+            versions.append(api_release)
+    except UnboundLocalError as ale:
+        print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS")
+        # else:
+        #     print(f"{len(versions)} versions of {release.title} from {local_artist} found:")
+        #     # print each version
+        #     for index, api_release in enumerate(versions, 1):
+        #         print(f"\n{index}. version: {api_release}")
+        #     # check agains local version
+        #     print(f"\nChecking for a match with: {local_release}\n")
+        # for index, api_release in enumerate(versions, 1):
+        #     are_equal = check_if_releases_equal(local_release, api_release, index)
+        #     if are_equal:
+        #         print(f"\nFINAL: API MATCH FOUND: {local_release} and {api_release} are equal.. -> moving and skiping to another album\n")
+        #         tag_and_move_matched_folders(local_release.path, api_release.id)
+        #         break
+ 
+
+
+
+
+
+ 
+
+    
+    # 2] vypis prvnich 10 a projed forem, checkni kde se rovna autor
+    # 3] ziskej id tohodle a udelej query na verze -> vytvor list
+    # 4] projed list tedlech verzi udelej strukturu jako predtim
+
+
 if __name__ == "__main__":
+
     root="/home/lukas/Music/api-to_be_checked"
     local_releases = get_releases_from_local_filesystem(root)
-
-
     for i in local_releases:
-        get_release_versions_from_discogs_api_new(i)
+        get_release_version_from_discogs_api_by_title(i)
         print("------------------------------------------")
-        # print(i)
-        # tag_and_move_matched_folders(i.path)
+
 
 
     # pp = pprint.PrettyPrinter(indent=4)
