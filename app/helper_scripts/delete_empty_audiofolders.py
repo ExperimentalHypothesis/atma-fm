@@ -81,11 +81,9 @@ def delete_folders_without_audio(directory: str) -> int:
 
 
 if __name__ == "__main__":
-    source = r"/home/lukas/Music/api-to_be_checked"
+    source = r"C:\Users\nirvikalpa\Music\api\api-to_be_checked"
 
-    if not os.path.exists(source):
-        print("directory doesnt exists, check the path")
+    if not os.path.exists(source): print("directory doesnt exists, check the path")
 
     # delete recursively bottom up
-    while delete_folders_without_audio(source) != 0:
-        delete_folders_without_audio(source)
+    while delete_folders_without_audio(source) != 0: delete_folders_without_audio(source)

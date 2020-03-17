@@ -1,5 +1,6 @@
 import discogs_client, os, pprint, difflib, shutil, re, time
 from collections import namedtuple
+from delete_empty_audiofolders import delete_folders_without_audio
 
 def get_releases_from_local_filesystem(source:str) -> list:
     """ return list of releases from filesystem 
@@ -11,6 +12,7 @@ def get_releases_from_local_filesystem(source:str) -> list:
     audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt")
     with open(audio_extensions) as f:
         e = f.read().splitlines()
+
 
     for composer in os.listdir(source):
         if os.path.isdir(os.path.join(source, composer)):
@@ -36,9 +38,11 @@ def get_releases_from_local_filesystem(source:str) -> list:
                 discographies.append(r)
     return(discographies)
 
+
 def validate_string_similarity(a:str, b:str) -> bool:
     threshold = difflib.SequenceMatcher(None, a, b).ratio()
     return True if threshold > 0.85 else False
+
 
 def have_equal_tracklist_names(local_release: namedtuple, api_release: namedtuple, index:int) -> bool:
     """ check if release on filesystem is the same as release on discogs """
@@ -61,13 +65,17 @@ def have_equal_tracklist_names(local_release: namedtuple, api_release: namedtupl
     print(f"NO MATCH: {index}. api version has the same tracklist length, but the song names are different")
     return False
 
-def tag_and_move_matched_folders(source_dir:str, id:int, directory_name:str) -> None:
+
+def tag_and_move_matched_folders(source_dir:str, directory_name:str, *id:int) -> None:
     """ move folders [album version] were matched with discogs api """
 
     for file in os.listdir(source_dir):
         src_filepath = os.path.join(source_dir, file)
         dst_filepath = src_filepath.replace("api-to_be_checked", directory_name) 
-        dst_filepath = os.path.join(os.path.dirname(dst_filepath) + f' [api match {id}]', file)
+        if id:
+            dst_filepath = os.path.join(os.path.dirname(dst_filepath) + f' [api match {id}]', file)
+        else:
+            dst_filepath = os.path.join(os.path.dirname(dst_filepath), file)
         if not os.path.exists(os.path.dirname(dst_filepath)):
             os.makedirs(os.path.dirname(dst_filepath))
             os.rename(src_filepath, dst_filepath)
@@ -88,6 +96,7 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
             time.sleep(1)
         except IndexError:
             print(f"Artist {local_artist} NOT FOUND ON DISCOGS.. skipping")
+            tag_and_move_matched_folders(local_release.path, "5] artist not found on discogs api")
         except Exception as e:
             print("error when connection to API:", e)
         else:
@@ -125,7 +134,7 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
                         for index, api_release in enumerate(versions, 1):
                             if have_equal_tracklist_names(local_release, api_release, index):
                                 print(f"\n>> FINAL: API MATCH FOUND << on tracklist names: {local_release} and {api_release} are equaly named -> moving and skiping to another album\n")
-                                tag_and_move_matched_folders(local_release.path, api_release.id, "1] api match [by names]")
+                                tag_and_move_matched_folders(local_release.path, "1] api match [by names]", api_release.id)
                                 match_found = True
                                 break
                         else:
@@ -137,7 +146,7 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
                             for index, api_release in enumerate(versions, 1): 
                                 if len(local_release.songs) == len(api_release.songs):
                                     print(f"\n>> FINAL: API MATCH FOUND << on tracklist length: {local_release} and {api_release} are equally long -> moving and skiping to another album\n")
-                                    tag_and_move_matched_folders(local_release.path, api_release.id, "2] api match [by length]")
+                                    tag_and_move_matched_folders(local_release.path, "2] api match [by length]", api_release.id)
                                     match_found = True
                                     break
                             else:
@@ -146,11 +155,13 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
                         # if not matched with names or length, it is probbaly incomplete..
                         if not match_found:                      
                             print(f"Album {local_release.album} from {local_release.artist} is incomplete -> moving to INCOMPLETE FOLDER")
-                            tag_and_move_matched_folders(local_release.path, 0, "3] api match [not found - incomplete tracklist]")
+                            tag_and_move_matched_folders(local_release.path, "3] api match [not found - incomplete tracklist]", 0)
                         
-                    break # this break needs to be here in order to jump out of the for loop and not to print the statement bellow
+                        break # this break needs to be here in order to jump out of the for loop and not to print the statement bellow
                 else:
-                    print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS")
+                    print(f"Album {local_album} from {local_artist} NOT FOUND ON DISCOGS -> moving and skiping to another album\n")
+                    tag_and_move_matched_folders(local_release.path, "4] album not found on discogs api")
+
 
 
 
@@ -212,11 +223,17 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
 
 if __name__ == "__main__":
 
-    root=r"C:\Users\nirvikalpa\Music\api\api-to_be_checked"
-    local_releases = match_releases_from_local_filesystem(root)
+    root = r"C:\Users\nirvikalpa\Music\api\api-to_be_checked"
+    if not os.path.exists(root): print("directory doesnt exists, check the path")
+
+    local_releases = get_releases_from_local_filesystem(root)
     for i in local_releases:
-        get_release_versions_from_discogs_api_by_artist(i)
-        print("-------------------------------------------------------------------------")
+        match_release_versions_from_discogs_api_by_artist(i)
+        print("--------------------------------------------")
+
+    # delete recursively bottom up
+    while delete_folders_without_audio(root) != 0:
+        delete_folders_without_audio(root)
 
 
 
