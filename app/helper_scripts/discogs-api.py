@@ -67,7 +67,17 @@ def have_equal_tracklist_names(local_release: namedtuple, api_release: namedtupl
 
 
 def tag_and_move_matched_folders(source_dir:str, directory_name:str, *id:int) -> None:
-    """ move folders [album version] were matched with discogs api """
+    """ move folders [album version] were matched with discogs api and change path names based on this format
+    
+        old:
+        path='Z:\\Music\\api\\api-to_be_checked\\andrew lahiff\\2009 tales of hidden algebra')
+
+        new:
+        path='Z:\\Music\\api\\1] api match [by names]\\Andrew Lahiff\\Tales Of Hidden Algebra [api match 123456]')
+        path='Z:\\Music\\api\\1] api match [by names]\\<API_Release.artist>\\<API_Release.album [api match {id[0]}]>')
+
+    """
+
 
     for file in os.listdir(source_dir):
         src_filepath = os.path.join(source_dir, file)
@@ -228,9 +238,10 @@ if __name__ == "__main__":
 
     local_releases = get_releases_from_local_filesystem(root)
     for i in local_releases:
+        print(i)
         # if not i.songs:
         #     print(i)
-        match_release_versions_from_discogs_api_by_artist(i)
+        # match_release_versions_from_discogs_api_by_artist(i)
         print("--------------------------------------------")
 
     # delete recursively bottom up
@@ -247,12 +258,12 @@ if __name__ == "__main__":
 
 
 """
-puvodni
-path='Z:\\Music\\api\\1] api match [by names]\\andrew lahiff\\2009 tales of hidden algebra')
+old:
+'Z:\\Music\\api\\api-to_be_checked\\andrew lahiff\\2009 tales of hidden algebra\\'Of Hidden Algebra (01) Reflecting World.mp3)
 
-budouci
-path='Z:\\Music\\api\\1] api match [by names]\\Andrew Lahiff\\Tales Of Hidden Algebra')
-path='Z:\\Music\\api\\1] api match [by names]\\<API_Release.artist>\\<API_Release.album>')
+new:
+'Z:\\Music\\api\\1] api match [by names]\\Andrew Lahiff\\Tales Of Hidden Algebra [api match 123456]\\01 - Reflecting World.mp3'
+('Z:\\Music\\api\\1] api match [by names]\\<API_Release.artist>\\<API_Release.album [api match #]>\\API_Release.songs[i] ')
 
 
 Local_Release(artist='Andrew Lahiff', album='Tales Of Hidden Algebra', songs=['Of Hidden Algebra (01) Reflecting World', 'Of Hidden
