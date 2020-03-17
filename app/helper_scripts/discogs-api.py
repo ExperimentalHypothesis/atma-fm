@@ -73,7 +73,7 @@ def tag_and_move_matched_folders(source_dir:str, directory_name:str, *id:int) ->
         src_filepath = os.path.join(source_dir, file)
         dst_filepath = src_filepath.replace("api-to_be_checked", directory_name) 
         if id:
-            dst_filepath = os.path.join(os.path.dirname(dst_filepath) + f' [api match {id}]', file)
+            dst_filepath = os.path.join(os.path.dirname(dst_filepath) + f' [api match {id[0]}]', file)
         else:
             dst_filepath = os.path.join(os.path.dirname(dst_filepath), file)
         if not os.path.exists(os.path.dirname(dst_filepath)):
@@ -138,7 +138,7 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
                                 match_found = True
                                 break
                         else:
-                            print(f"\nNo match based on tracklist names for: {local_release}")
+                            print(f"\nNo match based on tracklist names for: {local_release}\n")
                                 
                         # if it did not find match on names, try find match with an api version based on tracklist length
                         if not match_found:
@@ -150,7 +150,7 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
                                     match_found = True
                                     break
                             else:
-                                print(f"\nNo match based on tracklist length for: {local_release}")
+                                print(f"\nNo match based on tracklist length for: {local_release}\n")
                       
                         # if not matched with names or length, it is probbaly incomplete..
                         if not match_found:                      
@@ -228,14 +228,37 @@ if __name__ == "__main__":
 
     local_releases = get_releases_from_local_filesystem(root)
     for i in local_releases:
+        # if not i.songs:
+        #     print(i)
         match_release_versions_from_discogs_api_by_artist(i)
         print("--------------------------------------------")
 
     # delete recursively bottom up
-    while delete_folders_without_audio(root) != 0:
-        delete_folders_without_audio(root)
+    try:
+        while delete_folders_without_audio(root) != 0:
+            delete_folders_without_audio(root)
+    except PermissionError as pe:
+        print(pe)
 
 
 
     # pp = pprint.PrettyPrinter(indent=4)
     # pp.pprint(api_releases)
+
+
+"""
+puvodni
+path='Z:\\Music\\api\\1] api match [by names]\\andrew lahiff\\2009 tales of hidden algebra')
+
+budouci
+path='Z:\\Music\\api\\1] api match [by names]\\Andrew Lahiff\\Tales Of Hidden Algebra')
+path='Z:\\Music\\api\\1] api match [by names]\\<API_Release.artist>\\<API_Release.album>')
+
+
+Local_Release(artist='Andrew Lahiff', album='Tales Of Hidden Algebra', songs=['Of Hidden Algebra (01) Reflecting World', 'Of Hidden
+Algebra (02) Sunrise Nebula', 'Of Hidden Algebra (03) Circulating', 'Of Hidden Algebra (04) Lonely Serenity', 'Of Hidden Algebra (05) Below The City In The Clouds', 'Of Hidden Algebra (06) Through Time', 'Of Hidden Algebra (07) Sky Watch', 'Of Hidden Algebra (08) Planetary Wonder', 'Of Hidden Algebra (09) A Thousand Falling Mirrors', 'Of Hidden Algebra (10) Time Continuing', 'Of Hidden Algebra (11) The Radiance Of Dreaming Spheres', 'Of Hidden Algebra (12) Calling For Answers'], path='Z:\\Music\\api\\1] api match [by names]\\andrew lahiff\\2009 tales of hidden algebra')
+
+API_Release(artist='Andrew Lahiff', album='Tales Of Hidden Algebra', songs=['01 - Reflecting World', '02 - Sunrise Nebula', '03 - Circulating', '04
+- Lonely Serenity', '05 - Below The City In The Clouds', '06 - Through Time', '07 - Sky Watch', '08 - Planetary Wonder', '09 - A Thousand Falling Mirrors', '10 - Time Continuing', '11 - The Radiance Of Dreaming Spheres', '12 - Calling For Answers'], id=2368452)
+
+"""
