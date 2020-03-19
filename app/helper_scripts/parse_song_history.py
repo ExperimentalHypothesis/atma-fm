@@ -38,6 +38,8 @@
 
 
 def get_last_n_songs(n: int) -> list:
+    """ get last n songs from logfile playlist to be displayed at frontend """
+
     import collections, re
     Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
     song_history = []

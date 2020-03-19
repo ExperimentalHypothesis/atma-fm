@@ -2,6 +2,25 @@ import discogs_client, os, pprint, difflib, shutil, re, time
 from collections import namedtuple
 from delete_empty_audiofolders import delete_folders_without_audio
 
+
+def move_nonclustered_files_to_folder(root: str) -> None:
+    """ 
+    when iterating over files using get_releases_from_local_filesystem() 
+    there were troubles if an artist folder contained files that were not in an album subfolder.
+    this function clusters there files into an artificial folder, thus, it should be run first to prepare the field
+    """
+
+    for artist_folder in os.listdir(root):
+        for item in os.listdir(os.path.join(root, artist_folder)):
+            if os.path.isfile(os.path.join(root, artist_folder, item)):
+                src_path = os.path.join(root, artist_folder, item)
+                dst_path = os.path.join(root, artist_folder, "artificial folder", item)
+                if not os.path.exists(os.path.dirname(dst_path)):
+                    os.makedirs(os.path.dirname(dst_path))
+                print(f"moving {src_path} to {dst_path}")
+                os.rename(src_path, dst_path)
+
+
 def get_releases_from_local_filesystem(source:str) -> list:
     """ return list of releases from filesystem 
     the format of namedtuple(artist, album, [songs], path) """
@@ -44,6 +63,7 @@ def validate_string_similarity(a:str, b:str) -> bool:
     return True if threshold > 0.85 else False
 
 
+
 def have_equal_tracklist_names(local_release: namedtuple, api_release: namedtuple, index:int) -> bool:
     """ check if release on filesystem is the same as release on discogs """
 
@@ -75,9 +95,7 @@ def tag_and_move_matched_folders(source_dir:str, directory_name:str, *id:int) ->
         new:
         path='Z:\\Music\\api\\1] api match [by names]\\Andrew Lahiff\\Tales Of Hidden Algebra [api match 123456]')
         path='Z:\\Music\\api\\1] api match [by names]\\<API_Release.artist>\\<API_Release.album [api match {id[0]}]>')
-
     """
-
 
     for file in os.listdir(source_dir):
         src_filepath = os.path.join(source_dir, file)
@@ -103,7 +121,7 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
         try:
             d = discogs_client.Client('atma-fm', user_token="XqVXtxTvsRtYoPaxmvqIfBXHKxyZEqlTVYVzvDPe")
             releases = d.search(local_artist, type='artist')[0].releases
-            time.sleep(1)
+            #time.sleep(1)
         except IndexError:
             print(f"Artist {local_artist} NOT FOUND ON DISCOGS.. skipping")
             tag_and_move_matched_folders(local_release.path, "5] artist not found on discogs api")
@@ -123,6 +141,7 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
                                 for track in version.tracklist:
                                     songs.append(track.title)
                                     api_release = API_Release(local_artist, release.title, songs, version.id)
+                                    time.sleep(1)
                                 versions.append(api_release)
                        
                         # make the list when it has only one version
@@ -227,34 +246,43 @@ def match_release_versions_from_discogs_api_by_artist(local_release:namedtuple) 
 #         #         break
  
     # 2] vypis prvnich 10 a projed forem, checkni kde se rovna autor
-    # 3] ziskej id tohodle a udelej query na verze -> vytvor list
+    # 3] ziskej id tohodle a udelej query na verze -> vytvor listdef count_albums(root:str) -> int:
     # 4] projed list tedlech verzi udelej strukturu jako predtim
 
 
+
+
+def main(root:str) -> None:
+    """ Executes all other function """
+
+    if not os.path.exists(root): 
+        print("directory doesnt exists, check the path")
+    else:    
+        move_nonclustered_files_to_folder(root)
+        try:
+            while delete_folders_without_audio(root) != 0: 
+                delete_folders_without_audio(root)
+        except PermissionError as pe:
+            print(pe)
+        try:
+            for i in get_releases_from_local_filesystem(root):
+                match_release_versions_from_discogs_api_by_artist(i)
+                print("--------------------------------------------")
+        except Exception as e:
+            print(e)
+            time.sleep(100)
+            process()
+
+    
+
 if __name__ == "__main__":
+    main(r"Z:\Music\api\api-to_be_checked")
 
-    root = r"C:\Users\nirvikalpa\Music\api\api-to_be_checked"
-    if not os.path.exists(root): print("directory doesnt exists, check the path")
-
-    local_releases = get_releases_from_local_filesystem(root)
-    for i in local_releases:
-        print(i)
-        # if not i.songs:
-        #     print(i)
-        # match_release_versions_from_discogs_api_by_artist(i)
-        print("--------------------------------------------")
-
-    # delete recursively bottom up
+    # at the very end => delete recursively bottom up
     try:
-        while delete_folders_without_audio(root) != 0:
-            delete_folders_without_audio(root)
+        while delete_folders_without_audio(root) != 0: delete_folders_without_audio(root)
     except PermissionError as pe:
         print(pe)
-
-
-
-    # pp = pprint.PrettyPrinter(indent=4)
-    # pp.pprint(api_releases)
 
 
 """

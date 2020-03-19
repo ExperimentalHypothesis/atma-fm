@@ -8,7 +8,7 @@
 # $if(%albumartist%,%album%/,)
 # $if($gt(%totaldiscs%,1),%discnumber%-,)$if($and(%albumartist%,%tracknumber%),$num(%tracknumber%,2) ,)$if(%_multiartist%,%artist% - ,) %artist% -- %album% -- %title%
 
-import os, shutil
+import os, shutil, delete_empty_audiofolders, time
 
 def sort_audiofolders(source: str, target: str) -> None:
     """ move audio folders into correct path in alphabetical structure """
@@ -34,12 +34,22 @@ def sort_audiofolders(source: str, target: str) -> None:
     # TODO log how many folders were moved, how many were skipped (name which was which) 
 
 # if __name__ == "__main__":
-source = r"\\192.168.0.109\Public\Music\_temp"
-target = r"\\192.168.0.109\Public\Music\_temp"
+source = r"Z:\Music\tagged\_to be sorted"
+target = r"Z:\Music\tagged"
 #     try:
 #         sort_audiofolders(source, target)
 #     except Exception as e:
 #         print(e)
 # # TODO
 
+
+
+start = time.perf_counter()
 sort_audiofolders(source, target)
+stop = time.perf_counter()
+
+print(f"moving files took {stop - start} seconds")
+
+while delete_empty_audiofolders.delete_folders_without_audio(source) != 0:
+    delete_empty_audiofolders.delete_folders_without_audio(source)
+
