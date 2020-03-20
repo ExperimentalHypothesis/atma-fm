@@ -271,7 +271,7 @@ def main(root:str) -> None:
         except Exception as e:
             print(e)
             time.sleep(100)
-            process()
+            main()
 
     
 

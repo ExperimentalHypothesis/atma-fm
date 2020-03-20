@@ -15,7 +15,7 @@ import os, re
 # will be more complicated) so the solution to it is:
 
 # steps:
-# 0] get rid of all the - chars
+# 0] get rid of all the - chars nad make it lowercase
 # 1] get rid of album name in the songname
 # 2] get rig of artist name in the songname
 # 3] apply regex and parse out
@@ -25,47 +25,72 @@ import os, re
 
 print("importing...")
 
-def normalize_artists_albums_songs(root:str) -> None:
+
+def delete_spaces(root:str) -> None:
+    """ delete unnecesary spaces in song names """
+
+    for path, dirs, files in os.walk(root):
+        for file in files:
+            src_file = os.path.join(path, file)
+            dst_file = os.path.join(path, file.replace("   ", " ").replace("  ", " "))
+            os.rename(src_file, dst_file)
+
+
+def strip_out_artists_albums_names(root:str) -> None:
+    """ strip out artist name and album name if they are a part of name of a song name """
+
+    for artist_folder in os.listdir(root):
+        for album_folder in os.listdir(os.path.join(root, artist_folder)):
+            tracklist = [track for track in os.listdir(os.path.join(root, artist_folder, album_folder)) if track.endswith((".mp3", ".flac", ".wma"))]
+            if all(artist_folder in song for song in tracklist) or all(album_folder in song for song in tracklist): 
+                print(f"Album {album_folder} contains substrings as part of all audio tracks")
+                for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
+                    src_file = file
+                    dst_file = file.replace(artist_folder, "")
+                    dst_file = dst_file.replace(album_folder, "")
+                    print(f"renaming {src_file} to {dst_file}")
+                    os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
+
+
+# TODO pridat checky velikosti znaku - jestli uz to existuje ale pres if ZXY in path...
+def normalize_artists_albums_songs_names(root:str) -> None:
     """ strip out year in album folder name, strip out and -_ char from all song names, album names, artist names and make all song names, album names, artist names lowercase -> all this leads to better parsing which comes next
     """
-
+    # 1] rename all artist folder bottom down as u traverse
     for artist_folder in os.listdir(root):
         artist_folder_normalized = artist_folder.replace("-", " ").replace("_", " ").lower()
         src_name = os.path.join(root, artist_folder)
         dst_name = os.path.join(root, artist_folder_normalized)
-        if not os.path.exists(dst_name):
-            print(f"renaming artist from {src_name} to {dst_name}")
-            os.rename(src_name, dst_name)
+        #if not os.path.exists(dst_name):
+        print(f"renaming artist from {src_name} to {dst_name}")
+        os.rename(src_name, dst_name)
         print(artist_folder_normalized)
-
+        
+        # 2] rename all album folders of each artist
         for album_folder in os.listdir(os.path.join(root, artist_folder_normalized)):
             album_folder_normalized = re.sub("^\d\d\d\d\s?\-?", "", album_folder)
             album_folder_normalized = album_folder_normalized.replace("-"," ").replace("_", " ").lower()
             src_name = os.path.join(root, artist_folder_normalized, album_folder)
             dst_name = os.path.join(root, artist_folder_normalized, album_folder_normalized)
-            if not os.path.exists(dst_name):
-                print(f"renaming album from {src_name} to {dst_name}")
-                os.rename(src_name, dst_name)
+            #if album_folder_normalized not in dst_name:
+            print(f"renaming album from {src_name} to {dst_name}")
+            os.rename(src_name, dst_name)
             print("  ", album_folder_normalized)
-
+            
+            # 3] rename all tracks of each album
             for file in os.listdir(os.path.join(root, artist_folder_normalized, album_folder_normalized)):
                 if file.endswith((".mp3", ".flac")):
                     file_normalized = file.replace("-", " ").replace("_", " ").lower()
                     file_normalized = re.sub("\s\s\s", " ", file_normalized)
                     src_name = os.path.join(root, artist_folder_normalized, album_folder_normalized, file)
                     dst_name = os.path.join(root, artist_folder_normalized, album_folder_normalized, file_normalized)
-                    if not os.path.exists(dst_name):
-                        print(f"renaming {src_name} to {dst_name}")
-                        os.rename(src_name, dst_name)
+                    #if not os.path.exists(dst_name):
+                    print(f"renaming {src_name} to {dst_name}")
+                    os.rename(src_name, dst_name)
                     print("    ", file)
-
-
-
-
-
-
-
-
+    
+    strip_out_artists_albums_names(root)
+    delete_spaces(root)
 
 
 def find_regex_pattern_match(root:str) -> None:
@@ -111,6 +136,26 @@ def count_albums(root:str) -> int:
             c += 1
     return c
 
+def print_all_files(root:str) -> None:
+    """ print all audio files in a directory """
+
+    for path, dirs, folders in os.walk(root):
+        for file in folders:
+            if file.endswith((".mp3", ".flac", ".wma")):
+                print(file)
+
+def print_dir_tree(root:str) -> None:
+    """ prints directory tree of all files """
+
+    for artist in os.listdir(root):
+        print(artist)
+        for album in os.listdir(os.path.join(root, artist)):
+            print("  ", album)
+            for file in os.listdir(os.path.join(root, artist, album)):
+                print("     ", file)
+
+
+
 
 # for artist_folder in os.listdir(root):
 #     """ 
@@ -151,6 +196,7 @@ def count_albums(root:str) -> int:
 root = r"Z:\Music\api\1] api match [by names]"
 
 def main(root:str):
+    normalize_artists_albums_songs_names(root)
     find_regex_pattern_match(root)
 
 if __name__ == "__main__":
