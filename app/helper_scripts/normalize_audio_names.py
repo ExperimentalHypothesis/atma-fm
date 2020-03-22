@@ -10,21 +10,6 @@
 01 , part one.mp3                                                                   ^\d\d\s[,]\s[\w\s()]*.mp3                   " ".join(s.split(" - ")[1:])
 01 , part one (and the end).mp3    
 
-
-09 who'll fall
-04 rome for douglas p.
-10 [untitled]
-03 tokyo a.m.
-1 06 new fool's moon the closet
-1 07 my wandering star as a bird, part 2
-03 six hours to louisiana, black coffee going cold
-07 elvis on the radio, steel guitar in my soul
-08 3 a.m. somewhere out of beaumont
-01 first, consider the lillies
-04 4am exhale (chill out, world!)
-04 montagne d'or (der gute berg)
-05 oxbow lakes (andy's space mix)
-
 """
 ##############################################################################################################################################################
 
@@ -39,7 +24,7 @@
 
 # 3] parse out the name only
 
-import os, re
+import os, re, mutagen
 from collections import namedtuple
 
 print("importing...")
@@ -139,40 +124,70 @@ def normalize_artists_albums_songs_names(root:str) -> None:
 01 name of artist -- name of album -- name of song.mp3
 """
 
+def tag_songs(release:namedtuple) -> None:
+    """ 
+    write id3 tags [artist, album, title] to audio files (used for the albums that are not found by by MusicBranz Pickard)
+    artist, album and title is parsed out from filesystem using regex patterns.
+    to be parsed out and renamed corretly, the names must be already normalize using normalize_artists_albums_songs_names()
+    """
+
+    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:'?!\[\]]*)$") # one CD 
+    p2 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:'?!\[\]]*)$") # multiple CD
+
+    artist, album, songs, paths = release.artist.title(), release.album.title(), release.songs, release.paths
+    for song, path in zip(songs, paths):
+        song_name = song.rsplit(".", 1)[0].title()
+        if p1.match(song_name):
+            m = p1.match(song_name)
+            tracknumber, _, title = m.groups()
+            tags = mutagen.File(path, easy=True)
+            try:
+                tags['album'] = album
+                tags['artist'] = artist
+                tags['title'] = title
+                tags['tracknumber'] = tracknumber
+            except Exception as e:
+                print(e)
+            tags.save()
+        else:
+            print(f"Song {song_name} doent match regex -> not tagged")
+
+
 
 def rename_songs_for_broadcasting(release:namedtuple) -> None:
     """ 
-    renames songs used to radio broadcast following this pattern:
-    old name: 01 name of song.mp3
-    new name: 01 name of artist -- name of album -- name of song.mp3
+    renames songs used to radio broadcast following this pattern: 
+    01 Name Of Artist -- Name Of Album -- Name Of Song.mp3 
     """
-    album, artist, songs = release.album, release.artist, release.songs
+    album, artist, songs, paths = release.album, release.artist, release.songs, release.paths
     #print(album, artist, songs)
     
 
 def make_tuples_of_album_artist_songs(root:str) -> None:
-    """ create namedtuple from all albums in root dir in the form of artist, album, songs[] """
+    """ create namedtuple from all albums in root dir in the form of artist, album, songs[], paths[] """
 
     #audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt")
     audio_extensions = r"C:\Users\nirvikalpa\Disk Google\coding\Python\repos\radio\app\helper_scripts\audio_extensions.txt"    
     with open(audio_extensions) as f:
         e = f.read().splitlines()
 
-    Release = namedtuple("Release", ["artist", "album", "songs"])
+    Release = namedtuple("Release", ["artist", "album", "songs", "paths"])
     releases = []
 
     for artist_folder in os.listdir(root):
         for album_folder in os.listdir(os.path.join(root, artist_folder)):
-            tracklist = [track for track in os.listdir(os.path.join(root, artist_folder, album_folder)) if track.endswith(tuple(e))]
-            release = Release(artist_folder, album_folder, tracklist)
-            rename_songs_for_broadcasting(release)
-            print("printing release", release)
-    #         releases.append(release)
-    # return releases   
+            songs = [track for track in os.listdir(os.path.join(root, artist_folder, album_folder)) if track.endswith(tuple(e))]
+            paths = [os.path.join(root, artist_folder, album_folder, track) 
+                    for track in os.listdir(os.path.join(root, artist_folder, album_folder)) if track.endswith(tuple(e))]
+            release = Release(artist_folder, album_folder, songs, paths)
+            # print(release)
+            tag_songs(release)
+            # rename_songs_for_broadcasting(release)
+
 
 
 def find_regex_pattern_match(root:str) -> None:
-    """ prints all audio files with particular regex pattern and parse out the song name only """
+    """ prints all audio files with particular regex pattern - this is just for quick check to see matched patterns """
 
     p1 = re.compile("(^\d\d)(\s)([\w+\s().,:'?!\[\]]*)$") # one CD 
     p2 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:'?!\[\]]*)$") # multiple CD
