@@ -40,6 +40,7 @@
 # 3] parse out the name only
 
 import os, re
+from collections import namedtuple
 
 print("importing...")
 
@@ -132,11 +133,49 @@ def normalize_artists_albums_songs_names(root:str) -> None:
     delete_spaces(root)
 
 
+
+"""
+01 name of song.mp3
+01 name of artist -- name of album -- name of song.mp3
+"""
+
+
+def rename_songs_for_broadcasting(release:namedtuple) -> None:
+    """ 
+    renames songs used to radio broadcast following this pattern:
+    old name: 01 name of song.mp3
+    new name: 01 name of artist -- name of album -- name of song.mp3
+    """
+    album, artist, songs = release.album, release.artist, release.songs
+    #print(album, artist, songs)
+    
+
+def make_tuples_of_album_artist_songs(root:str) -> None:
+    """ create namedtuple from all albums in root dir in the form of artist, album, songs[] """
+
+    #audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt")
+    audio_extensions = r"C:\Users\nirvikalpa\Disk Google\coding\Python\repos\radio\app\helper_scripts\audio_extensions.txt"    
+    with open(audio_extensions) as f:
+        e = f.read().splitlines()
+
+    Release = namedtuple("Release", ["artist", "album", "songs"])
+    releases = []
+
+    for artist_folder in os.listdir(root):
+        for album_folder in os.listdir(os.path.join(root, artist_folder)):
+            tracklist = [track for track in os.listdir(os.path.join(root, artist_folder, album_folder)) if track.endswith(tuple(e))]
+            release = Release(artist_folder, album_folder, tracklist)
+            rename_songs_for_broadcasting(release)
+            print("printing release", release)
+    #         releases.append(release)
+    # return releases   
+
+
 def find_regex_pattern_match(root:str) -> None:
     """ prints all audio files with particular regex pattern and parse out the song name only """
 
-    p1 = re.compile("^\d\d\s[\w+\s().,:'?!\[\]]*$") # one CD 
-    p2 = re.compile("^\d\s\d\d\s[\w+\s().,:'?!\[\]]*$") # multiple CD
+    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:'?!\[\]]*)$") # one CD 
+    p2 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:'?!\[\]]*)$") # multiple CD
 
     #audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt")
     audio_extensions = r"C:\Users\nirvikalpa\Disk Google\coding\Python\repos\radio\app\helper_scripts\audio_extensions.txt"
@@ -148,9 +187,8 @@ def find_regex_pattern_match(root:str) -> None:
             for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
                 if file.endswith(tuple(e)):
                     file = os.path.splitext(file)[0]
-                    if p1.match(file):      continue # print(file, " -> p1 match")
-                    elif p2.match(file):    continue # print(file, " -> p2 match")
-
+                    if p1.match(file):      print(file, " -> p1 match") # continue
+                    elif p2.match(file):    print(file, " -> p2 match") # continue
                     else: print(file, " -> no regex match")
 
 
@@ -163,6 +201,7 @@ def count_albums(root:str) -> int:
             c += 1
     return c
 
+
 def print_all_files(root:str) -> None:
     """ print all audio files in a directory """
 
@@ -170,6 +209,7 @@ def print_all_files(root:str) -> None:
         for file in folders:
             if file.endswith((".mp3", ".flac", ".wma")):
                 print(file)
+
 
 def print_dir_tree(root:str) -> None:
     """ prints directory tree of all files """
