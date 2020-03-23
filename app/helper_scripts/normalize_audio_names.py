@@ -41,7 +41,7 @@ def get_all_audio_extensions() -> list:
     return e
 
 
-def delete_spaces(root:str) -> None:
+def strip_whitespaces(root:str) -> None:
     """ delete double and triple spaces in song names """
 
     for path, dirs, files in os.walk(root):
@@ -51,7 +51,7 @@ def delete_spaces(root:str) -> None:
             os.rename(src_file, dst_file)
 
 
-def delete_dot_after_tracknumber(root:str) -> None:
+def strip_dot_after_tracknumber(root:str) -> None:
     """ some song have this format "01. songname.mp3", this will delete the dot that makes mess for re patterns """
 
     for path, dirs, files in os.walk(root):
@@ -63,7 +63,19 @@ def delete_dot_after_tracknumber(root:str) -> None:
                 os.rename(src_file, dst_file)
 
 
-def strip_out_artists_albums_names(root:str) -> None:
+def strip_apimatch_from_album_name(root:str) -> None:
+    """ strip [api match 131243] from album folder """
+
+    for artist in os.listdir(root):
+        for album in os.listdir(os.path.join(root, artist)):
+            if "api match" in album:
+                album_name = album.rsplit(' [api')[0]
+                src_name = os.path.join(root, artist, album)
+                dst_name = os.path.join(root, artist, album_name)
+                print(f"reaming {src_name} to {dst_name}")
+                os.rename(src_name, dst_name)
+
+def strip_out_artist_album_name_from_song(root:str) -> None:
     """ strip out artist name and album name if they are a part of name of a song name """
 
     for artist_folder in os.listdir(root):
@@ -79,6 +91,100 @@ def strip_out_artists_albums_names(root:str) -> None:
                             dst_file = dst_file.replace(album_folder, "")
                             print(f"Renaming {os.path.join(artist_folder, album_folder, src_file)} to {os.path.join(artist_folder, album_folder, dst_file)}")
                             os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
+
+
+def lowercase_artist(root:str) -> None:
+    """ make artist folder lowercase """
+
+    for artist in os.listdir(root):
+        if artist != artist.lower():
+            src_name = os.path.join(root, artist)
+            dst_name = os.path.join(root, artist.lower())
+            print(f"Lowercasing artist {src_name} to {dst_name}")
+            os.rename(src_name, dst_name)
+
+
+def titlecase_artist(root:str) -> None:
+    """ make artist folder titlecase """
+    
+    for artist in os.listdir(root):
+        if artist != artist.title():
+            src_name = os.path.join(root, artist)
+            dst_name = os.path.join(root, artist.title())
+            print(f"Titlecasing artist {src_name} to {dst_name}")
+            os.rename(src_name, dst_name)
+
+
+def lowercase_album(root:str) -> None:
+    """ make album folder lowercase """
+
+    for artist in os.listdir(root):
+        for album in os.listdir(os.path.join(root, artist)):
+            if album != album.lower():
+                src_name = os.path.join(root, artist, album)
+                dst_name = os.path.join(root, artist, album.lower())
+                print(f"Lowercasing album {src_name} to {dst_name}")
+                os.rename(src_name, dst_name)
+
+
+def titlecase_album(root:str) -> None:
+    """ make album folder lowercase """
+
+    for artist in os.listdir(root):
+        for album in os.listdir(os.path.join(root, artist)):
+            if album != album.title():
+                src_name = os.path.join(root, artist, album)
+                dst_name = os.path.join(root, artist, album.title())
+                print(f"Titlecasing album {src_name} to {dst_name}")
+                os.rename(src_name, dst_name)
+
+
+def lowercase_song(root:str) -> None:
+    """ make song name lowercase """
+
+    e = get_all_audio_extensions()
+
+    for artist in os.listdir(root):
+        for album in os.listdir(os.path.join(root, artist)):
+            for song in os.listdir(os.path.join(root, artist, album)):
+                if song != song.lower():
+                    src_name = os.path.join(root, artist, album, song)
+                    dst_name = os.path.join(root, artist, album, song.lower())
+                    print(f"Lowercasing {os.path.join(artist, album, song)} ==> {os.path.join(artist, album, song.lower())}")
+                    os.rename(src_name, dst_name) 
+
+
+def titlecase_song(root:str) -> None:
+    """ make song name titlecased """
+
+    e = get_all_audio_extensions()
+
+    for artist in os.listdir(root):
+        for album in os.listdir(os.path.join(root, artist)):
+            for song in os.listdir(os.path.join(root, artist, album)):
+                if song != song.title():
+                    src_name = os.path.join(root, artist, album, song)
+                    dst_name = os.path.join(root, artist, album, song.title())
+                    print(f"Titlecasing {os.path.join(artist, album, song)} ==> {os.path.join(artist, album, song.title())}")
+                    os.rename(src_name, dst_name)
+
+
+def titlecase_all(root:str) -> None:
+    """ title all names of songs, artists, albums """
+
+    titlecase_song(root)
+    titlecase_album(root)
+    titlecase_artist(root)
+
+
+def lowercase_all(root:str) -> None:
+    """ lowercase all names of songs, artists, albums """
+
+    lowercase_song(root)
+    lowercase_album(root)
+    lowercase_artist(root)
+
+
 
 # TODO pridat checky velikosti znaku - jestli uz to existuje ale pres if ZXY in path...
 def normalize_names_for_filesystem(root:str) -> None:
@@ -149,13 +255,6 @@ def normalize_names_for_filesystem(root:str) -> None:
     strip_out_artists_albums_names(root)
     delete_spaces(root)
     delete_dot_after_tracknumber(root)
-
-
-def normalize_names_for_broadcasting(release:namedtuple) -> None:
-    """ rename songs used to broadcast following this pattern: 01 Name Of Artist -- Name Of Album -- Name Of Song.mp3 """
-
-    album, artist, songs, paths = release.album, release.artist, release.songs, release.paths
-    #print(album, artist, songs)
 
 ############### to nad tim by mohla bejt jedna trida (dopsat tri funce: normalizaci artistname, normalizaci albumname, normalizaci songname) ################
 
@@ -331,7 +430,7 @@ def print_no_regex_song_match(root:str) -> None:
 def print_all_regex_album_match(root:str) -> None:
     """ print all regex match patter for albums - helper function for quick check. here are the patterns """
 
-    p1 = re.compile(r"^\d\d\d\d\s?[a-zA-z\s!'’&.()+~,äáçăóéűęţ0-9\-]*$")                # 2002 name of album
+    p1 = re.compile(r"^\d\d\d\d\s?[a-zA-z\s!'’&.()+~,üäáçăóéűęţ0-9\-]*$")                # 2002 name of album
     p2 = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                           # name of album
     p3 = re.compile(r"^[a-zA-z\s!'&]*[,]\s\d\d\d\d$")                                    # name of album, 2002 
 
@@ -348,7 +447,7 @@ def print_no_regex_album_match(root:str) -> None:
     print all regex match patter for albums - helper function for quick check. here are the patterns
     
     """
-    p1 = re.compile(r"^\d\d\d\d\s?[a-zA-z\s!'’&.()+~,äáçăóéűęţ0-9\-]*$")                # 2002 name of album
+    p1 = re.compile(r"^\d\d\d\d\s?[a-zA-z\s!'’&.()+~,äüáçăóéűęţ0-9\-]*$")                # 2002 name of album
     p2 = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                          # name of album
     p3 = re.compile(r"^[a-zA-z\s!'&]*[,]\s\d\d\d\d$")                                   # name of album, 2002 
 
@@ -359,7 +458,6 @@ def print_no_regex_album_match(root:str) -> None:
             elif p2.match(album): continue
             elif p3.match(album): continue
             else: print(album, " -> no match")
-
 
 
 def count_albums(root:str) -> int:
@@ -415,7 +513,14 @@ def print_all_songs(root:str) -> None:
 
 
 
+def normalize_names_for_broadcasting(release:namedtuple) -> None:
+    """ rename songs used to broadcast following this pattern: 01 Name Of Artist -- Name Of Album -- Name Of Song.mp3 """
 
+    album, artist, songs, paths = release.album, release.artist, release.songs, release.paths
+    #print(album, artist, songs)
+
+
+############ dasli trida se bude starat o normalizaci pro server ######################### 
 
 
 def main(root:str):
