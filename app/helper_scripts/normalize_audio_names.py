@@ -37,18 +37,22 @@ def get_all_audio_extensions() -> list:
     #audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt" 
     audio_extensions = r"C:\Users\nirvikalpa\Disk Google\coding\Python\repos\radio\app\helper_scripts\audio_extensions.txt"    
     with open(audio_extensions) as f:
-        e = f.read().splitlines()
-    return e
+        ext = f.read().splitlines()
+    return ext
 
 
 def strip_whitespaces(root:str) -> None:
-    """ delete double and triple spaces in song names """
+    """ delete multiple spaces in song names """
 
     for path, dirs, files in os.walk(root):
         for file in files:
-            src_file = os.path.join(path, file)
-            dst_file = os.path.join(path, file.replace("   ", " ").replace("  ", " "))
-            os.rename(src_file, dst_file)
+            if "  " in file:                
+                src_file = os.path.join(path, file)
+                file = re.sub(r"[\s]+", " ", file).strip()
+                dst_file = os.path.join(path, file)
+                print(f"Stripping whitespace from {src_file} --> {dst_file}")
+                os.rename(src_file, dst_file)
+           
 
 
 def strip_dot_after_tracknumber(root:str) -> None:
@@ -56,10 +60,9 @@ def strip_dot_after_tracknumber(root:str) -> None:
 
     for path, dirs, files in os.walk(root):
         for file in files:
-            src_file = os.path.join(path, file)
             if file[2] == ".":
-                file = file.replace(".","", 1)
-                dst_file = os.path.join(path, file)
+                src_file = os.path.join(path, file)
+                dst_file = os.path.join(path, file.replace(".","", 1))
                 os.rename(src_file, dst_file)
 
 
@@ -75,22 +78,43 @@ def strip_apimatch_from_album_name(root:str) -> None:
                 print(f"reaming {src_name} to {dst_name}")
                 os.rename(src_name, dst_name)
 
-def strip_out_artist_album_name_from_song(root:str) -> None:
+def strip_artist_album_name_from_song(root:str) -> None:
     """ strip out artist name and album name if they are a part of name of a song name """
+
+    ext = get_all_audio_extensions()
 
     for artist_folder in os.listdir(root):
         for album_folder in os.listdir(os.path.join(root, artist_folder)):
-            tracklist = [track for track in os.listdir(os.path.join(root, artist_folder, album_folder)) if track.endswith((".mp3", ".flac", ".wma"))]
-            if len(tracklist) > 1:
-                if all(artist_folder in song for song in tracklist) or all(album_folder in song for song in tracklist): 
-                    # print(f"Album {album_folder} contains substrings as part of all audio tracks")
-                    for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
-                        if file.endswith((".mp3", ".flac", ".wma")):
-                            src_file = file
-                            dst_file = file.replace(artist_folder, "")
-                            dst_file = dst_file.replace(album_folder, "")
-                            print(f"Renaming {os.path.join(artist_folder, album_folder, src_file)} to {os.path.join(artist_folder, album_folder, dst_file)}")
-                            os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
+            tracklist = [track for track in os.listdir(os.path.join(root, artist_folder, album_folder)) if track.endswith(tuple(ext))]
+            if len(tracklist) > 1 and all(artist_folder in song for song in tracklist): 
+                print(f"Album {album_folder} contains artist name '{artist_folder}' as part of all audio tracks => stripping it out..")
+                for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
+                    if file.endswith(tuple(ext)):
+                        src_file = file
+                        dst_file = file.replace(artist_folder, "", 1)
+                        print(f"Renaming {os.path.join(artist_folder, album_folder, src_file)} to {os.path.join(artist_folder, album_folder, dst_file)}")
+                        os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
+            if len(tracklist) > 1 and all(album_folder in song for song in tracklist):
+                print(f"Album {album_folder} contains album name '{album_folder}' as part of all audio tracks => stripping it out..")
+                for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
+                    if file.endswith(tuple(ext)):
+                        src_file = file
+                        dst_file = file.replace(album_folder, "", 1)
+                        print(f"Renaming {os.path.join(artist_folder, album_folder, src_file)} to {os.path.join(artist_folder, album_folder, dst_file)}")
+                        os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
+
+def strip_parens_around_tracknumbers(root:str) -> None:
+    """ some songs have this format: (02) Secret Light At The Upper Window """
+
+    ext = get_all_audio_extensions()
+
+    for path, dirs, folders in os.walk(root):
+        for file in folders:
+            if file.endswith(tuple(ext)):
+                if file[0] == "(" and file[3] == ")":
+                    src_name = os.path.join(path, file)
+                    dst_name = os.path.join(path, file.replace("(","", 1).replace(")","", 1))
+                    os.rename(src_name, dst_name)
 
 
 def lowercase_artist(root:str) -> None:
@@ -142,8 +166,6 @@ def titlecase_album(root:str) -> None:
 def lowercase_song(root:str) -> None:
     """ make song name lowercase """
 
-    e = get_all_audio_extensions()
-
     for artist in os.listdir(root):
         for album in os.listdir(os.path.join(root, artist)):
             for song in os.listdir(os.path.join(root, artist, album)):
@@ -157,15 +179,14 @@ def lowercase_song(root:str) -> None:
 def titlecase_song(root:str) -> None:
     """ make song name titlecased """
 
-    e = get_all_audio_extensions()
-
     for artist in os.listdir(root):
         for album in os.listdir(os.path.join(root, artist)):
             for song in os.listdir(os.path.join(root, artist, album)):
-                if song != song.title():
+                song_name, ext = os.path.splitext(os.path.join(root, artist, album, song))
+                if song != os.path.basename(song_name.title()+ext):
                     src_name = os.path.join(root, artist, album, song)
-                    dst_name = os.path.join(root, artist, album, song.title())
-                    print(f"Titlecasing {os.path.join(artist, album, song)} ==> {os.path.join(artist, album, song.title())}")
+                    dst_name = os.path.join(root, artist, album, song_name.title()+ext)
+                    print(f"Titlecasing {os.path.join(artist, album, song)} ==> {os.path.join(artist, album, os.path.basename(song_name.title()+ext))}")
                     os.rename(src_name, dst_name)
 
 
@@ -251,10 +272,7 @@ def normalize_names_for_filesystem(root:str) -> None:
                         os.rename(src_name, dst_name)
                         print(f"Renaming {src_name} to {dst_name}")
                     #print("    ", file)
-    
-    strip_out_artists_albums_names(root)
-    delete_spaces(root)
-    delete_dot_after_tracknumber(root)
+
 
 ############### to nad tim by mohla bejt jedna trida (dopsat tri funce: normalizaci artistname, normalizaci albumname, normalizaci songname) ################
 
@@ -267,10 +285,10 @@ def tag_songs_based_on_regexes(release:namedtuple) -> None:
     - this function takes a namedtuple and can be used inside another function that traverses filesystem. alone it is not used. 
     """
 
-    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD 
-    p2 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD
-    p3 = re.compile("(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD no leading zero (1 song name.mp3)
-
+    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD leading zero (01 song name.mp3)
+    p2 = re.compile("(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD no leading zero (1 song name.mp3)
+    p3 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (1 01 song name.mp3)
+    p4 = re.compile("(^\d\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (101 song name.mp3)
 
     artist, album, songs, paths = release.artist.title(), release.album.title(), release.songs, release.paths
     if "Api Match" in album:
@@ -310,39 +328,33 @@ def tag_songs_based_on_regexes(release:namedtuple) -> None:
             except UnboundLocalError as e:
                 print(e, f"on file {path} -> NOT TAGGED PROPERLY")
         else:
-            print(f"Song {song_name} doesnt match regex -> NOT TAGGED")
+            print(f"Song {song_name} on path {path} doesnt match regex -> NOT TAGGED")
 
 
 def tag_songs(root:str) -> None:
     """ tag songs based on regexes - the names for song, album, artist are parsed from filesystem, thus first they need to be normalized """
 
-    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD 
-    p2 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD
-    p3 = re.compile("(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD no leading zero (1 song name.mp3)
+    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD leading zero (01 song name.mp3)
+    p2 = re.compile("(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD no leading zero (1 song name.mp3)
+    p3 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (1 01 song name.mp3)
+    p4 = re.compile("(^\d\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (101 song name.mp3)
 
-    #audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt" 
-    audio_extensions = r"C:\Users\nirvikalpa\Disk Google\coding\Python\repos\radio\app\helper_scripts\audio_extensions.txt"    
-    with open(audio_extensions) as f:
-        e = f.read().splitlines()
-
-    #Release = namedtuple("Release", ["artist", "album", "songs", "paths"])
-    # releases = []
+    ext = get_all_audio_extensions()
 
     for artist in os.listdir(root):
         for album in os.listdir(os.path.join(root, artist)):
-            songs = [track for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(e))]
+            songs = [track for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(ext))]
             paths = [os.path.join(root, artist, album, track) 
-                    for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(e))]
-            # release = Release(artist_folder, album_folder, songs, paths)
-            # artist, album, songs, paths = release.artist.title(), release.album.title(), release.songs, release.paths
+                    for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(ext))]
             if "api match" in album:
                 album = album.rsplit(" [api", 1)[0]
             for song, path in zip(songs, paths):
                 song_name = song.rsplit(".", 1)[0].title()
-                if p1.match(song_name) or p2.match(song_name) or p3.match(song_name):
+                if p1.match(song_name) or p2.match(song_name) or p3.match(song_name) or p4.match(song_name):
                     p1_match = p1.match(song_name)
                     p2_match = p2.match(song_name)
                     p3_match = p3.match(song_name)
+                    p4_match = p4.match(song_name)
                     try:
                         tracknumber, _, title = p1_match.groups()
                     except AttributeError:
@@ -356,9 +368,15 @@ def tag_songs(root:str) -> None:
                     except AttributeError:
                         pass
                     try:
+                        tracknumber, _, title = p4_match.groups()
+                    except AttributeError:
+                        pass
+
+                    try:
                         tags = mutagen.File(path, easy=True)
                     except Exception as e:
                         print(e, f"on path {path}" )
+
                     try:
                         tags['album'] = album.title()
                         tags['artist'] = artist.title()
@@ -366,13 +384,13 @@ def tag_songs(root:str) -> None:
                         tags['tracknumber'] = tracknumber
                     except Exception as e:
                         print(e, f"path {path}")
+
                     try:
                         tags.save()
                     except UnboundLocalError as e:
                         print(e, f"on file {path} -> NOT TAGGED PROPERLY")
                 else:
-                    print(f"Song {song_name} doesnt match regex -> NOT TAGGED")
-
+                    print(f"Song on path {path} doesnt match regex -> NOT TAGGED")
 
 
 ############# o tagovnai by se mohla starat druha trida #################
@@ -380,9 +398,10 @@ def tag_songs(root:str) -> None:
 def print_all_regex_song_match(root:str) -> None:
     """ prints all audio files with particular regex pattern - this is just for quick check to see matched patterns """
 
-    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD 
-    p2 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD
-    p3 = re.compile(("(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$")) # one CD no leading zero (1 song name.mp3)
+    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD leading zero (01 song name.mp3)
+    p2 = re.compile("(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD no leading zero (1 song name.mp3)
+    p3 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (1 01 song name.mp3)
+    p4 = re.compile("(^\d\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (101 song name.mp3)
 
     #audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt")
     audio_extensions = r"C:\Users\nirvikalpa\Disk Google\coding\Python\repos\radio\app\helper_scripts\audio_extensions.txt"
@@ -405,9 +424,10 @@ def print_no_regex_song_match(root:str) -> None:
     """ prints audio files that did not match any regex pattern """
 
     p1 = re.compile("(^\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD leading zero (01 song name.mp3)
-    p2 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (1 01 song name.mp3)
-    p3 = re.compile("(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD no leading zero (1 song name.mp3)
-
+    p2 = re.compile("(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD no leading zero (1 song name.mp3)
+    p3 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (1 01 song name.mp3)
+    p4 = re.compile("(^\d\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (101 song name.mp3)
+    
     #audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt")
     audio_extensions = r"C:\Users\nirvikalpa\Disk Google\coding\Python\repos\radio\app\helper_scripts\audio_extensions.txt"
     with open(audio_extensions) as f:
@@ -421,10 +441,8 @@ def print_no_regex_song_match(root:str) -> None:
                     if p1.match(file): continue
                     elif p2.match(file): continue
                     elif p3.match(file): continue
-
-                    else: 
-                        print(file, " -> no regex match")
-                        print(f"path: {os.path.join(artist_folder, album_folder)}")
+                    elif p4.match(file): continue
+                    else: print(file, f" -> no regex match :: on path {os.path.join(artist_folder, album_folder)}")
 
 
 def print_all_regex_album_match(root:str) -> None:
@@ -499,11 +517,11 @@ def print_all_albums(root:str) -> None:
 def print_all_songs(root:str) -> None:
     """ prints all song folder names - it is helper function - just to see them for further processing """
 
-    e = get_all_audio_extensions()
+    ext = get_all_audio_extensions()
 
     for path, dirs, folders in os.walk(root):
         for file in folders:
-            if file.endswith(tuple(e)):
+            if file.endswith(tuple(ext)):
                 print(file)
 
 
@@ -529,10 +547,11 @@ def main(root:str):
 
 
 
-root = r"z:\Music\api"
 local_api = r"C:\Users\nirvikalpa\Music\api\api\1] api match [by names]"
 local_test = r"C:\Users\nirvikalpa\Music\api\api\testing folder"
 
+cloud_root = r"z:\Music\api"
+cloud_names = r"Z:\Music\api\1] api match [by names]"
 
 
 if __name__ == "__main__":
