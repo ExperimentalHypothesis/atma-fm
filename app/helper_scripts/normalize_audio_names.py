@@ -7,7 +7,7 @@
 
 
 
-2 07 they return to their earth (they are dead).mp3                                 ^\d\s\d\d\s[\w+\s().,:#='?!\[\]]*$  
+2 07 they retu                print(f"Stripping whitespace from {file} --> {}")rn to their earth (they are dead).mp3                                 ^\d\s\d\d\s[\w+\s().,:#='?!\[\]]*$  
 2 07 they return to their earth.mp3                                                 ^\d\s\d\d\s[\w+\s().,:#='?!\[\]]*$               
 
 under the shadows of trees, 1999                                                    ^[\w+\s().,:#='?!\[\]]*[,]\s(\d\d\d\d)$
