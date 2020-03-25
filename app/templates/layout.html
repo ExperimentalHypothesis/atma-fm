@@ -1,22 +1,35 @@
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta name="description" content="online ambient radio playing atmospheric abstract electronic, experimental & psychedelic music">
-  <meta name="keywords" content="abstract, ambient, atmospheric, electronic, experimental, psychedelic, underground, alternative, avantgarde, electroacoustic music. online radio, online audio stream">
+  <meta name="description"
+    content="online ambient radio playing atmospheric abstract electronic, experimental & psychedelic music">
+  <meta name="keywords"
+    content="abstract, ambient, atmospheric, electronic, experimental, psychedelic, underground, alternative, avantgarde, electroacoustic music. online radio, online audio stream">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/new-style.css')}}">
   <link href="https://fonts.googleapis.com/css?family=Tomorrow&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.css">
   <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-161911289-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-161911289-1');
+  </script>
   <title>atma.fm - ambient & electronic</title>
 </head>
+
 <body>
   <section class="player-box">
     <p class="player-txt">[ independent underground radio channel ]<p>
         <div class="player-button">
           <button id="bt-txt" class="player-button-txt" onclick="toggle_play()">listen now</button>
-          <button  class="button" style="border: none;" onclick="toggle_play()"><i id="bt-icon" class="fa fa-volume-up  fa-3x"></i></button>
+          <button class="button" style="border: none;" onclick="toggle_play()"><i id="bt-icon"
+              class="fa fa-volume-up  fa-3x"></i></button>
         </div>
         <div class="player-button">
           <button class="player-button-txt" onclick=location.href="http://144.91.73.167:7777/atma.fm.m3u">download
@@ -42,4 +55,5 @@
   <script src="{{ url_for('static', filename='js/play.js')}}"> </script>
   <script src="https://kit.fontawesome.com/37c4968eb2.js" crossorigin="anonymous"></script>
 </body>
+
 </html>
