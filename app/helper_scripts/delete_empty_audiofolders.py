@@ -81,7 +81,7 @@ def delete_folders_without_audio(directory: str) -> int:
 
 
 if __name__ == "__main__":
-    source = r"Z:\Music\not-tagged\_temp"
+    source = r"C:\Users\nirvikalpa\Music\1] api match [by names]"
     
     if not os.path.exists(source): print("directory doesnt exists, check the path")
 
