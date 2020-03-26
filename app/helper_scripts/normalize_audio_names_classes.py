@@ -3,7 +3,7 @@ from collections import namedtuple
 
 print("importing..")
 
-api_match_testing = r"Z:\Music\api\testing folder\2] api match [by length]"
+api_match_testing = r"Z:\Music\api\t\2] api match [by length]"
 api_notfound = r"Z:\Music\api\4] album not found on discogs api"
 
 
@@ -14,6 +14,31 @@ def get_all_audio_extensions() -> list:
     with open(audio_extensions) as f:
         ext = f.read().splitlines()
     return ext
+
+def move_albums_with_one_track_only(root:str) -> None:
+    """ moves albums with one track to separate folder """
+    
+    singletrack_albums = []
+    ext = get_all_audio_extensions()
+    one_only = "_ALBUMS_WITH_ONE_TRACK_"
+
+    for artist in os.listdir(root):
+        for album in os.listdir(os.path.join(root, artist)):
+            tracklist = [track for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(ext))]
+            if len(tracklist) == 1:
+                print(f"Album '{album}' on path {os.path.join(root, artist)} has only one track")
+                singletrack_albums.append(album)
+                for track in tracklist:
+                    src_file = os.path.join(root, artist, album, track)
+                    root_one_only = root + one_only
+                    dst_file = os.path.join(root_one_only, artist, album, track)
+                    if not os.path.exists(os.path.dirname(dst_file)):
+                        os.makedirs(os.path.join(root_one_only, artist, album))
+                    print(f"Moving {src_file} to {dst_file}")
+                    shutil.move(src_file, dst_file)
+    print(f"Totaly: {len(singletrack_albums)} with one track only")
+
+
 
 class NameNormalizer:
     """ 
@@ -27,17 +52,81 @@ class NameNormalizer:
         pass
 
     def __call__(self, root):
-        NameNormalizer.strip_apimatch_from_album_name(self, root)
-        NameNormalizer.strip_year_from_album_name(self, root)
+        NameNormalizer.strip_apimatch_from_albumname(self, root)
+        NameNormalizer.strip_year_from_albumname(self, root)
         NameNormalizer.titlecase_all(self, root)
-        NameNormalizer.strip_artist_album_name_from_song(self, root)
-        NameNormalizer.strip_dot_after_tracknumber(self, root)
-        NameNormalizer.strip_parens_around_tracknumbers(self, root)
-        NameNormalizer.strip_dash_underscores_from_songs(self, root)
-        NameNormalizer.strip_whitespaces(self, root)
+        NameNormalizer.strip_year_from_songname(self, root)
+        NameNormalizer.strip_artist_album_name_from_songname(self, root)
+        NameNormalizer.strip_whitespaces_from_songname(self, root)
+        NameNormalizer.strip_dot_after_track_from_songname(self, root)
+        NameNormalizer.strip_parens_around_track_from_songname(self, root)
+        NameNormalizer.strip_whitespaces_from_songname(self, root)
 
-    #TODO strip space at the end
-    def strip_whitespaces(self, root:str) -> None:
+    ################# SONGY 
+    
+    def strip_artist_album_name_from_songname(self, root:str) -> None:
+        """ strip out artist name and album name if they are a part of name of a song name """
+
+        ext = get_all_audio_extensions()
+        for artist_folder in os.listdir(root):
+            for album_folder in os.listdir(os.path.join(root, artist_folder)):
+                tracklist = [track for track in os.listdir(os.path.join(root, artist_folder, album_folder)) if track.endswith(tuple(ext))]
+                if len(tracklist) > 1 and all(artist_folder in song for song in tracklist): 
+                    print(f"Album {album_folder} contains artist name '{artist_folder}' as part of all audio tracks => stripping it out..")
+                    for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
+                        if file.endswith(tuple(ext)):
+                            src_file = file
+                            dst_file = file.replace(artist_folder, "", 1)
+                            print(f"Renaming {os.path.join(artist_folder, album_folder, src_file)} to {os.path.join(artist_folder, album_folder, dst_file)}")
+                            os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
+                if len(tracklist) > 1 and all(album_folder in song for song in tracklist):
+                    print(f"Album {album_folder} contains album name '{album_folder}' as part of all audio tracks => stripping it out..")
+                    for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
+                        if file.endswith(tuple(ext)):
+                            src_file = file
+                            dst_file = file.replace(album_folder, "", 1)
+                            print(f"Renaming {os.path.join(artist_folder, album_folder, src_file)} to {os.path.join(artist_folder, album_folder, dst_file)}")
+                            os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
+
+
+    def strip_year_from_songname(self, root:str) -> None:
+        """ deletes (year) and Cd and _- from song name """
+
+        ext = get_all_audio_extensions()
+        yr_parens = re.compile(r"[(]\d\d\d\d[)]")
+        cd = re.compile(r"Cd\s?\d\d?")
+        for path, dirs, folders in os.walk(root):
+            for file in folders:
+                if file.endswith(tuple(ext)):
+                    if re.search(yr_parens, file) or re.search(cd, file) or "-" in file or "_" in file or "[" in file or "]" in file:
+                        #print(f"stripping yr from {file}")
+                        new_file_name = re.sub(yr_parens, "", file).strip()
+                        #print(f"stripping cd from {file}")
+                        new_file_name = re.sub(cd, "", new_file_name).strip()
+                        #print(f"stripping '-' from {file}")
+                        new_file_name = new_file_name.replace("-", " ").replace("_", " ").strip()
+                        #print(f"stripping '_' from {file}")
+                        new_file_name = new_file_name.replace("[", "").replace("]", "").strip()
+                        src_file = os.path.join(path, file)
+                        dst_file = os.path.join(path, new_file_name)                    
+                        os.rename(src_file, dst_file)
+
+
+    def strip_dash_underscores_from_songname(self, root:str) -> None:
+        """ deletes _ and - from all song names """
+
+        ext = get_all_audio_extensions()
+        for path, dirs, folders in os.walk(root):
+            for file in folders:
+                if file.endswith(tuple(ext)) and ("-" in file or "_" in file):
+                    new_file_name = file.replace("-", " ").replace("_", " ")
+                    src_name = os.path.join(path, file)
+                    dst_name = os.path.join(path, new_file_name)
+                    print(f"Striping -_ from song name {src_name} -> {dst_name}")
+                    os.rename(src_name, dst_name)
+
+         
+    def strip_whitespaces_from_songname(self, root:str) -> None:
         """ delete multiple spaces in song names """
 
         for path, dirs, files in os.walk(root):
@@ -48,21 +137,66 @@ class NameNormalizer:
                     dst_file = os.path.join(path, file)
                     print(f"Stripping whitespace from {src_file} --> {dst_file}")
                     os.rename(src_file, dst_file)                   
-                path_file_without_ext, ext= os.path.splitext(os.path.join(path, file))
+                path_file_without_ext, ext = os.path.splitext(os.path.join(path, file))
                 if path_file_without_ext[-1] == " ":
-                    print(f"{path_file_without_ext} has space at the end and sould be stripped")
-                    # src_file = os.path.join(path, file)
-                    # file = re.sub(r"[\s]+", " ", file).strip()
-                    # dst_file = os.path.join(path, file)
-                    # print(f"Stripping whitespace as last character {src_file} --> {dst_file}")
-                    # os.rename(src_file, dst_file)                   
+                    new_file_name = path_file_without_ext.strip()+ext
+                    src_file = os.path.join(path, file)
+                    dst_file = os.path.join(path, new_file_name)
+                    print(f"Stripping whitespace as last char {src_file} --> {dst_file}")
+                    os.rename(src_file, dst_file)   
 
-    def strip_year_from_album_name(self, root:str) -> None:
+
+    def strip_dot_after_track_from_songname(self, root:str) -> None:
+        """ some song have this format "01. songname.mp3", or (02) song name.mp3 - this will will make it 01 song name.mp3 """
+
+        for path, dirs, files in os.walk(root):
+            for file in files:
+                file_name, ext = os.path.splitext(os.path.join(path, file))
+                basename = os.path.basename(file_name)
+                try:
+                    if os.path.basename(file_name)[2] == ".":
+                        src_file = os.path.join(path, file)
+                        dst_file = os.path.join(path, file_name.replace(".","", 1)+ext)
+                        print(f"Stripping dot from {file}")
+                        os.rename(src_file, dst_file)
+                except IndexError as e:
+                    print(f"{e}, {os.path.join(path, file)} does not have song name")
+
+
+    def strip_parens_around_track_from_songname(self, root:str) -> None:
+        """ some songs have this format: (02) Secret Light At The Upper Window """
+
+        ext = get_all_audio_extensions()
+        for path, dirs, folders in os.walk(root):
+            for file in folders:
+                if file.endswith(tuple(ext)):
+                    if file[0] == "(" and file[3] == ")":
+                        src_name = os.path.join(path, file)
+                        dst_name = os.path.join(path, file.replace("(","", 1).replace(")","", 1))
+                        print(f"Stripping parens arount songname {file}")
+                        os.rename(src_name, dst_name)
+
+    @staticmethod
+    def strip_whatever_from_songname(s:set) -> None:
+        """ used for manual clearing when we see which songs with no regex match """
+
+        for path in s:
+            head, tail = os.path.split(path)
+            if "Danna Clement" in tail:
+                new_tail = tail.replace("Danna Clement", "").strip()
+                dst = os.path.join(head, new_tail)
+                os.rename(path, dst)
+
+
+   
+################ ALBA
+
+    def strip_year_from_albumname(self, root:str) -> None:
         """ deletes year from album name """
-    
-        p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                    # name of album
+
+        p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                            # name of album
         p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")                   # 2002 name of album
-        p3_album = re.compile(r"^([a-zA-z\s!'&]*)([,]\s)(\d\d\d\d)$")                                       # name of album, 2002
+        p3_album = re.compile(r"^([a-zA-z\s!'&]*)([,]\s)(\d\d\d\d)$")                                               # name of album, 2002        
 
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
@@ -87,33 +221,7 @@ class NameNormalizer:
                         print(f"Ablbum {dst_name} already exists, removing duplicates")
                         shutil.rmtree(src_name)
 
-    def strip_dash_underscores_from_songs(self, root:str) -> None:
-        """ deletes _ and - from all song names """
-
-        ext = get_all_audio_extensions()
-
-        for path, dirs, folders in os.walk(root):
-            for file in folders:
-                if file.endswith(tuple(ext)) and ("-" in file or "_" in file):
-                    new_file_name = file.replace("-", " ").replace("_", " ")
-                    src_name = os.path.join(path, file)
-                    dst_name = os.path.join(path, new_file_name)
-                    print(f"Striping -_ from song name {src_name} -> {dst_name}")
-                    os.rename(src_name, dst_name)
-
-    def strip_dot_after_tracknumber(self, root:str) -> None:
-        """ some song have this format "01. songname.mp3", this will delete the dot that makes mess for re patterns """
-
-        for path, dirs, files in os.walk(root):
-            for file in files:
-                file_name, ext = os.path.splitext(os.path.join(path, file))
-                if file_name[2] == ".":
-                    src_file = os.path.join(path, file)
-                    dst_file = os.path.join(path, file_name.replace(".","", 1)+ext)
-                    os.rename(src_file, dst_file)
-
-
-    def strip_apimatch_from_album_name(self, root:str) -> None:
+    def strip_apimatch_from_albumname(self, root:str) -> None:
         """ strip [api match 131243] from album folder """
 
         for artist in os.listdir(root):
@@ -126,45 +234,7 @@ class NameNormalizer:
                     os.rename(src_name, dst_name)
 
 
-    def strip_artist_album_name_from_song(self, root:str) -> None:
-        """ strip out artist name and album name if they are a part of name of a song name """
-
-        ext = get_all_audio_extensions()
-
-        for artist_folder in os.listdir(root):
-            for album_folder in os.listdir(os.path.join(root, artist_folder)):
-                tracklist = [track for track in os.listdir(os.path.join(root, artist_folder, album_folder)) if track.endswith(tuple(ext))]
-                if len(tracklist) > 1 and all(artist_folder in song for song in tracklist): 
-                    print(f"Album {album_folder} contains artist name '{artist_folder}' as part of all audio tracks => stripping it out..")
-                    for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
-                        if file.endswith(tuple(ext)):
-                            src_file = file
-                            dst_file = file.replace(artist_folder, "", 1)
-                            print(f"Renaming {os.path.join(artist_folder, album_folder, src_file)} to {os.path.join(artist_folder, album_folder, dst_file)}")
-                            os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
-                if len(tracklist) > 1 and all(album_folder in song for song in tracklist):
-                    print(f"Album {album_folder} contains album name '{album_folder}' as part of all audio tracks => stripping it out..")
-                    for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
-                        if file.endswith(tuple(ext)):
-                            src_file = file
-                            dst_file = file.replace(album_folder, "", 1)
-                            print(f"Renaming {os.path.join(artist_folder, album_folder, src_file)} to {os.path.join(artist_folder, album_folder, dst_file)}")
-                            os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
-
-
-    def strip_parens_around_tracknumbers(self, root:str) -> None:
-        """ some songs have this format: (02) Secret Light At The Upper Window """
-
-        ext = get_all_audio_extensions()
-
-        for path, dirs, folders in os.walk(root):
-            for file in folders:
-                if file.endswith(tuple(ext)):
-                    if file[0] == "(" and file[3] == ")":
-                        src_name = os.path.join(path, file)
-                        dst_name = os.path.join(path, file.replace("(","", 1).replace(")","", 1))
-                        os.rename(src_name, dst_name)
-        
+############### CASE
 
     def lowercase_artist(self, root:str) -> None:
         """ make artist folder lowercase """
@@ -179,7 +249,7 @@ class NameNormalizer:
 
     def titlecase_artist(self, root:str) -> None:
         """ make artist folder titlecase """
-        
+
         for artist in os.listdir(root):
             if artist != artist.title():
                 src_name = os.path.join(root, artist)
@@ -259,10 +329,10 @@ class SongTagger:
 
     ext = get_all_audio_extensions()
 
-    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD leading zero (01 song name.mp3)
-    p2 = re.compile("(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD no leading zero (1 song name.mp3)
-    p3 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (1 01 song name.mp3)
-    p4 = re.compile("(^\d\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (101 song name.mp3)
+    p1 = re.compile("(^\d\d)(\s)([\w+\s().,:#=`&'?!\[\]]*)$")        # one CD leading zero (01 song name.mp3)
+    p2 = re.compile("(^\d)(\s)([\w+\s().,:#=`&'?!\[\]]*)$")          # one CD no leading zero (1 song name.mp3)
+    p3 = re.compile("(^\d\s\d\d)(\s)([\w+\s().,:#=`&'?!\[\]]*)$")    # multiple CD (1 01 song name.mp3)
+    p4 = re.compile("(^\d\d\d)(\s)([\w+\s().,:#=`&'?!\[\]]*)$")      # multiple CD (101 song name.mp3)
 
     def tag_songs(self, root:str) -> None:
         """ tag songs based on regexes  """
@@ -272,8 +342,9 @@ class SongTagger:
                 songs = [track for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(SongTagger.ext))]
                 paths = [os.path.join(root, artist, album, track) 
                         for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(SongTagger.ext))]
-                if "api match" in album:
-                    album = album.rsplit(" [api", 1)[0]
+                # if len(songs) == 1:
+                #     netaguj to ale presun to
+
                 for song, path in zip(songs, paths):
                     song_name = song.rsplit(".", 1)[0].title()
                     if SongTagger.p1.match(song_name) or SongTagger.p2.match(song_name) or SongTagger.p3.match(song_name) or SongTagger.p4.match(song_name):
@@ -336,59 +407,96 @@ class SongTagger:
                 os.makedirs(dst_directory)
             print(f"Moving untagged file from {path} to {dst_filepath}")
             shutil.move(path, dst_filepath)
+    
+    # def move_onetrack_albums()
+
 
 class RegexMatcher:
 
     ext = get_all_audio_extensions()
 
-    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD leading zero (01 song name.mp3)
-    p2_song = re.compile(r"(^\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # one CD no leading zero (1 song name.mp3)
-    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (1 01 song name.mp3)
-    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:#=&'?!\[\]]*)$") # multiple CD (101 song name.mp3)
+    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=`&'?!\[\]]*)$")                                          # one CD leading zero (01 song name.mp3)
+    p2_song = re.compile(r"(^\d)(\s)([a-z][\w+\s().,:#=`&'?!\[\]]*)$")                                   # one CD no leading zero (1 song name.mp3)
+    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().,:#=&`'?!\[\]]*)$")                                 # multiple CD (1 01 song name.mp3)
+    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:#=&'?`!\[\]]*)$")                                   # multiple CD (101 song name.mp3)
 
     p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                    # name of album
-    p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")                   # 2002 name of album
+    p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")          # 2002 name of album
     p3_album = re.compile(r"^([a-zA-z\s!'&]*)([,]\s)(\d\d\d\d)$")                                       # name of album, 2002
         
+    p1_song_matches = set() 
+    p2_song_matches = set() 
+    p3_song_matches = set()
+    p4_song_matches = set()
+    no_song_matches = set()
+
+    p1_album_matches = set()
+    p2_album_matches = set()    
+    p3_album_matches = set()
+    no_album_matches = set()
+
     def print_all_regex_song_match(self, root:str) -> None:
         """ prints all audio files with particular regex pattern """
+
+        self.p1_song_matches.clear() 
+        self.p2_song_matches.clear() 
+        self.p3_song_matches.clear()
+        self.p4_song_matches.clear()
+        self.no_song_matches.clear()
 
         for artist_folder in os.listdir(os.path.join(root)):
             for album_folder in os.listdir(os.path.join(root, artist_folder)):
                 for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
                     if file.endswith(tuple(RegexMatcher.ext)):
-                        file = os.path.splitext(file)[0]
-                        if RegexMatcher.p1_song.match(file): print(f"{file} -> p1_song match") 
-                        elif RegexMatcher.p2_song.match(file): print(f"{file} -> p2_song match") 
-                        elif RegexMatcher.p3_song.match(file): print(f"{file} -> p3_song match")
-                        elif RegexMatcher.p4_song.match(file): print(f"{file} -> p4_song match")
-                        else: print(f"{file}  :: path {os.path.join(artist_folder, album_folder)} -> no regex match")
+                        file, ext = os.path.splitext(file)
+                        if self.p1_song.match(file): 
+                            print(f"{file+ext} -> p1_song match")
+                            RegexMatcher.p1_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext)) 
+                        elif RegexMatcher.p2_song.match(file): 
+                            print(f"{file+ext} -> p2_song match")
+                            RegexMatcher.p2_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext)) 
+                        elif RegexMatcher.p3_song.match(file): 
+                            print(f"{file+ext} -> p3_song match")
+                            RegexMatcher.p3_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext))
+                        elif RegexMatcher.p4_song.match(file): 
+                            print(f"{file+ext} -> p4_song match")
+                            RegexMatcher.p4_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext))
+                        else: 
+                            RegexMatcher.no_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext))
+                            print(f"{file+ext}  :: path {os.path.join(artist_folder, album_folder)} -> no regex match")
 
 
     def print_no_regex_song_match(self, root:str) -> None:
         """ prints audio files that did not match any regex pattern """
 
+        self.no_song_matches.clear()
+
         for artist_folder in os.listdir(os.path.join(root)):
             for album_folder in os.listdir(os.path.join(root, artist_folder)):
                 for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
                     if file.endswith(tuple(RegexMatcher.ext)):
-                        file = os.path.splitext(file)[0]
+                        file, ext = os.path.splitext(file)
                         if RegexMatcher.p1_song.match(file):      continue
                         elif RegexMatcher.p2_song.match(file):    continue
                         elif RegexMatcher.p3_song.match(file):    continue
                         elif RegexMatcher.p4_song.match(file):    continue
-                        else: print(f"{file} :: path {os.path.join(artist_folder, album_folder)} -> no regex match")
-
+                        else: 
+                            print(f"{file+ext} :: path {os.path.join(artist_folder, album_folder)} -> no regex match")
+                            self.no_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext))
 
     def print_all_regex_album_match(self, root:str) -> None:
         """ print regex match pattern for all albums """ 
 
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
-                if RegexMatcher.p1_album.match(album): print(album, f" -> p1_album match :: path {os.path.join(root, artist)}")
-                elif RegexMatcher.p2_album.match(album): print(album, f" -> p2_album match :: path {os.path.join(root, artist)}")
-                elif RegexMatcher.p3_album.match(album): print(album, f" -> p3_album match :: path {os.path.join(root, artist)}")
-                else: print(album, " -> no match")
+                if RegexMatcher.p1_album.match(album): 
+                    print(album, f" -> p1_album match :: path {os.path.join(root, artist)}")
+                elif RegexMatcher.p2_album.match(album): 
+                    print(album, f" -> p2_album match :: path {os.path.join(root, artist)}")
+                elif RegexMatcher.p3_album.match(album): 
+                    print(album, f" -> p3_album match :: path {os.path.join(root, artist)}")
+                else: 
+                    print(album, " -> no match")
 
 
     def print_no_regex_album_match(self, root:str) -> None:
@@ -396,10 +504,11 @@ class RegexMatcher:
 
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
-                if RegexMatcher.p1_album.match(album): continue
-                elif RegexMatcher.p2_album.match(album): continue
-                elif RegexMatcher.p3_album.match(album): continue
-                else: print(f"{album} :: path {os.path.join(root, artist)} -> no regex match")
+                if RegexMatcher.p1_album.match(album):      continue
+                elif RegexMatcher.p2_album.match(album):    continue
+                elif RegexMatcher.p3_album.match(album):    continue
+                else: 
+                    print(f"{album} :: path {os.path.join(root, artist)} -> no regex match")
 
 class HelperInfo:
 
