@@ -2,9 +2,7 @@
 # it uses the audio_extensions.txt where all audio extensions are specified (this file was scrapped from wikipedia and is saved in the same folder as this script and in case it will be lost, the scrapping function will run to replace it)
 
 
-import os
-import shutil
-import requests
+import os, shutil, requests
 from bs4 import BeautifulSoup
 
 def scrap_audio_formats_table() -> list:
@@ -81,7 +79,7 @@ def delete_folders_without_audio(directory: str) -> int:
 
 
 if __name__ == "__main__":
-    source = r"C:\Users\nirvikalpa\Music\1] api match [by names]"
+    source = r"Z:\Music\api\t\2] api match [by length]"
     
     if not os.path.exists(source): print("directory doesnt exists, check the path")
 

@@ -34,7 +34,7 @@ def sort_audiofolders(source: str, target: str) -> None:
     # TODO log how many folders were moved, how many were skipped (name which was which) 
 
 # if __name__ == "__main__":
-source = r"Z:\Music\downloaded from soulseek\!TAGGED-FULL ALBUMS"
+source = r"Z:\Music\api\t\2] api match [by length]"
 target = r"Z:\Music\tagged"
 #     try:
 #         sort_audiofolders(source, target)
