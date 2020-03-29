@@ -1,13 +1,12 @@
 import discogs_client, os, pprint, difflib, shutil, re, time
 from collections import namedtuple
-from delete_empty_audiofolders import delete_folders_without_audio
 
 
 def move_nonclustered_files_to_folder(root: str) -> None:
     """ 
     when iterating over files using get_releases_from_local_filesystem() 
     there were troubles if an artist folder contained files that were not in an album subfolder.
-    this function clusters there files into an artificial folder, thus, it should be run first to prepare the field
+    this function clusters there files into an 'artificial folder', thus, it should be run first to prepare the field
     """
 
     for artist_folder in os.listdir(root):

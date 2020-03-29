@@ -65,10 +65,8 @@ def count_audiofiles(directory: str) -> int:
                 continue
         return counter
 
-
 def delete_folders_without_audio(directory: str) -> int:
     """ delete folders where no audio files are left """
-
     counter = 0
     for path, dirs, _ in os.walk(directory):
         if len(dirs) == 0 and count_audiofiles(path) == 0:

@@ -1,15 +1,17 @@
 import os, re, mutagen, shutil, pathlib
 from collections import namedtuple
+from app.helpers.delete_empty_audiofolders_classes import Deleter
+
 
 print("importing..")
 
 api_match_testing = r"Z:\Music\api\t\2] api match [by length]"
-api_notfound = r"Z:\Music\api\4] album not found on discogs api"
-
+api_notfound = r"Z:\Music\api\testing folder\4] album not found on discogs api"
+api_broadcast =r"Y:\ambient\testing folder"
 
 def get_all_audio_extensions() -> list:
     """ returns audio extensions specified in file. must be called from root of the project. works both for shell and non shell, win i linux """
-    audio_extensions = pathlib.Path().absolute().joinpath('app', 'helper_scripts','audio_extensions.txt')  
+    audio_extensions = pathlib.Path().absolute().joinpath('app', 'helpers','audio_extensions.txt')  
     with open(audio_extensions) as f:
         ext = f.read().splitlines()
     return ext
@@ -38,7 +40,20 @@ def move_albums_with_one_track_only(root:str) -> None:
     print(f"Totaly: {len(singletrack_albums)} with one track only")
 
 
-class NameNormalizer:
+
+class RegexPatternsProvider:
+    """ base class for SongTagger and RegexMatcher, this basically only encapulates regex patters to have them in one place """
+    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=`&'?!\[\]]*)$")                                          # one CD leading zero (01 song name.mp3)
+    p2_song = re.compile(r"(^\d)(\s)([A-Z][\w+\s().,:#=`&'?!\[\]]*)$")                                   # one CD no leading zero (1 song name.mp3)
+    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().,:#=&`'?!\[\]]*)$")                                 # multiple CD (1 01 song name.mp3)
+    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:#=&'?`!\[\]]*)$")                                   # multiple CD (101 song name.mp3)
+
+    p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                    # name of album
+    p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")          # 2002 name of album
+    p3_album = re.compile(r"^([a-zA-z\s!'&]*)([,]\s)(\d\d\d\d)$")                                       # name of album, 2002
+
+
+class NameNormalizer(RegexPatternsProvider):
     """ class for clearing out the names of songs, artists and albums, the goal is to have:
         clear {artist_name} in the form of plain "artist name"          => for example "steve roach" 
         clear {album_name} in the form of plain "album name"            => for example "structures of silence"
@@ -168,15 +183,18 @@ class NameNormalizer:
                         os.rename(src_name, dst_name)
 
     @staticmethod
-    def strip_whatever_from_songname(s:set, substrings:list) -> None:
-        """ used for manual clearing when we see which songs with no regex match, takes a list os strings that should be stripped out """
+    def strip_whatever_from_name(s:set, substrings:list) -> None:
+        """ used for manual clearing for songs or albums that had no regex match - takes a list os strings that should be stripped out """
         for path in s:
             head, tail = os.path.split(path)
             for substring in substrings:
                 if substring in tail:
                     new_tail = tail.replace(substring, "").strip()
                     dst = os.path.join(head, new_tail)
-                    os.rename(path, dst)
+                    try:
+                        os.rename(path, dst)
+                    except Exception as e:
+                        print(e)
 
     @staticmethod
     def split_tracknumber_from_name_in_songname(s:set) -> None:
@@ -190,18 +208,13 @@ class NameNormalizer:
                 print(f"Spliting tracknumber from name {tail} -> {new_tail}")
                 os.rename(src, dst)            
 
-
     def strip_year_from_albumname(self, root:str) -> None:
         """ deletes year from album name """
-        p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                            # name of album
-        p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")                   # 2002 name of album
-        p3_album = re.compile(r"^([a-zA-z\s!'&]*)([,]\s)(\d\d\d\d)$")                                               # name of album, 2002        
-
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
-                if p2_album.match(album) or p3_album.match(album):
-                    p2_match = p2_album.match(album)
-                    p3_match = p3_album.match(album)
+                if NameNormalizer.p2_album.match(album) or NameNormalizer.p3_album.match(album):
+                    p2_match = NameNormalizer.p2_album.match(album)
+                    p3_match = NameNormalizer.p3_album.match(album)
                     try:
                         album_title = p2_match.group(3)
                     except AttributeError:
@@ -314,18 +327,6 @@ class NameNormalizer:
         NameNormalizer.lowercase_artist(self, root)
 
 
-class RegexPatternsProvider:
-    """ base class for SongTagger and RegexMatcher, this basically only encapulates regex patters to have them in one place """
-    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=`&'?!\[\]]*)$")                                          # one CD leading zero (01 song name.mp3)
-    p2_song = re.compile(r"(^\d)(\s)([A-Z][\w+\s().,:#=`&'?!\[\]]*)$")                                   # one CD no leading zero (1 song name.mp3)
-    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().,:#=&`'?!\[\]]*)$")                                 # multiple CD (1 01 song name.mp3)
-    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:#=&'?`!\[\]]*)$")                                   # multiple CD (101 song name.mp3)
-
-    p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                    # name of album
-    p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")          # 2002 name of album
-    p3_album = re.compile(r"^([a-zA-z\s!'&]*)([,]\s)(\d\d\d\d)$")                                       # name of album, 2002
-
-
 class RegexMatcher(RegexPatternsProvider):
 
     ext = get_all_audio_extensions()
@@ -342,7 +343,7 @@ class RegexMatcher(RegexPatternsProvider):
     no_album_matches = set()
 
     def get_all_regex_song_match(self, root:str) -> None:
-        """ prints all audio files with particular regex pattern """
+        """ get all audio files with particular regex pattern """
         self.p1_song_matches.clear() 
         self.p2_song_matches.clear() 
         self.p3_song_matches.clear()
@@ -372,9 +373,8 @@ class RegexMatcher(RegexPatternsProvider):
 
 
     def get_no_regex_song_match(self, root:str) -> None:
-        """ prints audio files that did not match any regex pattern """
+        """ get audio files that did not match any regex pattern """
         self.no_song_matches.clear()
-
         for artist_folder in os.listdir(os.path.join(root)):
             for album_folder in os.listdir(os.path.join(root, artist_folder)):
                 for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
@@ -390,21 +390,30 @@ class RegexMatcher(RegexPatternsProvider):
 
 
     def get_all_regex_album_match(self, root:str) -> None:
-        """ print regex match pattern for all albums """ 
+        """ get regex match pattern for all albums """ 
+        self.p1_album_matches.clear()
+        self.p2_album_matches.clear()
+        self.p3_album_matches.clear()
+        self.no_album_matches.clear()
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
                 if RegexMatcher.p1_album.match(album): 
                     print(album, f" -> p1_album match :: path {os.path.join(root, artist)}")
+                    RegexMatcher.p1_album_matches.add(os.path.join(root, artist, album))
                 elif RegexMatcher.p2_album.match(album): 
                     print(album, f" -> p2_album match :: path {os.path.join(root, artist)}")
+                    RegexMatcher.p2_album_matches.add(os.path.join(root, artist, album))
                 elif RegexMatcher.p3_album.match(album): 
                     print(album, f" -> p3_album match :: path {os.path.join(root, artist)}")
+                    RegexMatcher.p3_album_matches.add(os.path.join(root, artist, album))
                 else: 
                     print(album, " -> no match")
+                    RegexMatcher.no_album_matches.add(os.path.join(root, artist, album))
 
 
     def get_no_regex_album_match(self, root:str) -> None:
-        """ print albums that did not match any regex pattern """
+        """ get albums that did not match any regex pattern """
+        self.no_album_matches.clear()
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
                 if RegexMatcher.p1_album.match(album):      continue
@@ -412,6 +421,7 @@ class RegexMatcher(RegexPatternsProvider):
                 elif RegexMatcher.p3_album.match(album):    continue
                 else: 
                     print(f"{album} :: path {os.path.join(root, artist)} -> no regex match")
+                    RegexMatcher.no_album_matches.add(os.path.join(root, artist, album))
     
 
     def count_albums_with_no_regex_matched_songs(self, s:set) -> int:
@@ -502,10 +512,11 @@ class SongTagger(RegexPatternsProvider):
             print(f"Moving untagged file from {path} to {dst_filepath}")
             shutil.move(path, dst_filepath)
     
-    # def move_onetrack_albums()
+    def __call__(self, root:str) -> None:
+        """ tags, moves, and deletes empty folders """
+        pass
 
-
-class HelperInfo(RegexPatternsProvider):
+class FolderInfo(RegexPatternsProvider):
 
     ext = get_all_audio_extensions()
 
@@ -535,9 +546,11 @@ class HelperInfo(RegexPatternsProvider):
 
     def print_all_albums(self, root:str) -> None:
         """ prints all album folder names """
-        for artist in os.listdir(root):
-            for album in os.listdir(os.path.join(root, artist)):
-                print(album)
+        with open("all_albums.txt", 'w') as f:
+            for artist in os.listdir(root):
+                for album in os.listdir(os.path.join(root, artist)):
+                    print(artist, " - ", album)
+                    print(artist, " - ", album, file=f)
 
 
     def print_all_songs(self, root:str) -> None:
@@ -548,13 +561,92 @@ class HelperInfo(RegexPatternsProvider):
                     print(file)
 
 
+class BroadcastRenamer(RegexPatternsProvider):
+    """" class for handling files used in broadcasting server, it normalizes names, moves them to proper folder and delete the empty folders. 
+    after it is called, only albums that have songs that did not match any regex pattern reside in the root folder, all the rest is renamed, moved or deleted [duplicates]
+    """
+
+    renamed = set()
+    not_renamed = set()
+
+    def normalize_names_for_broadcasting(self, root:str) -> None:
+        """ renames songs for radio server, following this pattern:
+            01 name of artist -- name of album -- name of song.mp3
+        first the names for artist, album, song should be normalized using NameNormalizer class it moves the songs to the particular folder '2] to be bitnormed'
+        """
+        e = get_all_audio_extensions()
+        basedir, taildir = os.path.split(root) # tail will be swapped to '2] to be bitnormed'
+        dst_taildir = '2] to be bitnormed'
+
+        for artist in os.listdir(root):
+            for album in os.listdir(os.path.join(root, artist)):
+                for song in os.listdir(os.path.join(root, artist, album)):
+                    src = os.path.join(root, artist, album, song)
+                    if song.endswith(tuple(e)):
+                        if(self.p1_song.match(song) or self.p2_song.match(song) or self.p3_song.match(song) or self.p4_song.match(song)):
+                            p1_match = self.p1_song.match(song)
+                            p2_match = self.p2_song.match(song)
+                            p3_match = self.p3_song.match(song)
+                            p4_match = self.p4_song.match(song)
+                            try:
+                                tracknumber, _, title = p1_match.groups()
+                            except AttributeError:
+                                pass
+                            try:
+                                tracknumber, _, title = p2_match.groups()
+                            except AttributeError:
+                                pass
+                            try:
+                                tracknumber, _, title = p3_match.groups()
+                            except AttributeError:
+                                pass
+                            try:
+                                tracknumber, _, title = p4_match.groups()
+                            except AttributeError:
+                                pass
+                            
+                            new_title = "".join([tracknumber, " ", artist, " -- ", album, " -- ", title])
+                            dst = os.path.join(basedir, dst_taildir, artist, album, new_title)
+                            dst_dir, dst_file = os.path.split(dst)
+                            if not os.path.exists(dst_dir):
+                                os.makedirs(dst_dir)
+                            if not os.path.exists(dst):
+                                print(f"Renaming for broadcast and moving from {src} to {dst}")
+                                shutil.move(src, dst)
+                            elif os.path.exists(dst):
+                                print(f"File on path {dst} already exists, removing duplicates")
+                                os.remove(src)
+                            self.renamed.add(dst)
+                        else:
+                            print(f"File on path {src} does not match any pattern --> not renamed (and moved to set)")
+                            self.not_renamed.add(src)
 
 
-class BroadcastRenamer:
-    pass
+    def __call__(self, root:str):
+        """ normalize the names and move them to proper place, after that delete empty olders """
+        n = NameNormalizer()
+        n.strip_apimatch_from_albumname(root)
+        n.titlecase_all(root)
+        self.normalize_names_for_broadcasting(root)
+        d = Deleter()
+        try:
+            d.delete_folders_without_audio(root)
+        except RecursionError as e:
+            print(e)
 
+
+
+
+
+# no_album_match_liststr = ["[Ep]", "[Box Set]", "(Flac)", "(Lowlife)", "[With Quartiere Nuovo]", "(C93 + Nww)", "(+ Limited Cd-R)", "(320 Kbps)", "(2004 Reissue)", "(2 Of 2)"]
 
 
 if __name__ == "__main__":
     x = get_all_audio_extensions()
     print(x)
+
+
+
+# 1] clear artist
+# 2] strip artist from album
+# 3] strip al the crap from album
