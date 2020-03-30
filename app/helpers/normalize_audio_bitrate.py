@@ -32,7 +32,7 @@ def change_bitrate(source_dir: str) -> None:
   """change bitrate to defined value"""
 
   codec = " [lame]"
-  path_replacement = "3] bitnormed"
+  path_replacement = "3] to be transfered"
   head, tail = os.path.split(source_dir)
 
   for path, dirs, files in os.walk(source_dir):
@@ -64,8 +64,8 @@ if __name__ == "__main__":
   # source = r"\\192.168.0.109\lukas\online radio resources\audio - tohle se testuje pro normalizaci"
   # normalize_audio(source)
 
-  # m = check_bitrate(r"\\192.168.0.109\lukas\online radio resources\1] renamed", b'160000')
-  # for k,v in m.items():
-  #   print(k, v)
+  m = check_bitrate(r"Y:\ambient\testing folder", b'160000')
+  for k,v in m.items():
+    print(k, v)
 
-  change_bitrate(r"\\192.168.0.109\lukas\online radio resources\1] renamed")
+  # change_bitrate(r"Y:\ambient\testing folder")

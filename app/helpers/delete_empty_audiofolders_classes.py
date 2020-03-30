@@ -24,7 +24,7 @@ class Deleter():
                     continue
             return counter
 
-    #ISSUE RECURSION EROR
+
     def delete_folders_without_audio(self, directory: str) -> int:
         """ delete folders where no audio files are left """
         counter = 0
@@ -33,10 +33,11 @@ class Deleter():
                 counter += 1
                 print(f"deleting.. {path}")
                 shutil.rmtree(path)
-                print(path)
-                print(directory)
-            if path != directory:
-                return self.delete_folders_without_audio(directory)
+        if counter > 0:
+            return self.delete_folders_without_audio(directory)
+        else:
+            return None
+
 
     # def __call__(self):
     #     while delete_folders_without_audio(directory) != 0: 

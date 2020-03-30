@@ -7,7 +7,9 @@ print("importing..")
 
 api_match_testing = r"Z:\Music\api\t\2] api match [by length]"
 api_notfound = r"Z:\Music\api\testing folder\4] album not found on discogs api"
-api_broadcast =r"Y:\ambient\testing folder"
+api_broadcast_test =r"Y:\ambient\testing folder"
+api_broadcast = r"Y:\ambient\1] to be renamed"
+api_to_be_bitnormed = r"Y:\ambient\2] to be bitnormed"
 
 def get_all_audio_extensions() -> list:
     """ returns audio extensions specified in file. must be called from root of the project. works both for shell and non shell, win i linux """
@@ -51,6 +53,8 @@ class RegexPatternsProvider:
     p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                    # name of album
     p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")          # 2002 name of album
     p3_album = re.compile(r"^([a-zA-z\s!'&]*)([,]\s)(\d\d\d\d)$")                                       # name of album, 2002
+
+    p_broadcast = re.compile(r"^(\d\d)(\s[A-Z][\w\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)--(\s[A-Z][\w\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)--(\s[A-Z][\w\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")           # 01 Controlled Bleeding -- The Poisoner -- Part One.mp3
 
 
 class NameNormalizer(RegexPatternsProvider):
@@ -437,7 +441,6 @@ class RegexMatcher(RegexPatternsProvider):
             print(i)
 
 
-
 #TODO dopsat deleter po presunuti
 class SongTagger(RegexPatternsProvider):
     """ class that tags songs, names are parsed from filesystem, thus first they need to be normalized. after tagging, the untagged songs are move to separated folder """
@@ -561,17 +564,15 @@ class FolderInfo(RegexPatternsProvider):
                     print(file)
 
 
-class BroadcastRenamer(RegexPatternsProvider):
-    """" class for handling files used in broadcasting server, it normalizes names, moves them to proper folder and delete the empty folders. 
-    after it is called, only albums that have songs that did not match any regex pattern reside in the root folder, all the rest is renamed, moved or deleted [duplicates]
-    """
-
+class BroadcastFileNormalizer(RegexPatternsProvider):
+    """" class for handling files used in broadcasting server, it normalizes names, and bitrate, moves them to proper folders and delete the empty folders """
     renamed = set()
     not_renamed = set()
+    not_matched = set()
 
-    def normalize_names_for_broadcasting(self, root:str) -> None:
-        """ renames songs for radio server, following this pattern:
-            01 name of artist -- name of album -- name of song.mp3
+    def normalize_names(self, root:str) -> None:
+        """ renames songs for radio server, following this pattern: 
+            01 Name Of Artist -- Name Of Album -- Name Of Song.mp3
         first the names for artist, album, song should be normalized using NameNormalizer class it moves the songs to the particular folder '2] to be bitnormed'
         """
         e = get_all_audio_extensions()
@@ -622,6 +623,23 @@ class BroadcastRenamer(RegexPatternsProvider):
                             self.not_renamed.add(src)
 
 
+    def check_names_integrity(self, root:str) -> None:
+        """ check if all song name match the broadcast pattern """
+        ext = get_all_audio_extensions()
+        for path, dirs, folders in os.walk(root):
+            for file in folders:
+                if file.endswith(tuple(ext)):
+                    filename, ext = os.path.splitext(os.path.join(path, file))
+                    if self.p_broadcast.match(os.path.basename(filename)):
+                        continue
+                    else:
+                        self.not_matched.add(filename)
+                        print(filename, "-> not matched")
+
+    
+    
+
+
     def __call__(self, root:str):
         """ normalize the names and move them to proper place, after that delete empty olders """
         n = NameNormalizer()
@@ -629,10 +647,8 @@ class BroadcastRenamer(RegexPatternsProvider):
         n.titlecase_all(root)
         self.normalize_names_for_broadcasting(root)
         d = Deleter()
-        try:
-            d.delete_folders_without_audio(root)
-        except RecursionError as e:
-            print(e)
+        d.delete_folders_without_audio(root)
+
 
 
 
@@ -642,11 +658,16 @@ class BroadcastRenamer(RegexPatternsProvider):
 
 
 if __name__ == "__main__":
-    x = get_all_audio_extensions()
-    print(x)
-
+    # x = get_all_audio_extensions()
+    # print(x)
+    b = BroadcastRenamer()
+    b(api_broadcast)
 
 
 # 1] clear artist
 # 2] strip artist from album
 # 3] strip al the crap from album
+
+
+# 01 Controlled Bleeding -- The Poisoner -- , Part One.mp3
+# 06 Jarguna -- Prospettive Animiche -- Indaco not match

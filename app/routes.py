@@ -2,7 +2,7 @@ import requests
 from app import app
 from flask import render_template, Response, request, flash
 import random, time, os, random
-from app.helper_scripts.parse_song_history import get_last_n_songs
+from app.helpers.parse_song_history import get_last_n_songs
 from flask_mail import Message, Mail
 
 app.config['SECRET_KEY'] = 'b36e4ef7cd15862acf8e3cb9ea4bc59a'

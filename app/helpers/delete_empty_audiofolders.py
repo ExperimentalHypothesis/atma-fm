@@ -65,7 +65,7 @@ def count_audiofiles(directory: str) -> int:
                 continue
         return counter
 
-def delete_folders_without_audio(directory: str) -> int:
+def delete_folders_without_audio(directory: str) -> None:
     """ delete folders where no audio files are left """
     counter = 0
     for path, dirs, _ in os.walk(directory):
@@ -73,13 +73,16 @@ def delete_folders_without_audio(directory: str) -> int:
             counter += 1
             print(f"deleting.. {path}")
             shutil.rmtree(path)
-    return counter
+    if counter > 0:
+        return delete_folders_without_audio(directory)
+    else:
+        return None
 
 
 if __name__ == "__main__":
-    source = r"Z:\Music\api\t\2] api match [by length]"
-    
-    if not os.path.exists(source): print("directory doesnt exists, check the path")
+    source = r"Y:\ambient\testing folder"
+    delete_folders_without_audio(source)
+    # if not os.path.exists(source): print("directory doesnt exists, check the path")
 
-    # delete recursively bottom up
-    while delete_folders_without_audio(source) != 0: delete_folders_without_audio(source)
+    # # delete recursively bottom up
+    # while delete_folders_without_audio(source) != 0: delete_folders_without_audio(source)
