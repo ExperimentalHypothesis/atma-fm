@@ -7,7 +7,6 @@ class Deleter():
 
     def count_audiofiles(self, directory: str) -> int:
         """ count audiofiles in a directory """
-
         filename = "audio_extensions.txt"
         try:
             with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), filename)) as f:
@@ -37,8 +36,3 @@ class Deleter():
             return self.delete_folders_without_audio(directory)
         else:
             return None
-
-
-    # def __call__(self):
-    #     while delete_folders_without_audio(directory) != 0: 
-    #         delete_folders_without_audio(director)
