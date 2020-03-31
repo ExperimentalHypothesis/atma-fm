@@ -1,5 +1,6 @@
 import os, re, mutagen, shutil, pathlib
 from collections import namedtuple
+from app.helpers.delete_empty_audiofolders_classes import Deleter
 
 print("importing names normalization 2")
 
@@ -55,26 +56,11 @@ class RegexPatternsProvider:
 
 
 class NameNormalizer(RegexPatternsProvider):
-    """ class for clearing out the names of songs, artists and albums, the goal is to have:
-        clear {artist_name} in the form of plain "artist name"          => for example "steve roach" 
-        clear {album_name} in the form of plain "album name"            => for example "structures of silence"
-        clear {song name} in the of "song name" with track number       => for example "01 early man.mp3"
+    """ Class for clearing out the names of songs, artists and albums, the goal is to have:
+        - Clear {artist_name} in the form of plain "artist name"          => for example "Steve Roach" 
+        - Clear {album_name} in the form of plain "album name"            => for example "Structures Of Silence"
+        - Clear {song name} in the of "song name" with track number       => for example "01 Early Man.mp3"
     """ 
-    def __repr__(self):
-        return "Class for clearing out the names of songs, albums and artists. All functions are class-level functions. Class serves simply as a namespace for functions that has something to do with normalization. Do not instantiate an object to run them."
-
-    def __call__(self, root):
-        """ Calls the function in appropriate order. It can be called either on the clas itself NameNormalizer(path) or on an object """
-        NameNormalizer.strip_apimatch_from_albumname(root)
-        NameNormalizer.strip_year_from_albumname(root)
-        NameNormalizer.titlecase_all(root)
-        NameNormalizer.strip_year_from_songname(root)
-        NameNormalizer.strip_artist_album_name_from_songname(root)
-        NameNormalizer.strip_whitespaces_from_songname(root)
-        NameNormalizer.strip_dot_after_track_from_songname(root)
-        NameNormalizer.strip_parens_around_track_from_songname(root)
-        NameNormalizer.strip_whitespaces_from_songname(root)
-    
 
     def strip_artist_album_name_from_songname(root:str) -> None:
         """ strip out artist name and album name if they are a part of name of a song name """
@@ -324,6 +310,23 @@ class NameNormalizer(RegexPatternsProvider):
         NameNormalizer.lowercase_artist(root)
 
 
+    def __repr__(self):
+        return "Class for clearing out the names of songs, albums and artists. All functions are class-level functions. Class serves simply as a namespace for functions that has something to do with normalization. Do not instantiate an object to run them."
+
+
+    def __call__(self, root):
+        """ Calls the functions in appropriate order. It can be called either on the clas itself NameNormalizer(path) or on an object """
+        NameNormalizer.strip_apimatch_from_albumname(root)
+        NameNormalizer.strip_year_from_albumname(root)
+        NameNormalizer.titlecase_all(root)
+        NameNormalizer.strip_year_from_songname(root)
+        NameNormalizer.strip_artist_album_name_from_songname(root)
+        NameNormalizer.strip_whitespaces_from_songname(root)
+        NameNormalizer.strip_dot_after_track_from_songname(root)
+        NameNormalizer.strip_parens_around_track_from_songname(root)
+        NameNormalizer.strip_whitespaces_from_songname(root)
+    
+
 class RegexMatcher(RegexPatternsProvider):
     """ Class for checking regex matches for songs and albums """
 
@@ -440,14 +443,17 @@ class RegexMatcher(RegexPatternsProvider):
             print(i)
 
 
-
 class SongTagger(RegexPatternsProvider):
-    """ Class that tags songs, names are parsed from filesystem, so first they need to be normalized. After tagging, the untagged songs are moved to separated folder """
+    """ Class that tags songs with album, artist, song names. The names are parsed from filesystem, and so first they need to be normalized. 
+    Albums with one track only are moved to seprated folder and are not tagged.
+    Albums whoses songs do not match any regex pattern are moved to seprated folder and are not tagged. 
+    Empty audio folders are deleted after tagging and moving happens. """
+    
     ext = get_all_audio_extensions()
-    singletrack_albums = []
+    singletrack_albums = set()
 
     def tag_songs(root:str) -> None:
-        """ Tag songs based on regexes  """
+        """ Tag songs based on regexes """
 
         root_untagged = root + "_UNTAGGED_"
         root_onetrack = root + "_ONE_TRACKED_ALBUMS_"
@@ -459,6 +465,7 @@ class SongTagger(RegexPatternsProvider):
                         for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(SongTagger.ext))]
                 if len(songs) == 1: # move albums with one song only - dont tag them 
                     print(f"Album '{album}' on path {os.path.join(root, artist)} has only one track")
+                    SongTagger.singletrack_albums.add(os.path.join(root, artist, album))
                     for song in songs:
                         src_file = os.path.join(root, artist, album, song)
                         dst_file = os.path.join(root_onetrack, artist, album, song)
@@ -522,14 +529,152 @@ class SongTagger(RegexPatternsProvider):
                             shutil.move(path, dst_file)
 
 
-    #TODO 
-    # deleter
-
     def __call__(self, root:str) -> None:
-        """ tags, moves, and deletes empty folders """
-        pass
+        """ Tag songs, and deletes empty folders """
+        SongTagger.tag_songs(root)
+        Deleter.delete_folders_without_audio(root)
 
 
     def __repr__(self) -> None:
         return "Class tagging songs with artist, album, song names. The names are parsed from filesystem. All functions are class-level only, no instance is needed. Class serves as namespace."
+
+
+
+class FolderInfo(RegexPatternsProvider):
+    """ Class for getting basic info about the albums, songs etc.. """
+
+    ext = get_all_audio_extensions()
+    def count_albums(root:str) -> int:
+        """ return number of albums i a root dir """
+        c = 0
+        for artist_folder in os.listdir(root):
+            for album_folder in os.listdir(os.path.join(root, artist_folder)):
+                c += 1
+        return c
+        
+
+    def print_dir_tree(root:str) -> None:
+        """ prints directory tree of all files """
+        for artist in os.listdir(root):
+            print(artist)
+            for album in os.listdir(os.path.join(root, artist)):
+                print("  ", album)
+                for file in os.listdir(os.path.join(root, artist, album)):
+                    print("     ", file)
+
+
+    def print_all_artists(root:str) -> None:
+        """ prints all artist folder names """
+        for artist in os.listdir(root):
+            print(artist)
+
+
+    def print_all_albums(root:str) -> None:
+        """ prints all album folder names """
+        with open("all_albums.txt", 'w') as f:
+            for artist in os.listdir(root):
+                for album in os.listdir(os.path.join(root, artist)):
+                    print(artist, " - ", album)
+                    print(artist, " - ", album, file=f)
+
+
+    def print_all_songs(root:str) -> None:
+        """ prints all song folder names """
+        for path, dirs, folders in os.walk(root):
+            for file in folders:
+                if file.endswith(tuple(HelperInfo.ext)):
+                    print(file)
+
+
+    def __repr__(self) -> None:
+        return "Class for getting basic information about the folder's content. All functions are class-level only. Class name serves as namespace."
+
+
+
+class BroadcastFileNormalizer(RegexPatternsProvider):
+    """" Class for handling files used in broadcasting server. It normalizes names, bitrate and volume of songs and moves them to proper folders. Empty folders are deleted afterwards. """
+    
+    renamed = set()
+    not_renamed = set()
+    not_matched = set()
+
+    def normalize_names(root:str) -> None:
+        """ Renames songs for radio server, following this pattern: 
+            01 Name Of Artist -- Name Of Album -- Name Of Song.mp3
+        The names for artist, album, song should be first normalized using NameNormalizer class! 
+        All files are moved to the particular folder '2] to be bitnormed'
+        """
+        ext = get_all_audio_extensions()
+        basedir, taildir = os.path.split(root) # tail will be swapped to '2] to be bitnormed'
+        dst_taildir = '2] to be bitnormed'
+
+        for artist in os.listdir(root):
+            for album in os.listdir(os.path.join(root, artist)):
+                for song in os.listdir(os.path.join(root, artist, album)):
+                    src = os.path.join(root, artist, album, song)
+                    if song.endswith(tuple(ext)):
+                        if(BroadcastFileNormalizer.p1_song.match(song) or BroadcastFileNormalizer.p2_song.match(song) \
+                            or BroadcastFileNormalizer.p3_song.match(song) or BroadcastFileNormalizer.p4_song.match(song)):
+                            p1_match = BroadcastFileNormalizer.p1_song.match(song)
+                            p2_match = BroadcastFileNormalizer.p2_song.match(song)
+                            p3_match = BroadcastFileNormalizer.p3_song.match(song)
+                            p4_match = BroadcastFileNormalizer.p4_song.match(song)
+                            try:
+                                tracknumber, _, title = p1_match.groups()
+                            except AttributeError:
+                                pass
+                            try:
+                                tracknumber, _, title = p2_match.groups()
+                            except AttributeError:
+                                pass
+                            try:
+                                tracknumber, _, title = p3_match.groups()
+                            except AttributeError:
+                                pass
+                            try:
+                                tracknumber, _, title = p4_match.groups()
+                            except AttributeError:
+                                pass
+                            
+                            new_title = "".join([tracknumber, " ", artist, " -- ", album, " -- ", title])
+                            dst = os.path.join(basedir, dst_taildir, artist, album, new_title)
+                            dst_dir, dst_file = os.path.split(dst)
+                            if not os.path.exists(dst_dir):
+                                os.makedirs(dst_dir)
+                            if not os.path.exists(dst):
+                                print(f"Renaming for broadcast and moving from {src} to {dst}")
+                                shutil.move(src, dst)
+                            elif os.path.exists(dst):
+                                print(f"File on path {dst} already exists, removing duplicates")
+                                os.remove(src)
+                            BroadcastFileNormalizer.renamed.add(dst)
+                        else:
+                            print(f"File on path {src} does not match any pattern --> not renamed (and moved to set)")
+                            BroadcastFileNormalizer.not_renamed.add(src)
+
+
+    def check_names_integrity(root:str) -> None:
+        """ Check if all song name match the broadcast pattern before u move them to the server """
+        ext = get_all_audio_extensions()
+        for path, dirs, folders in os.walk(root):
+            for file in folders:
+                if file.endswith(tuple(ext)):
+                    filename, ext = os.path.splitext(os.path.join(path, file))
+                    if BroadcastFileNormalizer.p_broadcast.match(os.path.basename(filename)):
+                        continue
+                    else:
+                        BroadcastFileNormalizer.not_matched.add(filename)
+                        print(filename, "-> not matched")
+
+    
+    def __call__(self, root:str) -> None:
+        """ Normalize the names and move them to proper folders. After that delete empty folders. """
+        NameNormalizer.strip_apimatch_from_albumname(root)
+        NameNormalizer.titlecase_all(root)
+        BroadcastFileNormalizer.normalize_names(root)
+        Deleter.delete_folders_without_audio(root)
+
+
+    def __repr__(self) -> None:
+        return "Class for handling files used in broadcasting server. It is responsible for normalization of name, bitrate and volume of each track. All functions are class-level only. Class name serves as namespace."
 

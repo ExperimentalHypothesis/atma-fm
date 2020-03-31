@@ -1,12 +1,11 @@
 import os, shutil
 
 
-#TODO mozna to prepsat do jedny funkce.. 
 class Deleter():
-    """ class deleting empty audiofolders """
+    """ Class deleting empty audiofolders """
 
-    def count_audiofiles(self, directory: str) -> int:
-        """ count audiofiles in a directory """
+    def count_audiofiles(directory: str) -> int:
+        """ Count audiofiles in a directory """
         filename = "audio_extensions.txt"
         try:
             with open(os.path.join(os.path.dirname(os.path.realpath(__file__)), filename)) as f:
@@ -24,15 +23,15 @@ class Deleter():
             return counter
 
 
-    def delete_folders_without_audio(self, directory: str) -> int:
-        """ delete folders where no audio files are left """
+    def delete_folders_without_audio(directory: str) -> int:
+        """ Delete folders where no audio files are left, recursively from botom up """
         counter = 0
         for path, dirs, _ in os.walk(directory):
-            if len(dirs) == 0 and self.count_audiofiles(path) == 0:
+            if len(dirs) == 0 and Deleter.count_audiofiles(path) == 0:
                 counter += 1
                 print(f"deleting.. {path}")
                 shutil.rmtree(path)
         if counter > 0:
-            return self.delete_folders_without_audio(directory)
+            return Deleter.delete_folders_without_audio(directory)
         else:
             return None
