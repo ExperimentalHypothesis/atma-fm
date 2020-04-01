@@ -1,10 +1,20 @@
-import os, re, mutagen, shutil, pathlib
-from collections import namedtuple
-from app.helpers.delete_empty_audiofolders_classes import Deleter
 
-print("importing names normalization 2")
+# this module is responsible for all types of audio file normalization. That means:
+#  - it normalizes names of songs, albums, artist for filesystem
+#  - it tags songs
+#  - it normalizes names of songs for broadcasting server
+#  - it normalizes bitrate of songs for broadcasting server
+#  - it normalizes volume of songs for broadcasting server
+
+
+import os, re, mutagen, shutil, pathlib, subprocess
+from collections import namedtuple
+from app.helpers.cl_filesystem_handler import Deleter
+
+print("importing cl audiofile normalization..")
 
 api_broadcast_test =r"Y:\ambient\testing folder"
+api_broadcast_test2 =r"Y:\ambient\testing folder2"
 
 def get_all_audio_extensions() -> list:
     """ returns audio extensions specified in file. must be called from root of the project. works both for shell and non shell, win i linux """
@@ -346,7 +356,8 @@ class RegexMatcher(RegexPatternsProvider):
     def __repr__(self):
         return "Class for checking regex matches for songs and albums. All functions are class-level only, to call them, no instanace need to be created. The class is just to provide namespace."
 
-    def get_all_regex_song_match(root:str) -> None:
+    @classmethod
+    def get_all_regex_song_match(cls, root:str) -> None:
         """ Get all audio files with particular regex pattern """
         RegexMatcher.p1_song_matches.clear() 
         RegexMatcher.p2_song_matches.clear() 
@@ -376,6 +387,7 @@ class RegexMatcher(RegexPatternsProvider):
                             print(f"{file+ext}  :: path {os.path.join(artist_folder, album_folder)} -> no regex match")
 
 
+    @classmethod
     def get_no_regex_song_match(root:str) -> None:
         """ Get audio files that did not match any regex pattern """
         RegexMatcher.no_song_matches.clear()
@@ -393,7 +405,8 @@ class RegexMatcher(RegexPatternsProvider):
                             RegexMatcher.no_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext))
 
 
-    def get_all_regex_album_match(root:str) -> None:
+    @classmethod
+    def get_all_regex_album_match(cls, root:str) -> None:
         """ Get regex match pattern for all albums """ 
         RegexMatcher.p1_album_matches.clear()
         RegexMatcher.p2_album_matches.clear()
@@ -415,7 +428,8 @@ class RegexMatcher(RegexPatternsProvider):
                     RegexMatcher.no_album_matches.add(os.path.join(root, artist, album))
 
 
-    def get_no_regex_album_match(root:str) -> None:
+    @classmethod
+    def get_no_regex_album_match(cls, root:str) -> None:
         """ Get albums that did not match any regex pattern """
         RegexMatcher.no_album_matches.clear()
         for artist in os.listdir(root):
@@ -428,6 +442,7 @@ class RegexMatcher(RegexPatternsProvider):
                     RegexMatcher.no_album_matches.add(os.path.join(root, artist, album))
     
 
+    @staticmethod
     def count_albums_with_regex_matched_songs(s:set) -> int:
         """ Returns number of albums whose songs did match particular regex pattern.
         Used mostly with set of not matched songs to see, how many albums will be tagged """
@@ -435,6 +450,7 @@ class RegexMatcher(RegexPatternsProvider):
         return len(uni_paths)
 
 
+    @staticmethod
     def print_albums_with_regex_matched_songs(s:set) -> int:
         """ Prints the albums whose songs did match particular regex pattern. 
         Used mostly with set of not matched songs to see, which albums will not be tagged """
@@ -452,7 +468,8 @@ class SongTagger(RegexPatternsProvider):
     ext = get_all_audio_extensions()
     singletrack_albums = set()
 
-    def tag_songs(root:str) -> None:
+    @classmethod
+    def tag_songs(cls, root:str) -> None:
         """ Tag songs based on regexes """
 
         root_untagged = root + "_UNTAGGED_"
@@ -536,15 +553,16 @@ class SongTagger(RegexPatternsProvider):
 
 
     def __repr__(self) -> None:
-        return "Class tagging songs with artist, album, song names. The names are parsed from filesystem. All functions are class-level only, no instance is needed. Class serves as namespace."
-
+        return "Class tagging songs with artist, album, song names. The names are parsed from filesystem. Functions are class-level only, no instance is needed. Class serves as namespace."
 
 
 class FolderInfo(RegexPatternsProvider):
     """ Class for getting basic info about the albums, songs etc.. """
 
     ext = get_all_audio_extensions()
-    def count_albums(root:str) -> int:
+
+    @classmethod    
+    def count_albums(cls, root:str) -> int:
         """ return number of albums i a root dir """
         c = 0
         for artist_folder in os.listdir(root):
@@ -553,7 +571,8 @@ class FolderInfo(RegexPatternsProvider):
         return c
         
 
-    def print_dir_tree(root:str) -> None:
+    @classmethod
+    def print_dir_tree(cls, root:str) -> None:
         """ prints directory tree of all files """
         for artist in os.listdir(root):
             print(artist)
@@ -562,14 +581,15 @@ class FolderInfo(RegexPatternsProvider):
                 for file in os.listdir(os.path.join(root, artist, album)):
                     print("     ", file)
 
-
-    def print_all_artists(root:str) -> None:
+    @classmethod
+    def print_all_artists(cls, root:str) -> None:
         """ prints all artist folder names """
         for artist in os.listdir(root):
             print(artist)
 
 
-    def print_all_albums(root:str) -> None:
+    @classmethod
+    def print_all_albums(cls, root:str) -> None:
         """ prints all album folder names """
         with open("all_albums.txt", 'w') as f:
             for artist in os.listdir(root):
@@ -578,17 +598,17 @@ class FolderInfo(RegexPatternsProvider):
                     print(artist, " - ", album, file=f)
 
 
-    def print_all_songs(root:str) -> None:
+    @classmethod
+    def print_all_songs(cls, root:str) -> None:
         """ prints all song folder names """
         for path, dirs, folders in os.walk(root):
             for file in folders:
-                if file.endswith(tuple(HelperInfo.ext)):
+                if file.endswith(tuple(FolderInfo.ext)):
                     print(file)
 
 
     def __repr__(self) -> None:
         return "Class for getting basic information about the folder's content. All functions are class-level only. Class name serves as namespace."
-
 
 
 class BroadcastFileNormalizer(RegexPatternsProvider):
@@ -601,6 +621,7 @@ class BroadcastFileNormalizer(RegexPatternsProvider):
     def normalize_names(root:str) -> None:
         """ Renames songs for radio server, following this pattern: 
             01 Name Of Artist -- Name Of Album -- Name Of Song.mp3
+        
         The names for artist, album, song should be first normalized using NameNormalizer class! 
         All files are moved to the particular folder '2] to be bitnormed'
         """
@@ -665,6 +686,49 @@ class BroadcastFileNormalizer(RegexPatternsProvider):
                     else:
                         BroadcastFileNormalizer.not_matched.add(filename)
                         print(filename, "-> not matched")
+
+
+    def check_bitrate(root: str, min_bitrate: bytes) -> dict:
+        """ Make a map of files having less bitrate than specified """
+        audio_extensions = os.path.join(os.path.dirname(__file__), "audio_extensions.txt")
+        with open(audio_extensions) as f:
+            e = f.read().splitlines()
+        command = "ffprobe -v error -show_entries format=bit_rate -of default=noprint_wrappers=1:nokey=1"
+        d = {}
+        for path, dirs, files in os.walk(root):
+            for file in files:
+                if file.endswith(tuple(e)):
+                    file_name = os.path.join(path, file)
+                    full_command = "".join(command + f' "{file_name}"')
+                    out = subprocess.check_output(full_command)
+                    if out < min_bitrate:
+                        d[file_name] = out
+        return d
+
+
+    def change_bitrate(source_dir: str) -> None:
+        """Change bitrate to 128k value"""
+        codec = " [lame]"
+        path_replacement = "3] to be transfered"
+        head, tail = os.path.split(source_dir)
+
+        for path, dirs, files in os.walk(source_dir):
+            for file in files:
+                filepath_source = os.path.abspath(os.path.join(path, file))
+                index = filepath_source.rfind(".") #DEBUG
+                filepath_norm = filepath_source[:index] + codec + filepath_source[index:] #DEBUG
+                filepath_target = filepath_norm.replace(tail, path_replacement)
+            if not file.endswith(".mp3"):
+                filename, extension = os.path.splitext(filepath_target)
+                filepath_target = filename + ".mp3"
+            dir_name = os.path.dirname(filepath_target)
+            if os.path.exists(filepath_target):
+                print(f"file {filepath_target} already exists, skipping..")
+            else:
+                if not os.path.exists(dir_name): 
+                    os.makedirs(dir_name)
+                print(f"encoding from {filepath_source} to {filepath_target}")
+                subprocess.run(f'ffmpeg -i "{filepath_source}" -metadata comment="ripped with lame @128k" -codec:a libmp3lame -b:a 128k -ar 44100 "{filepath_target}"')
 
     
     def __call__(self, root:str) -> None:
