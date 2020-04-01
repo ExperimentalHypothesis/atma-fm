@@ -82,6 +82,30 @@ class Deleter():
         else:
             return None
 
+# TODO DELETE DUPLICATED 
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\01 Exile.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\01 Exile.mp3',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\02 One Thousand Years.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\02 One Thousand Years.mp3',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\03 Fetish.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\03 Fetish.mp3',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\04 Body of Light.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\04 Body of Light.mp3',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\05 Pan America.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\05 Pan America.mp3',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\06 Breath.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\05 Pan America.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\05 Pan America.mp3',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\06 Breath.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\06 Breath.mp3',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\07 High Places.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\07 High Places.mp3',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\08 Sand Garden.flac',
+#  'Y:\\ambient\\testing folder\\Tuu\\One Thousand Years\\08 Sand Garden.mp3
+
+
+
+
 class Sorter():
     """ Class for sorting audio folders in a tree structure following this pattern:
         [a/name_of_composer_starting_from_letter_a/albums...]

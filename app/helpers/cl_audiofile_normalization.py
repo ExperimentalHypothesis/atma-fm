@@ -9,7 +9,7 @@
 
 import os, re, mutagen, shutil, pathlib, subprocess
 from collections import namedtuple
-from app.helpers.cl_filesystem_handler import Deleter
+from cl_filesystem_handler import Deleter
 
 print("importing cl audiofile normalization..")
 
@@ -338,62 +338,89 @@ class NameNormalizer(RegexPatternsProvider):
     
 
 class RegexMatcher(RegexPatternsProvider):
-    """ Class for checking regex matches for songs and albums """
+    """ Class for checking regex matches for songs and albums. It holds paths of all matched and unmatched files or folders in separated sets for further processing. """
 
     ext = get_all_audio_extensions()
 
-    p1_song_matches = set() 
-    p2_song_matches = set() 
-    p3_song_matches = set()
-    p4_song_matches = set()
-    no_song_matches = set()
+    def __init__(self, root:str) -> None:
+        self._root = root
 
-    p1_album_matches = set()
-    p2_album_matches = set()    
-    p3_album_matches = set()
-    no_album_matches = set()
+        self.p1_song_matches = set() 
+        self.p2_song_matches = set() 
+        self.p3_song_matches = set()
+        self.p4_song_matches = set()
+        self.no_song_matches = set()
+        self.p1_album_matches = set()
+        self.p2_album_matches = set()    
+        self.p3_album_matches = set()
+        self.no_album_matches = set()
 
-    def __repr__(self):
-        return "Class for checking regex matches for songs and albums. All functions are class-level only, to call them, no instanace need to be created. The class is just to provide namespace."
 
-    @classmethod
-    def get_all_regex_song_match(cls, root:str) -> None:
+    def __str__(self) -> str:
+        return f"RegexMatcher - {self.root}"
+
+
+    def __repr__(self) -> str:
+        return f"RegexMatcher(root='{self.root}')"
+
+
+    @property
+    def root(self):
+        return self._root
+
+
+    @root.setter
+    def root(self, value:str):
+        if value != self._root:
+            self.p1_song_matches.clear() 
+            self.p2_song_matches.clear() 
+            self.p3_song_matches.clear()
+            self.p4_song_matches.clear()
+            self.no_song_matches.clear()
+            self.p1_album_matches.clear()
+            self.p2_album_matches.clear()
+            self.p3_album_matches.clear()
+            self.no_album_matches.clear()
+            
+            self._root = value
+
+
+    def get_all_regex_song_match(self) -> None:
         """ Get all audio files with particular regex pattern """
-        RegexMatcher.p1_song_matches.clear() 
-        RegexMatcher.p2_song_matches.clear() 
-        RegexMatcher.p3_song_matches.clear()
-        RegexMatcher.p4_song_matches.clear()
-        RegexMatcher.no_song_matches.clear()
+        self.p1_song_matches.clear() 
+        self.p2_song_matches.clear() 
+        self.p3_song_matches.clear()
+        self.p4_song_matches.clear()
+        self.no_song_matches.clear()
 
-        for artist_folder in os.listdir(os.path.join(root)):
-            for album_folder in os.listdir(os.path.join(root, artist_folder)):
-                for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
+        for artist_folder in os.listdir(os.path.join(self.root)):
+            for album_folder in os.listdir(os.path.join(self.root, artist_folder)):
+                for file in os.listdir(os.path.join(self.root, artist_folder, album_folder)):
                     if file.endswith(tuple(RegexMatcher.ext)):
                         file, ext = os.path.splitext(file)
                         if RegexMatcher.p1_song.match(file): 
                             print(f"{file+ext} -> p1_song match")
-                            RegexMatcher.p1_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext)) 
+                            self.p1_song_matches.add(os.path.join(self.root, artist_folder, album_folder, file+ext)) 
                         elif RegexMatcher.p2_song.match(file): 
                             print(f"{file+ext} -> p2_song match")
-                            RegexMatcher.p2_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext)) 
+                            self.p2_song_matches.add(os.path.join(self.root, artist_folder, album_folder, file+ext)) 
                         elif RegexMatcher.p3_song.match(file): 
                             print(f"{file+ext} -> p3_song match")
-                            RegexMatcher.p3_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext))
+                            self.p3_song_matches.add(os.path.join(self.root, artist_folder, album_folder, file+ext))
                         elif RegexMatcher.p4_song.match(file): 
                             print(f"{file+ext} -> p4_song match")
-                            RegexMatcher.p4_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext))
+                            self.p4_song_matches.add(os.path.join(self.root, artist_folder, album_folder, file+ext))
                         else: 
-                            RegexMatcher.no_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext))
+                            self.no_song_matches.add(os.path.join(self.root, artist_folder, album_folder, file+ext))
                             print(f"{file+ext}  :: path {os.path.join(artist_folder, album_folder)} -> no regex match")
 
 
-    @classmethod
-    def get_no_regex_song_match(root:str) -> None:
+    def get_no_regex_song_match(self) -> None:
         """ Get audio files that did not match any regex pattern """
-        RegexMatcher.no_song_matches.clear()
-        for artist_folder in os.listdir(os.path.join(root)):
-            for album_folder in os.listdir(os.path.join(root, artist_folder)):
-                for file in os.listdir(os.path.join(root, artist_folder, album_folder)):
+        self.no_song_matches.clear()
+        for artist_folder in os.listdir(os.path.join(self.root)):
+            for album_folder in os.listdir(os.path.join(self.root, artist_folder)):
+                for file in os.listdir(os.path.join(self.root, artist_folder, album_folder)):
                     if file.endswith(tuple(RegexMatcher.ext)):
                         file, ext = os.path.splitext(file)
                         if RegexMatcher.p1_song.match(file):      continue
@@ -402,44 +429,42 @@ class RegexMatcher(RegexPatternsProvider):
                         elif RegexMatcher.p4_song.match(file):    continue
                         else: 
                             print(f"{file+ext} :: path {os.path.join(artist_folder, album_folder)} -> no regex match")
-                            RegexMatcher.no_song_matches.add(os.path.join(root, artist_folder, album_folder, file+ext))
+                            self.no_song_matches.add(os.path.join(self.root, artist_folder, album_folder, file+ext))
 
 
-    @classmethod
-    def get_all_regex_album_match(cls, root:str) -> None:
+    def get_all_regex_album_match(self) -> None:
         """ Get regex match pattern for all albums """ 
-        RegexMatcher.p1_album_matches.clear()
-        RegexMatcher.p2_album_matches.clear()
-        RegexMatcher.p3_album_matches.clear()
-        RegexMatcher.no_album_matches.clear()
-        for artist in os.listdir(root):
-            for album in os.listdir(os.path.join(root, artist)):
+        self.p1_album_matches.clear()
+        self.p2_album_matches.clear()
+        self.p3_album_matches.clear()
+        self.no_album_matches.clear()
+        for artist in os.listdir(self.root):
+            for album in os.listdir(os.path.join(self.root, artist)):
                 if RegexMatcher.p1_album.match(album): 
-                    print(album, f" -> p1_album match :: path {os.path.join(root, artist)}")
-                    RegexMatcher.p1_album_matches.add(os.path.join(root, artist, album))
+                    print(album, f" -> p1_album match :: path {os.path.join(self.root, artist)}")
+                    self.p1_album_matches.add(os.path.join(self.root, artist, album))
                 elif RegexMatcher.p2_album.match(album): 
-                    print(album, f" -> p2_album match :: path {os.path.join(root, artist)}")
-                    RegexMatcher.p2_album_matches.add(os.path.join(root, artist, album))
+                    print(album, f" -> p2_album match :: path {os.path.join(self.root, artist)}")
+                    self.p2_album_matches.add(os.path.join(self.root, artist, album))
                 elif RegexMatcher.p3_album.match(album): 
-                    print(album, f" -> p3_album match :: path {os.path.join(root, artist)}")
-                    RegexMatcher.p3_album_matches.add(os.path.join(root, artist, album))
+                    print(album, f" -> p3_album match :: path {os.path.join(self.root, artist)}")
+                    self.p3_album_matches.add(os.path.join(self.root, artist, album))
                 else: 
                     print(album, " -> no match")
-                    RegexMatcher.no_album_matches.add(os.path.join(root, artist, album))
+                    self.no_album_matches.add(os.path.join(self.root, artist, album))
 
 
-    @classmethod
-    def get_no_regex_album_match(cls, root:str) -> None:
+    def get_no_regex_album_match(self) -> None:
         """ Get albums that did not match any regex pattern """
-        RegexMatcher.no_album_matches.clear()
-        for artist in os.listdir(root):
-            for album in os.listdir(os.path.join(root, artist)):
+        self.no_album_matches.clear()
+        for artist in os.listdir(self.root):
+            for album in os.listdir(os.path.join(self.root, artist)):
                 if RegexMatcher.p1_album.match(album):      continue
                 elif RegexMatcher.p2_album.match(album):    continue
                 elif RegexMatcher.p3_album.match(album):    continue
                 else: 
-                    print(f"{album} :: path {os.path.join(root, artist)} -> no regex match")
-                    RegexMatcher.no_album_matches.add(os.path.join(root, artist, album))
+                    print(f"{album} :: path {os.path.join(self.root, artist)} -> no regex match")
+                    self.no_album_matches.add(os.path.join(self.root, artist, album))
     
 
     @staticmethod
@@ -742,3 +767,17 @@ class BroadcastFileNormalizer(RegexPatternsProvider):
     def __repr__(self) -> None:
         return "Class for handling files used in broadcasting server. It is responsible for normalization of name, bitrate and volume of each track. All functions are class-level only. Class name serves as namespace."
 
+
+
+
+
+if __name__  == "__main__":
+    r1 = RegexMatcher(api_broadcast_test)
+    r2 = RegexMatcher(api_broadcast_test2)
+
+    r1.get_all_regex_album_match()
+    r2.get_all_regex_album_match()
+    r1.get_all_regex_song_match()
+    r2.get_all_regex_song_match()
+
+ 
