@@ -9,7 +9,7 @@
 
 import os, re, mutagen, shutil, pathlib, subprocess
 from collections import namedtuple
-from cl_filesystem_handler import Deleter
+from app.helpers.cl_filesystem_handler import Deleter
 
 print("importing cl audiofile normalization..")
 
@@ -50,10 +50,10 @@ def move_albums_with_one_track_only(root:str) -> None:
 class RegexPatternsProvider:
     """ Base class for encapsulating regex patterns to have them in one place """
 
-    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=`&'?!\[\]]*)$")                                          # one CD leading zero (01 song name.mp3)
-    p2_song = re.compile(r"(^\d)(\s)([A-Z][\w+\s().,:#=`&'?!\[\]]*)$")                                   # one CD no leading zero (1 song name.mp3)
-    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().,:#=&`'?!\[\]]*)$")                                 # multiple CD (1 01 song name.mp3)
-    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:#=&'?`!\[\]]*)$")                                   # multiple CD (101 song name.mp3)
+    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=\-`&'?!\[\]]*)$")                                          # one CD leading zero (01 song name.mp3)
+    p2_song = re.compile(r"(^\d)(\s)([A-Z][\w+\s().,\-:#=`&'?!\[\]]*)$")                                   # one CD no leading zero (1 song name.mp3)
+    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().\-,:#=&`'?!\[\]]*)$")                                 # multiple CD (1 01 song name.mp3)
+    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:\-#=&'?`!\[\]]*)$")                                   # multiple CD (101 song name.mp3)
 
     p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                    # name of album
     p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")          # 2002 name of album
@@ -491,25 +491,37 @@ class SongTagger(RegexPatternsProvider):
     Empty audio folders are deleted after tagging and moving happens. """
     
     ext = get_all_audio_extensions()
-    singletrack_albums = set()
 
-    @classmethod
-    def tag_songs(cls, root:str) -> None:
+    def __init__(self, root:str) -> None:
+        self.root = root
+        self.singletrack_albums = set()
+        self.tagged_songs = set()
+        self.untagged_songs = set()
+    
+    def __repr__(self):
+        return "SongTagger(root='{self.root}')"
+
+    
+    def __str__(self):
+        return "SongTagger - {self.root}"
+
+
+    def tag_songs(self) -> None:
         """ Tag songs based on regexes """
 
-        root_untagged = root + "_UNTAGGED_"
-        root_onetrack = root + "_ONE_TRACKED_ALBUMS_"
+        root_untagged = self.root + "_UNTAGGED_"
+        root_onetrack = self.root + "_ONE_TRACKED_ALBUMS_"
 
-        for artist in os.listdir(root):
-            for album in os.listdir(os.path.join(root, artist)):
-                songs = [track for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(SongTagger.ext))]
-                paths = [os.path.join(root, artist, album, track) 
-                        for track in os.listdir(os.path.join(root, artist, album)) if track.endswith(tuple(SongTagger.ext))]
+        for artist in os.listdir(self.root):
+            for album in os.listdir(os.path.join(self.root, artist)):
+                songs = [track for track in os.listdir(os.path.join(self.root, artist, album)) if track.endswith(tuple(SongTagger.ext))]
+                paths = [os.path.join(self.root, artist, album, track) 
+                        for track in os.listdir(os.path.join(self.root, artist, album)) if track.endswith(tuple(SongTagger.ext))]
                 if len(songs) == 1: # move albums with one song only - dont tag them 
-                    print(f"Album '{album}' on path {os.path.join(root, artist)} has only one track")
-                    SongTagger.singletrack_albums.add(os.path.join(root, artist, album))
+                    print(f"Album '{album}' on path {os.path.join(self.root, artist)} has only one track")
+                    self.singletrack_albums.add(os.path.join(self.root, artist, album))
                     for song in songs:
-                        src_file = os.path.join(root, artist, album, song)
+                        src_file = os.path.join(self.root, artist, album, song)
                         dst_file = os.path.join(root_onetrack, artist, album, song)
                         if not os.path.exists(os.path.dirname(dst_file)):
                             os.makedirs(os.path.dirname(dst_file))
@@ -521,7 +533,7 @@ class SongTagger(RegexPatternsProvider):
                     song_name = song.rsplit(".", 1)[0].title()
                     # if it finds a regex match, tag it
                     if SongTagger.p1_song.match(song_name) or SongTagger.p2_song.match(song_name) \
-                    or SongTagger.p3_song.match(song_name) or SongTagger.p4_song.match(song_name):  
+                    or SongTagger.p3_song.match(song_name) or SongTagger.p4_song.match(song_name):
                         p1_match = SongTagger.p1_song.match(song_name)
                         p2_match = SongTagger.p2_song.match(song_name)
                         p3_match = SongTagger.p3_song.match(song_name)
@@ -558,12 +570,14 @@ class SongTagger(RegexPatternsProvider):
 
                         try:
                             tags.save()
+                            self.tagged_songs.add(os.path.join(path, song))
                         except UnboundLocalError as e:
                             print(e, f"on file {path} -> NOT TAGGED PROPERLY")
                     else: 
                         # if it finds no regex match, move it to separeted folder
                         print(f"Song on path {path} doesnt match regex -> NOT TAGGED, moving..")
-                        dst_file = os.path.join(root_untagged, artist, album, song)                        
+                        dst_file = os.path.join(root_untagged, artist, album, song)
+                        self.untagged_songs.add(dst_file)                       
                         if not os.path.exists(os.path.dirname(dst_file)):
                             os.makedirs(os.path.dirname(dst_file))
                         if not os.path.exists(dst_file):
@@ -571,14 +585,12 @@ class SongTagger(RegexPatternsProvider):
                             shutil.move(path, dst_file)
 
 
-    def __call__(self, root:str) -> None:
+
+    def __call__(self) -> None:
         """ Tag songs, and deletes empty folders """
-        SongTagger.tag_songs(root)
-        Deleter.delete_folders_without_audio(root)
-
-
-    def __repr__(self) -> None:
-        return "Class tagging songs with artist, album, song names. The names are parsed from filesystem. Functions are class-level only, no instance is needed. Class serves as namespace."
+        inst = SongTagger(self.root)
+        inst.tag_songs()
+        Deleter.delete_folders_without_audio(self.root)
 
 
 class FolderInfo(RegexPatternsProvider):
@@ -632,7 +644,7 @@ class FolderInfo(RegexPatternsProvider):
                     print(file)
 
 
-    def __repr__(self) -> None:
+    def __str__(self) -> None:
         return "Class for getting basic information about the folder's content. All functions are class-level only. Class name serves as namespace."
 
 
@@ -766,9 +778,6 @@ class BroadcastFileNormalizer(RegexPatternsProvider):
 
     def __repr__(self) -> None:
         return "Class for handling files used in broadcasting server. It is responsible for normalization of name, bitrate and volume of each track. All functions are class-level only. Class name serves as namespace."
-
-
-
 
 
 if __name__  == "__main__":
