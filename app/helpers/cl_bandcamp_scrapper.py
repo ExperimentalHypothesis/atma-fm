@@ -74,17 +74,27 @@ class BandcampScrapper:
         NameNormalizer.titlecase_all(self.base_dir)
         NameNormalizer.strip_dash_from_artist_album_song(self.base_dir)
 
-    def scrap_genres(self) -> None:
-        """ Scrap genres from particular author or label """
-        
-        scrapped = ["ambient, electronic, drone, atmospehric"]
 
-        genres_txt = pathlib.Path().absolute().joinpath('app', 'helpers','genres.txt')  
-        with open(genres_txt, 'r+') as f:
-            genres = set(f.read().splitlines())
-            print(genres)
-        
-        
+     def scrap_genres(url:str) -> None
+        """ Scrap genres from particular author or label """
+
+        scrapped_tags = set()
+        try:
+            website = requests.get(url).text
+        except Exception as e:
+            print(e)
+        else:
+            soup = BeautifulSoup(website, "html.parser")
+            for tag in soup.find_all("a", {"class": "tag"}):
+                scrapped_tags.add(tag.text.lower())
+        genres_txt = pathlib.Path().absolute().joinpath('app', 'helpers', 'genres.txt')
+        with open(genres_txt, "r+") as f:
+            infile_tags = set(f.read().splitlines())
+            tags_to_add = scrapped_tags - infile_tags
+            for tag in tags_to_add:
+                f.write(str(tag) + "\n")
+           
+
 
 
 

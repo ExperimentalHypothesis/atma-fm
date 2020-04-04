@@ -746,7 +746,6 @@ class BroadcastFileNormalizer(RegexPatternsProvider):
         return "Class for handling files used in broadcasting server. It is responsible for normalization of name, bitrate and volume of each track. All functions are class-level only. Class name serves as namespace."
 
 
-
 class FolderInfo(RegexPatternsProvider):
     """ Class for getting basic info about the albums, songs etc.. """
 
