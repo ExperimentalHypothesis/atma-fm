@@ -10,7 +10,6 @@
 import os, re, mutagen, shutil, pathlib, subprocess
 from collections import namedtuple
 from app.helpers.cl_filesystem_handler import Deleter
-
 print("importing cl audiofile normalization..")
 
 api_broadcast_test =r"Y:\ambient\testing folder"
@@ -112,6 +111,28 @@ class NameNormalizer(RegexPatternsProvider):
                         src_file = os.path.join(path, file)
                         dst_file = os.path.join(path, new_file_name)                    
                         os.rename(src_file, dst_file)
+
+    def strip_dash_from_artist_album_song(root:str) -> None:
+        """ Deletes '-' from title, album, song names. This is used for Bandcamp name normalization. """
+        ext = get_all_audio_extensions()
+        for artist in os.listdir(root):
+            for album in os.listdir(os.path.join(root, artist)):
+                for file in os.listdir(os.path.join(root, artist, album)):
+                    if file.endswith(tuple(ext)) and "-" in file:
+                        src_file = os.path.join(root, artist, album, file)
+                        dst_file = os.path.join(root, artist, album, file.replace("-", "", 1).replace("-", " "))
+                        print(f"Stripping - from song {src_file}")
+                        os.rename(src_file, dst_file)
+                if "-" in album:
+                    src_album = os.path.join(root, artist, album)
+                    dst_album = os.path.join(root, artist, album.replace("-", " "))
+                    print(f"Stripping - from album {src_album}")
+                    os.rename(src_album, dst_album)
+            if "-" in artist:
+                src_artist = os.path.join(root, artist)
+                dst_artist = os.path.join(root, artist.replace("-", " "))
+                print(f"Stripping - from artist {src_artist}")
+                os.rename(src_artist, dst_artist)
 
 
     def strip_dash_underscores_from_songname(root:str) -> None:
@@ -583,14 +604,13 @@ class SongTagger(RegexPatternsProvider):
                         if not os.path.exists(dst_file):
                             print(f"Moving untagged file {path} to {dst_file}")
                             shutil.move(path, dst_file)
-
-
-
-    def __call__(self) -> None:
-        """ Tag songs, and deletes empty folders """
-        inst = SongTagger(self.root)
-        inst.tag_songs()
         Deleter.delete_folders_without_audio(self.root)
+
+    # def __call__(self) -> None:
+    #     """ Tag songs, and deletes empty folders """
+    #     inst = SongTagger(self.root)
+    #     inst.tag_songs()
+    #     
 
 
 class FolderInfo(RegexPatternsProvider):
@@ -789,4 +809,3 @@ if __name__  == "__main__":
     r1.get_all_regex_song_match()
     r2.get_all_regex_song_match()
 
- 
