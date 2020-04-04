@@ -10,7 +10,6 @@
 import os, re, mutagen, shutil, pathlib, subprocess
 from collections import namedtuple
 from app.helpers.cl_filesystem_handler import Deleter
-
 print("importing cl audiofile normalization..")
 
 api_broadcast_test =r"Y:\ambient\testing folder"
@@ -71,8 +70,8 @@ class NameNormalizer(RegexPatternsProvider):
         - Clear {album_name} in the form of plain "album name"            => for example "Structures Of Silence"
         - Clear {song name} in the of "song name" with track number       => for example "01 Early Man.mp3"
     """ 
-
-    def strip_artist_album_name_from_songname(root:str) -> None:
+    @classmethod    
+    def strip_artist_album_name_from_songname(cls, root:str) -> None:
         """ strip out artist name and album name if they are a part of name of a song name """
         ext = get_all_audio_extensions()
         for artist_folder in os.listdir(root):
@@ -95,8 +94,8 @@ class NameNormalizer(RegexPatternsProvider):
                             print(f"Renaming {os.path.join(artist_folder, album_folder, src_file)} to {os.path.join(artist_folder, album_folder, dst_file)}")
                             os.rename(os.path.join(root, artist_folder, album_folder, src_file), os.path.join(root, artist_folder, album_folder, dst_file))
 
-
-    def strip_year_from_songname(root:str) -> None:
+    @classmethod
+    def strip_year_from_songname(cls, root:str) -> None:
         """ deletes (year) and Cd and _- from song name """
         ext = get_all_audio_extensions()
         yr_parens = re.compile(r"[(]\d\d\d\d[)]")
@@ -113,8 +112,31 @@ class NameNormalizer(RegexPatternsProvider):
                         dst_file = os.path.join(path, new_file_name)                    
                         os.rename(src_file, dst_file)
 
+    @classmethod
+    def strip_dash_from_artist_album_song(cls, root:str) -> None:
+        """ Deletes '-' from title, album, song names. This is used for Bandcamp name normalization. """
+        ext = get_all_audio_extensions()
+        for artist in os.listdir(root):
+            for album in os.listdir(os.path.join(root, artist)):
+                for file in os.listdir(os.path.join(root, artist, album)):
+                    if file.endswith(tuple(ext)) and "-" in file:
+                        src_file = os.path.join(root, artist, album, file)
+                        dst_file = os.path.join(root, artist, album, file.replace("-", "", 1).replace("-", " "))
+                        print(f"Stripping - from song {src_file}")
+                        os.rename(src_file, dst_file)
+                if "-" in album:
+                    src_album = os.path.join(root, artist, album)
+                    dst_album = os.path.join(root, artist, album.replace("-", " "))
+                    print(f"Stripping - from album {src_album}")
+                    os.rename(src_album, dst_album)
+            if "-" in artist:
+                src_artist = os.path.join(root, artist)
+                dst_artist = os.path.join(root, artist.replace("-", " "))
+                print(f"Stripping - from artist {src_artist}")
+                os.rename(src_artist, dst_artist)
 
-    def strip_dash_underscores_from_songname(root:str) -> None:
+    @classmethod
+    def strip_dash_underscores_from_songname(cls, root:str) -> None:
         """ deletes _ and - from all song names """
         ext = get_all_audio_extensions()
         for path, dirs, folders in os.walk(root):
@@ -126,8 +148,8 @@ class NameNormalizer(RegexPatternsProvider):
                     print(f"Striping -_ from song name {src_name} -> {dst_name}")
                     os.rename(src_name, dst_name)
 
-         
-    def strip_whitespaces_from_songname(root:str) -> None:
+    @classmethod        
+    def strip_whitespaces_from_songname(cls, root:str) -> None:
         """ delete multiple spaces in song names, ale trailing space at the end as well """
         for path, dirs, files in os.walk(root):
             for file in files:
@@ -145,8 +167,8 @@ class NameNormalizer(RegexPatternsProvider):
                     print(f"Stripping whitespace as last char {src_file} --> {dst_file}")
                     os.rename(src_file, dst_file)   
 
-
-    def strip_dot_after_track_from_songname(root:str) -> None:
+    @classmethod
+    def strip_dot_after_track_from_songname(cls, root:str) -> None:
         """ some songs have this format: 01. songname.mp3, or 1. songname, strip the . """
         for path, dirs, files in os.walk(root):
             for file in files:
@@ -161,8 +183,8 @@ class NameNormalizer(RegexPatternsProvider):
                 except IndexError as e:
                     print(f"{e}, {os.path.join(path, file)} does not have song name")
 
-
-    def strip_parens_around_track_from_songname(root:str) -> None:
+    @classmethod
+    def strip_parens_around_track_from_songname(cls, root:str) -> None:
         """ some songs have this format: (02) Secret Light At The Upper Window, strip the () """
         ext = get_all_audio_extensions()
         for path, dirs, folders in os.walk(root):
@@ -174,8 +196,8 @@ class NameNormalizer(RegexPatternsProvider):
                         print(f"Stripping parens arount songname {file}")
                         os.rename(src_name, dst_name)
 
-
-    def strip_whatever_from_name(s:set, substrings:list) -> None:
+    @classmethod
+    def strip_whatever_from_name(cls, s:set, substrings:list) -> None:
         """ used for manual clearing for songs or albums that had no regex match - takes a list os strings that should be stripped out """
         for path in s:
             head, tail = os.path.split(path)
@@ -188,8 +210,8 @@ class NameNormalizer(RegexPatternsProvider):
                     except Exception as e:
                         print(e)
 
-
-    def split_tracknumber_from_name_in_songname(s:set) -> None:
+    @classmethod
+    def split_tracknumber_from_name_in_songname(cls, s:set) -> None:
         """ some song have this format 10songname.mp3, this will meke it 10 songname.mp3 """
         for song in s:
             head, tail = os.path.split(song)
@@ -200,8 +222,8 @@ class NameNormalizer(RegexPatternsProvider):
                 print(f"Spliting tracknumber from name {tail} -> {new_tail}")
                 os.rename(src, dst)            
 
-
-    def strip_year_from_albumname(root:str) -> None:
+    @classmethod
+    def strip_year_from_albumname(cls, root:str) -> None:
         """ deletes year from album name """
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
@@ -226,8 +248,8 @@ class NameNormalizer(RegexPatternsProvider):
                         print(f"Ablbum {dst_name} already exists, removing duplicates")
                         shutil.rmtree(src_name)
 
-
-    def strip_apimatch_from_albumname(root:str) -> None:
+    @classmethod
+    def strip_apimatch_from_albumname(cls, root:str) -> None:
         """ strip [api match 131243] from album folder """
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
@@ -238,8 +260,8 @@ class NameNormalizer(RegexPatternsProvider):
                     print(f"reaming {src_name} to {dst_name}")
                     os.rename(src_name, dst_name)
 
-
-    def lowercase_artist(root:str) -> None:
+    @classmethod
+    def lowercase_artist(cls, root:str) -> None:
         """ make artist folder lowercase """
         for artist in os.listdir(root):
             if artist != artist.lower():
@@ -248,8 +270,8 @@ class NameNormalizer(RegexPatternsProvider):
                 print(f"Lowercasing artist {src_name} to {dst_name}")
                 os.rename(src_name, dst_name)
 
-
-    def titlecase_artist(root:str) -> None:
+    @classmethod
+    def titlecase_artist(cls, root:str) -> None:
         """ make artist folder titlecase """
         for artist in os.listdir(root):
             if artist != artist.title():
@@ -258,8 +280,8 @@ class NameNormalizer(RegexPatternsProvider):
                 print(f"Titlecasing artist {src_name} to {dst_name}")
                 os.rename(src_name, dst_name)
 
-
-    def lowercase_album(root:str) -> None:
+    @classmethod
+    def lowercase_album(cls, root:str) -> None:
         """ make album folder lowercase """
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
@@ -269,8 +291,8 @@ class NameNormalizer(RegexPatternsProvider):
                     print(f"Lowercasing album {src_name} to {dst_name}")
                     os.rename(src_name, dst_name)
 
-
-    def titlecase_album(root:str) -> None:
+    @classmethod
+    def titlecase_album(cls, root:str) -> None:
         """ make album folder lowercase """
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
@@ -280,8 +302,8 @@ class NameNormalizer(RegexPatternsProvider):
                     print(f"Titlecasing album {src_name} to {dst_name}")
                     os.rename(src_name, dst_name)
 
-
-    def lowercase_song(root:str) -> None:
+    @classmethod
+    def lowercase_song(cls, root:str) -> None:
         """ make song name lowercase """
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
@@ -292,8 +314,8 @@ class NameNormalizer(RegexPatternsProvider):
                         print(f"Lowercasing {os.path.join(artist, album, song)} ==> {os.path.join(artist, album, song.lower())}")
                         os.rename(src_name, dst_name) 
 
-
-    def titlecase_song(root:str) -> None:
+    @classmethod
+    def titlecase_song(cls, root:str) -> None:
         """ make song name titlecased """
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
@@ -305,23 +327,23 @@ class NameNormalizer(RegexPatternsProvider):
                         print(f"Titlecasing {os.path.join(artist, album, song)} ==> {os.path.join(artist, album, os.path.basename(song_name.title()+ext))}")
                         os.rename(src_name, dst_name)
 
-
-    def titlecase_all(root:str) -> None:
+    @classmethod
+    def titlecase_all(cls, root:str) -> None:
         """ title all names of songs, artists, albums """
         NameNormalizer.titlecase_song(root)
         NameNormalizer.titlecase_album(root)
         NameNormalizer.titlecase_artist(root)
 
-
-    def lowercase_all(root:str) -> None:
+    @classmethod
+    def lowercase_all(cls, root:str) -> None:
         """ lowercase all names of songs, artists, albums """
         NameNormalizer.lowercase_song(root)
         NameNormalizer.lowercase_album(root)
         NameNormalizer.lowercase_artist(root)
 
 
-    def __repr__(self):
-        return "Class for clearing out the names of songs, albums and artists. All functions are class-level functions. Class serves simply as a namespace for functions that has something to do with normalization. Do not instantiate an object to run them."
+    def __str__(self):
+        return "Class for clearing out the names of songs, albums and artists. All functions are class-method functions. Class serves simply as a namespace for functions that has something to do with name normalization for filesystem."
 
 
     def __call__(self, root):
@@ -583,69 +605,13 @@ class SongTagger(RegexPatternsProvider):
                         if not os.path.exists(dst_file):
                             print(f"Moving untagged file {path} to {dst_file}")
                             shutil.move(path, dst_file)
-
-
-
-    def __call__(self) -> None:
-        """ Tag songs, and deletes empty folders """
-        inst = SongTagger(self.root)
-        inst.tag_songs()
         Deleter.delete_folders_without_audio(self.root)
 
-
-class FolderInfo(RegexPatternsProvider):
-    """ Class for getting basic info about the albums, songs etc.. """
-
-    ext = get_all_audio_extensions()
-
-    @classmethod    
-    def count_albums(cls, root:str) -> int:
-        """ return number of albums i a root dir """
-        c = 0
-        for artist_folder in os.listdir(root):
-            for album_folder in os.listdir(os.path.join(root, artist_folder)):
-                c += 1
-        return c
-        
-
-    @classmethod
-    def print_dir_tree(cls, root:str) -> None:
-        """ prints directory tree of all files """
-        for artist in os.listdir(root):
-            print(artist)
-            for album in os.listdir(os.path.join(root, artist)):
-                print("  ", album)
-                for file in os.listdir(os.path.join(root, artist, album)):
-                    print("     ", file)
-
-    @classmethod
-    def print_all_artists(cls, root:str) -> None:
-        """ prints all artist folder names """
-        for artist in os.listdir(root):
-            print(artist)
-
-
-    @classmethod
-    def print_all_albums(cls, root:str) -> None:
-        """ prints all album folder names """
-        with open("all_albums.txt", 'w') as f:
-            for artist in os.listdir(root):
-                for album in os.listdir(os.path.join(root, artist)):
-                    print(artist, " - ", album)
-                    print(artist, " - ", album, file=f)
-
-
-    @classmethod
-    def print_all_songs(cls, root:str) -> None:
-        """ prints all song folder names """
-        for path, dirs, folders in os.walk(root):
-            for file in folders:
-                if file.endswith(tuple(FolderInfo.ext)):
-                    print(file)
-
-
-    def __str__(self) -> None:
-        return "Class for getting basic information about the folder's content. All functions are class-level only. Class name serves as namespace."
+    # def __call__(self) -> None:
+    #     """ Tag songs, and deletes empty folders """
+    #     inst = SongTagger(self.root)
+    #     inst.tag_songs()
+    #     
 
 
 class BroadcastFileNormalizer(RegexPatternsProvider):
@@ -780,6 +746,63 @@ class BroadcastFileNormalizer(RegexPatternsProvider):
         return "Class for handling files used in broadcasting server. It is responsible for normalization of name, bitrate and volume of each track. All functions are class-level only. Class name serves as namespace."
 
 
+class FolderInfo(RegexPatternsProvider):
+    """ Class for getting basic info about the albums, songs etc.. """
+
+    ext = get_all_audio_extensions()
+
+    @classmethod    
+    def count_albums(cls, root:str) -> int:
+        """ return number of albums i a root dir """
+        c = 0
+        for artist_folder in os.listdir(root):
+            for album_folder in os.listdir(os.path.join(root, artist_folder)):
+                c += 1
+        return c
+        
+
+    @classmethod
+    def print_dir_tree(cls, root:str) -> None:
+        """ prints directory tree of all files """
+        for artist in os.listdir(root):
+            print(artist)
+            for album in os.listdir(os.path.join(root, artist)):
+                print("  ", album)
+                for file in os.listdir(os.path.join(root, artist, album)):
+                    print("     ", file)
+
+    @classmethod
+    def print_all_artists(cls, root:str) -> None:
+        """ prints all artist folder names """
+        for artist in os.listdir(root):
+            print(artist)
+
+
+    @classmethod
+    def print_all_albums(cls, root:str) -> None:
+        """ prints all album folder names """
+        with open("all_albums.txt", 'w') as f:
+            for artist in os.listdir(root):
+                for album in os.listdir(os.path.join(root, artist)):
+                    print(artist, " - ", album)
+                    print(artist, " - ", album, file=f)
+
+
+    @classmethod
+    def print_all_songs(cls, root:str) -> None:
+        """ prints all song folder names """
+        for path, dirs, folders in os.walk(root):
+            for file in folders:
+                if file.endswith(tuple(FolderInfo.ext)):
+                    print(file)
+
+
+    def __str__(self) -> None:
+        return "Class for getting basic information about the folder's content. All functions are class-level only. Class name serves as namespace."
+
+
+
+
 if __name__  == "__main__":
     r1 = RegexMatcher(api_broadcast_test)
     r2 = RegexMatcher(api_broadcast_test2)
@@ -789,4 +812,3 @@ if __name__  == "__main__":
     r1.get_all_regex_song_match()
     r2.get_all_regex_song_match()
 
- 

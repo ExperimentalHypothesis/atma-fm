@@ -130,3 +130,36 @@ class Sorter():
                     else:
                         print(f"album '{album}' on path '{album_path}' is not existing on target path '{target_dir}', moving now.. ")
                         shutil.move(album_path, target_dir)
+
+
+
+# def split_str_on_first_number(s:str) -> str:
+#     for i, c in enumerate(s):
+#         if c.isdigit(): 
+#             index = i
+#             break
+#     res = s[:index], s[index:]
+#     return " ".join(res)
+
+# import re
+# p = r"Z:\Music\downloaded from bandcamp"
+# for path, dirs, folders in os.walk(p):
+#     for file in folders:
+#         if file.endswith("mp3"):
+#             filename, ext = os.path.splitext(os.path.join(path, file))
+#             tracknumber, filename = "".join(filename.lstrip(path).split()[:1]), " ".join(filename.lstrip(path).split()[1:])
+#             # print(tracknumber,  " - - ", filename)
+#             if bool(re.search(r'\d', filename)):
+#                 new_name = split_str_on_first_number(filename)
+#                 dst_name = tracknumber + ' ' + new_name + ext
+#                 print(os.path.join(path, dst_name))
+#                 os.rename(os.path.join(path, file), os.path.join(path, dst_name))      
+# #                 print(f"renaming {os.path.join(path, file)} to {os.path.join(path, dst_name)}")     
+# #                 #os.rename(os.path.join(path, file), os.path.join(path, dst_name))
+
+# # pat = re.compile(r"(^\d\d)")
+
+# # for path, dirs, folders in os.walk(p):
+# #     for file in folders:
+# #         if not pat.match(file): 
+# #             print(file)
