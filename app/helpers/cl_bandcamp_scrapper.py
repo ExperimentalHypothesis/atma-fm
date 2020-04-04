@@ -1,4 +1,4 @@
-import bandcamp_dl, os, subprocess, requests
+import bandcamp_dl, os, subprocess, requests, pathlib
 from bs4 import BeautifulSoup
 from importlib import reload
 
@@ -73,6 +73,21 @@ class BandcampScrapper:
         """ Normalize names of artist, albums, songs that were just downloaded """
         NameNormalizer.titlecase_all(self.base_dir)
         NameNormalizer.strip_dash_from_artist_album_song(self.base_dir)
+
+    def scrap_genres(self) -> None:
+        """ Scrap genres from particular author or label """
+        
+        scrapped = ["ambient, electronic, drone, atmospehric"]
+
+        genres_txt = pathlib.Path().absolute().joinpath('app', 'helpers','genres.txt')  
+        with open(genres_txt, 'r+') as f:
+            genres = set(f.read().splitlines())
+            print(genres)
+        
+        
+
+
+
 
 
 if __name__ == "__main__":
