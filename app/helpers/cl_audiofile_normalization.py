@@ -49,10 +49,10 @@ def move_albums_with_one_track_only(root:str) -> None:
 class RegexPatternsProvider:
     """ Base class for encapsulating regex patterns to have them in one place """
 
-    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=\-`&'?!\[\]]*)$")                                          # one CD leading zero (01 song name.mp3)
-    p2_song = re.compile(r"(^\d)(\s)([A-Z][\w+\s().,\-:#=`&'?!\[\]]*)$")                                   # one CD no leading zero (1 song name.mp3)
-    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().\-,:#=&`'?!\[\]]*)$")                                 # multiple CD (1 01 song name.mp3)
-    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:\-#=&'?`!\[\]]*)$")                                   # multiple CD (101 song name.mp3)
+    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=\-`&'?!\[\]]*)$")                                   # one CD leading zero (01 song name.mp3)
+    p2_song = re.compile(r"(^\d)(\s)([A-Z][\w+\s().,\-:#=`&'?!\[\]]*)$")                                # one CD no leading zero (1 song name.mp3)
+    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().\-,:#=&`'?!\[\]]*)$")                               # multiple CD (1 01 song name.mp3)
+    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:\-#=&'?`!\[\]]*)$")                                 # multiple CD (101 song name.mp3)
 
     p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                    # name of album
     p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")          # 2002 name of album
