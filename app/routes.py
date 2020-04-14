@@ -10,14 +10,15 @@ app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
 app.config['MAIL_USERNAME'] = 'experimentalbroadcast@gmail.com'
-app.config['MAIL_PASSWORD'] = 'emeraldincubus'
+app.config['MAIL_PASSWORD'] = 'xxxxx'
 mail = Mail(app)
 
+# on local dev this has to commented out, otherwise it will throw error (no connection to streaming server)
 @app.context_processor
 def pass_current_song():
 	last_played = list(get_last_n_songs(1))
 	# last_song.author	
-	return dict(author=	last_played[0].author, title=last_played[0].title)
+	return dict(author=last_played[0].author, title=last_played[0].title)
 
 @app.route("/")
 def home():
