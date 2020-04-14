@@ -72,7 +72,7 @@ class NameNormalizer(RegexPatternsProvider):
     """ 
     
      def __str__(self):
-        return "Class for clearing out the names of songs, albums and artists. All functions are class-method, so it serves simply as a namespace for functions that has something to do with name normalization for filesystem. No instance is needed."
+        return "Class for clearing out the names of songs, albums and artists. All functions are class-method, so it serves simply as a namespace for functions that have something to do with name normalization for filesystem. No instance is needed."
    
     @classmethod    
     def strip_artist_album_name_from_songname(cls, root:str) -> None:
