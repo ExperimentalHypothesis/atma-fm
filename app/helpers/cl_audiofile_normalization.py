@@ -70,6 +70,10 @@ class NameNormalizer(RegexPatternsProvider):
         - Clear {album_name} in the form of plain "album name"            => for example "Structures Of Silence"
         - Clear {song name} in the of "song name" with track number       => for example "01 Early Man.mp3"
     """ 
+    
+     def __str__(self):
+        return "Class for clearing out the names of songs, albums and artists. All functions are class-method functions so it serves simply as a namespace for functions that has something to do with name normalization for filesystem. No instance is needed."
+   
     @classmethod    
     def strip_artist_album_name_from_songname(cls, root:str) -> None:
         """ strip out artist name and album name if they are a part of name of a song name """
@@ -340,10 +344,6 @@ class NameNormalizer(RegexPatternsProvider):
         NameNormalizer.lowercase_song(root)
         NameNormalizer.lowercase_album(root)
         NameNormalizer.lowercase_artist(root)
-
-
-    def __str__(self):
-        return "Class for clearing out the names of songs, albums and artists. All functions are class-method functions. Class serves simply as a namespace for functions that has something to do with name normalization for filesystem."
 
 
     def __call__(self, root):
