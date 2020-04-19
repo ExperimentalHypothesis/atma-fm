@@ -1,11 +1,11 @@
 import requests
-from app import app
+from flask import current_app as app
 from flask import render_template, Response, request, flash
 import random, time, os, random
-from app.helpers.parse_song_history import get_last_n_songs
-from flask_mail import Message, Mail
+from application.helpers.parse_song_history import get_last_n_songs
+from flask_mail import Message 
+from application import mail
 
-mail = Mail(app)
 
 # @app.context_processor
 # def pass_current_song():
@@ -26,8 +26,9 @@ def about():
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
+	print(app.config)
 	if request.method == 'POST':
-
+		print("poslano..")
 		try:
 			email = request.form.get("email")
 			selection = request.form.get("selection")
@@ -46,6 +47,7 @@ def contact():
 								reply_to=email,
 								recipients = ['experimentalbroadcast@gmail.com'])
 			msg.body = text
+			print(text)
 			mail.send(msg)
 			flash("your message was sent succesfully. bravo!")
 			return render_template("contact.html")
