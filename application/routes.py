@@ -5,12 +5,6 @@ import random, time, os, random
 from app.helpers.parse_song_history import get_last_n_songs
 from flask_mail import Message, Mail
 
-app.config['SECRET_KEY'] = 'b36e4ef7cd15862acf8e3cb9ea4bc59a'
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'experimentalbroadcast@gmail.com'
-app.config['MAIL_PASSWORD'] = 'emeraldincubus'
 mail = Mail(app)
 
 # @app.context_processor
