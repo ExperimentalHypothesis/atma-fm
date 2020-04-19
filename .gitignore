@@ -4,3 +4,4 @@
 app/static/css/style-working.css
 .vscode/
 __pycache__/
+atma.db
