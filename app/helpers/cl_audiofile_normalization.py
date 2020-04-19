@@ -9,11 +9,20 @@
 
 import os, re, mutagen, shutil, pathlib, subprocess
 from collections import namedtuple
-from app.helpers.cl_filesystem_handler import Deleter
+from cl_filesystem_handler import Deleter, Sorter
+
+
+
 print("importing cl audiofile normalization..")
+
+
+
 
 api_broadcast_test =r"Y:\ambient\testing folder"
 api_broadcast_test2 =r"Y:\ambient\testing folder2"
+api_notfound = r"Z:\Music\api\testing folder\4] album not found on discogs api"
+
+one_track = r"Z:\Music\_ALBUMS_WITH_ONE_TRACK_"
 
 def get_all_audio_extensions() -> list:
     """ returns audio extensions specified in file. must be called from root of the project. works both for shell and non shell, win i linux """
@@ -44,6 +53,21 @@ def move_albums_with_one_track_only(root:str) -> None:
                     print(f"Moving {src_file} to {dst_file}")
                     shutil.move(src_file, dst_file)
     print(f"Totaly: {len(singletrack_albums)} with one track only")
+
+
+
+def rename_albums_with_one_track_only(one_track_dir:str) -> None:
+    """ renames album with one track """
+    for artist in os.listdir(one_track_dir):
+        for album in os.listdir(os.path.join(one_track_dir, artist)):
+            src = os.path.join(one_track_dir, artist, album)
+            album = re.sub("^\d\d\d\d ","", album)
+            album = album.rsplit("[api ")[0].title()
+            dst = os.path.join(one_track_dir, artist, album)
+            if not os.path.exists(dst):
+                os.rename(src, dst)
+
+
 
 
 class RegexPatternsProvider:
@@ -804,11 +828,12 @@ class FolderInfo(RegexPatternsProvider):
 
 
 if __name__  == "__main__":
-    r1 = RegexMatcher(api_broadcast_test)
-    r2 = RegexMatcher(api_broadcast_test2)
+    p = r"Z:\Music\from bandcamp"
+    src = r"Z:\Music\test bc"
+    dst = r"Z:\Music\tagged"
+    # NameNormalizer.strip_dash_from_artist_album_song(p)
+    # NameNormalizer.titlecase_all(p)
+    Sorter.sort_audiofolders(p, dst)
+    # Deleter.delete_folders_without_audio(p)
 
-    r1.get_all_regex_album_match()
-    r2.get_all_regex_album_match()
-    r1.get_all_regex_song_match()
-    r2.get_all_regex_song_match()
-
+  

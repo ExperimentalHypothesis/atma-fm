@@ -2,7 +2,7 @@ import bandcamp_dl, os, subprocess, requests, pathlib
 from bs4 import BeautifulSoup
 from importlib import reload
 
-from app.helpers.cl_audiofile_normalization import NameNormalizer
+from cl_audiofile_normalization import NameNormalizer
 
 # reload(cl_audiofile_normalization)
 
@@ -75,7 +75,7 @@ class BandcampScrapper:
         NameNormalizer.strip_dash_from_artist_album_song(self.base_dir)
 
 
-     def scrap_genres(url:str) -> None
+    def scrap_genres(url:str) -> None:
         """ Scrap genres from particular author or label """
 
         scrapped_tags = set()
@@ -101,4 +101,10 @@ class BandcampScrapper:
 
 
 if __name__ == "__main__":
-   pass
+
+    authors = ["loki-found", "solarfields", "atoi", "numina"]
+    for i in authors:
+        b = BandcampScrapper(i)
+        b.prepare_dl_links()
+        b.dl_author_albums()
+        b.dl_label_albums()

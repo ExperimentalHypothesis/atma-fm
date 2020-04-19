@@ -13,11 +13,14 @@ app.config['MAIL_USERNAME'] = 'experimentalbroadcast@gmail.com'
 app.config['MAIL_PASSWORD'] = 'emeraldincubus'
 mail = Mail(app)
 
-@app.context_processor
-def pass_current_song():
-	last_played = list(get_last_n_songs(1))
-	# last_song.author	
-	return dict(author=	last_played[0].author, title=last_played[0].title)
+# @app.context_processor
+# def pass_current_song():
+# 	last_played = list(get_last_n_songs(1))
+# 	# last_song.author
+# 	try:
+# 		return dict(author=	last_played[0].author, title=last_played[0].title)
+# 	except Exception as e:
+# 		print(e, "we are on local dev and this will not work..")
 
 @app.route("/")
 def home():
