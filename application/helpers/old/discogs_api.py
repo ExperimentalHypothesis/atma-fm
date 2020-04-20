@@ -1,6 +1,6 @@
 import discogs_client, os, pprint, difflib, shutil, re, time
 from collections import namedtuple
-
+from app.helpers.old.delete_empty_audiofolders import delete_folders_without_audio
 
 def move_nonclustered_files_to_folder(root: str) -> None:
     """ 
@@ -88,7 +88,7 @@ def have_equal_tracklist_names(local_release: namedtuple, api_release: namedtupl
 def tag_and_move_matched_folders(source_dir:str, directory_name:str, *id:int) -> None:
     """ move folders [album version] were matched with discogs api and change path names based on this format
     
-        old:
+        old:\\\\\
         path='Z:\\Music\\api\\api-to_be_checked\\andrew lahiff\\2009 tales of hidden algebra')
 
         new:
@@ -275,7 +275,7 @@ def main(root:str) -> None:
     
 
 if __name__ == "__main__":
-    main(r"Z:\Music\api\api-to_be_checked")
+    main(r"Z:\Music\api\testing folder\4] album not found on discogs api")
 
     # at the very end => delete recursively bottom up
     try:

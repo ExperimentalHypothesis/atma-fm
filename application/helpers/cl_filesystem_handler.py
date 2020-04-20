@@ -163,3 +163,9 @@ class Sorter():
 # #     for file in folders:
 # #         if not pat.match(file): 
 # #             print(file)
+
+
+if __name__ == "__main__":
+    src = r"Z:\Music\test bc"
+    dst = r"Z:\Music\tagged"
+    Sorter.sort_audiofolders(src, dst)
