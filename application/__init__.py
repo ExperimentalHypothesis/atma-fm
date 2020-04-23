@@ -19,5 +19,4 @@ def create_app():
     with app.app_context():
         from application import routes
         db.create_all()
-        
         return app

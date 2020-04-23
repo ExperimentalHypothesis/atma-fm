@@ -1,18 +1,21 @@
 from application import db
 
-class SongDB(db.Model):
-    """ Data model for songs broadcasted on stream """
 
-    __tablename__ = "playlist"
+class RecordDB(db.Model):
+    """ Datamodel for an audio record broadcasted realtime """
+
+    __tablename__ = "audio record"
 
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(64), unique=False, nullable=False)
-    artist = db.Column(db.String(64), unique=False, nullable=False)
-    album = db.Column(db.String(64), unique=False, nullable=False)
-    started = db.Column(db.DateTime, nullable=False)
+    title = db.Column(db.String(256))
+    artist = db.Column(db.String(256))
+    album = db.Column(db.String(256))
+    started_at = db.Column(db.String(64)) 
+    added_at = db.Column(db.DateTime) # these two should be basically the same time.. 
 
     def __repr__(self):
-        return f'Song {self.id}, {self.title}, {self.artist}, {self.album}, {self.started}'
+        return f"<{self.title} - {self.artist}>"
+
 
 
 

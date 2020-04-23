@@ -76,4 +76,5 @@ def archive():
 @app.route("/playlist")
 def playlist():
 	song_history = get_last_n_songs(14)
+	print(song_history)
 	return render_template("playlist.html", song_history=song_history)
