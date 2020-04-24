@@ -16,7 +16,10 @@ def pass_current_song():
 	if app.config['ENV'] == 'development':
 		return dict(author="name of author", title="name of song")
 	elif app.config['ENV'] == 'production':
-		title, artist, _, _ = parse_record(get_last_n_records())
+		try:
+			title, artist, _, _ = parse_record(get_last_n_records())
+		except Exception:
+			return dict(author="name of author", title="name of song")
 		return dict(author=artist, title=title)
 
 

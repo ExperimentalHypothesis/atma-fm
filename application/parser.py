@@ -94,9 +94,10 @@ def parse_record(s:str) -> tuple:
         artist = " ".join(splitted[0].split()[5:])
         album = splitted[1]
         title = splitted[2]
-        return title, artist, album, started_at
     except Exception as e:
         print(e)
+    return title, artist, album, started_at
+
 
 
 def create_playlist(records:list):
