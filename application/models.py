@@ -18,6 +18,19 @@ class RecordDB(db.Model):
 
 
 
+class LogDB(db.Model):
+    """ Datamodel for recording logs from filesystem """
+
+    __tablename__ = "access log"
+
+    id = db.Column(db.Integer, primary_key=True)
+    message = db.Column(db.String(256), nullable=False)
+    time = db.Column(db.DateTime, nullable=False)
+
+    def __repr__(self):
+        return f"<{self.message}>"
+
+
 
 class MessageDB(db.Model):
     """ Data model for messages sent via contact form """

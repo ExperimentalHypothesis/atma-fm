@@ -1,3 +1,6 @@
+
+import time, subprocess, re, collections
+
 # was used as a testing  module for getting song history data from remote server 
 
 # def read_file_from_remote(host: str, user: str, pwd: str) -> list:
@@ -40,7 +43,6 @@
 def get_last_n_songs(n: int) -> list:
     """ get last n songs from logfile playlist to be displayed at frontend """
 
-    import collections, re
     Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
     song_history = []
     p= r'C:\Users\nirvikalpa\Desktop\playlist.txt'
@@ -48,7 +50,7 @@ def get_last_n_songs(n: int) -> list:
     try:
         with open(path_to_file) as playlist:
             for line in list(playlist)[-20:]:
-                print(line)
+                # print(line)
                 if "Now playing" not in line:
                     continue
                 else:
@@ -59,13 +61,63 @@ def get_last_n_songs(n: int) -> list:
                     song_details = Song_details(cleared_line[0], name, cleared_line[2], album)
                     song_history.append(song_details)
     except Exception as e:
-        print(e)
+        print("there is no such filename")
     return(reversed(song_history[-n:]))
 
-# songs = get_last_n_songs(8)
-# for i in songs:
-#     print(i)
 
 
+path_to_logfile = "/var/log/icecast/song-history.log"
+
+def get_last_n_records(path_to_file=path_to_logfile, n=1):
+    """ get last n records from log file """
+    proc = subprocess.Popen(['tail', f'-n {n}', path_to_logfile], stdout=subprocess.PIPE)
+    lines = proc.stdout.readlines()
+
+    # for database
+    if n == 1:
+        return lines[-1].decode().strip()
+    
+    # for playlist
+    else:
+        decoded_lines = []
+        for line in lines:
+            decoded_lines.append(line.decode().strip())
+        return decoded_lines
 
 
+def parse_record(s:str) -> tuple:
+    """ parses one record from log files """
+    try:
+        cleared = re.sub("\d\d\d\d: Now playing ", "", s)
+        splitted = cleared.strip(" [lame].mp3").split(" -- ")
+        started_at = " ".join(splitted[0].split()[0:4])
+        artist = " ".join(splitted[0].split()[5:])
+        album = splitted[1]
+        title = splitted[2]
+        return title, artist, album, started_at
+    except Exception as e:
+        print(e)
+
+
+def create_playlist(records:list):
+    """ parse list of records from log file """
+    Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
+    song_history = []
+
+    for i in records:
+        if "Now playing" not in i:
+            continue
+        try:
+            title, artist, album, started_at = parse_record(i)  
+            song = Song_details(started_at, artist, album, title)
+            song_history.append(song)
+        except Exception as e:
+            print(e, i)
+    return song_history
+
+
+if __name__ == "__main__":
+    records = get_last_n_records(n=20)
+    song_history = create_playlist(records)
+    print(records)
+    print(song_history)
