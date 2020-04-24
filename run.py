@@ -1,6 +1,9 @@
-from application import create_app
+from application.notifier import app, notify 
 
-app = create_app()
+def main():
+    notify()
+    app.run(host='localhost', port='5555')
+
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	main()

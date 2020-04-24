@@ -1,16 +1,16 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
     """ Set app configuration vars """
     
     # general config
-    SECRET_KEY = os.environ.get("TESTING")
-    TESTING = os.environ.get("TESTING")
-    DEBUG = os.environ.get("DEBUG")
-    ENV = os.environ.get("ENV")
+    SECRET_KEY = os.environ.get("SECRET_KEY")
+    FLASK_ENV = os.environ.get("FLASK_ENV")
+    FLASK_DEBUG = os.environ.get("FLASK_DEBUG")
 
     # database config
     SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")

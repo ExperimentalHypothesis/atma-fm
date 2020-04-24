@@ -5,19 +5,22 @@ from flask import current_app as app
 from flask import render_template, Response, request, flash
 from flask_mail import Message 
 
-from application.helpers.parse_song_history import get_last_n_songs
+# from application.helpers.parse_song_history import get_last_n_songs
 from application import mail
-from application.models import db, MessageDB, SongDB 
+from application.models import db, MessageDB, RecordDB, LogDB
+from application.parser import get_last_n_records, parse_record, create_playlist
 
 
 @app.context_processor
 def pass_current_song():
 	if app.config['ENV'] == 'development':
 		return dict(author="name of author", title="name of song")
-	else:
-		last_played = list(get_last_n_songs(1))
-		last_song.author
-		return dict(author=	last_played[0].author, title=last_played[0].title)
+	elif app.config['ENV'] == 'production':
+		try:
+			title, artist, _, _ = parse_record(get_last_n_records())
+		except Exception:
+			return dict(author="name of author", title="name of song")
+		return dict(author=artist, title=title)
 
 
 @app.route("/")
@@ -75,5 +78,6 @@ def archive():
 
 @app.route("/playlist")
 def playlist():
-	song_history = get_last_n_songs(14)
+	records = get_last_n_records(n=10)
+	song_history = create_playlist(records)
 	return render_template("playlist.html", song_history=song_history)
