@@ -10,7 +10,7 @@ mail = Mail()
 def create_app():
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object("config.Config")
-
+    print(app.config)
     # initiating plugins
     db.init_app(app)
     mail.init_app(app)

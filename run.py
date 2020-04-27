@@ -1,7 +1,9 @@
-from application.notifier import app, notify 
+from application.notifier import app 
 
 def main():
-    notify()
+    if not app.config["OS"] == "Windows_NT":
+        from application.notifier import notify
+        notify()
     app.run(host='localhost', port='5555')
 
 

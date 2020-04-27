@@ -9,7 +9,7 @@ from flask_mail import Message
 from application import mail
 from application.models import db, MessageDB, RecordDB, LogDB
 from application.parser import get_last_n_records, parse_record, create_playlist
-
+from flask import current_app as app
 
 @app.context_processor
 def pass_current_song():
@@ -78,6 +78,16 @@ def archive():
 
 @app.route("/playlist")
 def playlist():
-	records = get_last_n_records(n=10)
-	song_history = create_playlist(records)
+	if app.config["OS"] == "Windows_NT":
+		with open(r"C:\Users\nirvikalpa\source\repos\Python\flask-online-radio\_windows_fake_log.log") as f:
+			lines = []
+			for i in range(10):
+				lines.append(f.readline())
+			print(lines)
+			song_history = create_playlist(lines)
+		return render_template("playlist.html", song_history=song_history)
+	else:
+		records = get_last_n_records(n=10)
+		song_history = create_playlist(records)
 	return render_template("playlist.html", song_history=song_history)
+

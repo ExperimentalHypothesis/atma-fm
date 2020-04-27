@@ -73,10 +73,10 @@ def rename_albums_with_one_track_only(one_track_dir:str) -> None:
 class RegexPatternsProvider:
     """ Base class for encapsulating regex patterns to have them in one place """
 
-    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=\-`&'?!\[\]]*)$")                                          # one CD leading zero (01 song name.mp3)
-    p2_song = re.compile(r"(^\d)(\s)([A-Z][\w+\s().,\-:#=`&'?!\[\]]*)$")                                   # one CD no leading zero (1 song name.mp3)
-    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().\-,:#=&`'?!\[\]]*)$")                                 # multiple CD (1 01 song name.mp3)
-    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:\-#=&'?`!\[\]]*)$")                                   # multiple CD (101 song name.mp3)
+    p1_song = re.compile(r"(^\d\d)(\s)([\w+\s().,:#=\-`&'?!\[\]]*)$")                                   # one CD leading zero (01 song name.mp3)
+    p2_song = re.compile(r"(^\d)(\s)([A-Z][\w+\s().,\-:#=`&'?!\[\]]*)$")                                # one CD no leading zero (1 song name.mp3)
+    p3_song = re.compile(r"(^\d\s\d\d)(\s)([\w+\s().\-,:#=&`'?!\[\]]*)$")                               # multiple CD (1 01 song name.mp3)
+    p4_song = re.compile(r"(^\d\d\d)(\s)([\w+\s().,:\-#=&'?`!\[\]]*)$")                                 # multiple CD (101 song name.mp3)
 
     p1_album = re.compile(r"^[a-zA-zä\s!'&.,()\-]*[\d]?[\d]?[()]?$")                                    # name of album
     p2_album = re.compile(r"^(\d\d\d\d)(\s?)([a-zA-z\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")          # 2002 name of album
@@ -84,7 +84,7 @@ class RegexPatternsProvider:
 
     p_broadcast = re.compile(r"^(\d\d)(\s[A-Z][\w\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)--(\s[A-Z][\w\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)--(\s[A-Z][\w\s!'’&.()+~,üäöáçăóéűęěščřžýáíţ0-9\-]*)$")           # 01 Controlled Bleeding -- The Poisoner -- Part One.mp3
 
-    def __repr__(self):
+    def __str__(self):
         return "Class for encapsulating regex patterns. Used as base class for other that inherits the data. It does not contain any functions. All data are class-level"
 
 
@@ -94,6 +94,10 @@ class NameNormalizer(RegexPatternsProvider):
         - Clear {album_name} in the form of plain "album name"            => for example "Structures Of Silence"
         - Clear {song name} in the of "song name" with track number       => for example "01 Early Man.mp3"
     """ 
+    
+     def __str__(self):
+        return "Class for clearing out the names of songs, albums and artists. All functions are class-method, so it serves simply as a namespace for functions that have something to do with name normalization for filesystem. No instance is needed."
+   
     @classmethod    
     def strip_artist_album_name_from_songname(cls, root:str) -> None:
         """ strip out artist name and album name if they are a part of name of a song name """
@@ -364,10 +368,6 @@ class NameNormalizer(RegexPatternsProvider):
         NameNormalizer.lowercase_song(root)
         NameNormalizer.lowercase_album(root)
         NameNormalizer.lowercase_artist(root)
-
-
-    def __str__(self):
-        return "Class for clearing out the names of songs, albums and artists. All functions are class-method functions. Class serves simply as a namespace for functions that has something to do with name normalization for filesystem."
 
 
     def __call__(self, root):

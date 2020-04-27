@@ -11,6 +11,7 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY")
     FLASK_ENV = os.environ.get("FLASK_ENV")
     FLASK_DEBUG = os.environ.get("FLASK_DEBUG")
+    OS = os.environ.get("OS")
 
     # database config
     SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI")

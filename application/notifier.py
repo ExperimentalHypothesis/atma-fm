@@ -13,30 +13,31 @@ from application import create_app
 
 app = create_app()
 
-class MyHandler(FileSystemEventHandler):
-    def on_modified(self, event):
-        if event.event_type == "modified" and event.src_path == "/var/log/icecast/song-history.log":
-            title, artist, album, started_at = parse_record(get_last_n_records())
-            with app.app_context():
-                try:                
-                    record = RecordDB(title=title,
-                                    artist=artist,
-                                    album=album,
-                                    started_at=started_at,
-                                    added_at=dt.now())
-                    db.session.add(record)
-                    db.session.commit()
-                except Exception as e:
-                    print(e)
+if not app.config["OS"] == "Windows_NT":
+    class MyHandler(FileSystemEventHandler):
+        def on_modified(self, event):
+            if event.event_type == "modified" and event.src_path == "/var/log/icecast/song-history.log":
+                title, artist, album, started_at = parse_record(get_last_n_records())
+                with app.app_context():
+                    try:                
+                        record = RecordDB(title=title,
+                                        artist=artist,
+                                        album=album,
+                                        started_at=started_at,
+                                        added_at=dt.now())
+                        db.session.add(record)
+                        db.session.commit()
+                    except Exception as e:
+                        print(e)
 
-def notify():
-    event_handler = MyHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path='/var/log/icecast', recursive=False)
-    observer.start()
-    # try:
-    #     while True:
-    #         time.sleep(1)
-    # except KeyboardInterrupt:
-    #     observer.stop()
-    # observer.join()
+    # def notify():
+    #     event_handler = MyHandler()
+    #     observer = Observer()
+    #     observer.schedule(event_handler, path='/var/log/icecast', recursive=False)
+    #     observer.start()
+    #     # try:
+    #     #     while True:
+    #     #         time.sleep(1)
+    #     # except KeyboardInterrupt:
+    #     #     observer.stop()
+    #     # observer.join()

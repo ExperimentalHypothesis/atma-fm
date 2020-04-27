@@ -1,5 +1,6 @@
 
 import time, subprocess, re, collections
+from flask import current_app as app
 
 # was used as a testing  module for getting song history data from remote server 
 
@@ -40,35 +41,36 @@ import time, subprocess, re, collections
 # 	return parsed_list
 
 
-def get_last_n_songs(n: int) -> list:
-    """ get last n songs from logfile playlist to be displayed at frontend """
+# def get_last_n_songs(n: int) -> list:
+#     """ get last n songs from logfile playlist to be displayed at frontend """
 
-    Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
-    song_history = []
-    p= r'C:\Users\nirvikalpa\Desktop\playlist.txt'
-    path_to_file =  r"/var/log/icecast/song-history.log"
-    try:
-        with open(path_to_file) as playlist:
-            for line in list(playlist)[-20:]:
-                # print(line)
-                if "Now playing" not in line:
-                    continue
-                else:
-                    cleared_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ') # TODO regex
-                    name = cleared_line[1].split(" ")
-                    name = " ".join(name[1:])
-                    album = cleared_line[3].replace(" [lame]","")
-                    song_details = Song_details(cleared_line[0], name, cleared_line[2], album)
-                    song_history.append(song_details)
-    except Exception as e:
-        print("there is no such filename")
-    return(reversed(song_history[-n:]))
+#     Song_details = collections.namedtuple('Song_details',['played_at', 'author', 'album', 'title'])
+#     song_history = []
+#     p= r'C:\Users\nirvikalpa\Desktop\playlist.txt'
+#     path_to_file =  r"/var/log/icecast/song-history.log"
+#     try:
+#         with open(path_to_file) as playlist:
+#             for line in list(playlist)[-20:]:
+#                 # print(line)
+#                 if "Now playing" not in line:
+#                     continue
+#                 else:
+#                     cleared_line = line.replace("2020: Now playing ", '-- ').strip(".mp3\n").lower().split(' -- ') # TODO regex
+#                     name = cleared_line[1].split(" ")
+#                     name = " ".join(name[1:])
+#                     album = cleared_line[3].replace(" [lame]","")
+#                     song_details = Song_details(cleared_line[0], name, cleared_line[2], album)
+#                     song_history.append(song_details)
+#     except Exception as e:
+#         print("there is no such filename")
+#     return(reversed(song_history[-n:]))
 
 
 
-path_to_logfile = "/var/log/icecast/song-history.log"
+linux_logfile = "/var/log/icecast/song-history.log"
+windows_logfile = r"C:\Users\nirvikalpa\source\repos\Python\flask-online-radio\song-history.log"
 
-def get_last_n_records(path_to_file=path_to_logfile, n=1):
+def get_last_n_records(path_to_file=linux_logfile, n=1):
     """ get last n records from log file """
     proc = subprocess.Popen(['tail', f'-n {n}', path_to_logfile], stdout=subprocess.PIPE)
     lines = proc.stdout.readlines()
@@ -118,6 +120,15 @@ def create_playlist(records:list):
 
 
 if __name__ == "__main__":
+    app = create_app()
+    if app.config["ENV"] == "Windows_NT":
+        with open(r"C:\Users\nirvikalpa\source\repos\Python\flask-online-radio\_windows_fake_log.log") as f:
+            lines = []
+            for i in range(10):
+                lines.append(f.readline())
+        song_history = create_playlist(lines)
+        print(song_history)
+    
     records = get_last_n_records(n=20)
     song_history = create_playlist(records)
     print(records)
