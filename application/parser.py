@@ -93,9 +93,9 @@ def parse_record(s:str) -> tuple:
         cleared = re.sub("\d\d\d\d: Now playing ", "", s)
         splitted = cleared.strip(" [lame].mp3").split(" -- ")
         started_at = " ".join(splitted[0].split()[0:4])
-        artist = " ".join(splitted[0].split()[5:])
-        album = splitted[1]
-        title = splitted[2]
+        artist = " ".join(splitted[0].split()[5:]).lower()
+        album = splitted[1].lower()
+        title = splitted[2].lower()
     except Exception as e:
         print(e)
     return title, artist, album, started_at

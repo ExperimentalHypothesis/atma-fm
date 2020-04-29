@@ -11,6 +11,14 @@ from application.models import db, MessageDB, RecordDB, LogDB
 from application.parser import get_last_n_records, parse_record, create_playlist
 from flask import current_app as app
 
+import os
+from flask import send_from_directory
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                          'img/favicon.ico',mimetype='image/vnd.microsoft.icon')
+
 @app.context_processor
 def pass_current_song():
 	if app.config['ENV'] == 'development':
@@ -87,7 +95,7 @@ def playlist():
 			song_history = create_playlist(lines)
 		return render_template("playlist.html", song_history=song_history)
 	else:
-		records = get_last_n_records(n=10)
+		records = get_last_n_records(n=14)
 		song_history = create_playlist(records)
 	return render_template("playlist.html", song_history=song_history)
 
