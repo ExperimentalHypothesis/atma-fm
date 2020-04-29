@@ -93,9 +93,7 @@ def playlist():
 				lines.append(f.readline())
 			print(lines)
 			song_history = create_playlist(lines)
-		return render_template("playlist.html", song_history=song_history)
 	else:
 		records = get_last_n_records(n=14)
 		song_history = create_playlist(records)
-	return render_template("playlist.html", song_history=song_history)
-
+	return render_template("playlist.html", song_history=reversed(song_history))

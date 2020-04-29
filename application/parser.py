@@ -72,7 +72,7 @@ windows_logfile = r"C:\Users\nirvikalpa\source\repos\Python\flask-online-radio\s
 
 def get_last_n_records(path_to_file=linux_logfile, n=1):
     """ get last n records from log file """
-    proc = subprocess.Popen(['tail', f'-n {n}', path_to_logfile], stdout=subprocess.PIPE)
+    proc = subprocess.Popen(['tail', f'-n {n}', path_to_file], stdout=subprocess.PIPE)
     lines = proc.stdout.readlines()
 
     # for database
@@ -120,16 +120,9 @@ def create_playlist(records:list):
 
 
 if __name__ == "__main__":
-    app = create_app()
-    if app.config["ENV"] == "Windows_NT":
-        with open(r"C:\Users\nirvikalpa\source\repos\Python\flask-online-radio\_windows_fake_log.log") as f:
-            lines = []
-            for i in range(10):
-                lines.append(f.readline())
-        song_history = create_playlist(lines)
-        print(song_history)
-    
-    records = get_last_n_records(n=20)
+
+
+
     song_history = create_playlist(records)
-    print(records)
+    song_history.reverse()
     print(song_history)
