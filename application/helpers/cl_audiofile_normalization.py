@@ -26,7 +26,7 @@ one_track = r"Z:\Music\_ALBUMS_WITH_ONE_TRACK_"
 
 def get_all_audio_extensions() -> list:
     """ returns audio extensions specified in file. must be called from root of the project. works both for shell and non shell, win i linux """
-    audio_extensions = pathlib.Path().absolute().joinpath('app', 'helpers','audio_extensions.txt')  
+    audio_extensions = pathlib.Path().absolute().joinpath('application', 'helpers','audio_extensions.txt')  
     with open(audio_extensions) as f:
         ext = f.read().splitlines()
     return ext
@@ -95,7 +95,7 @@ class NameNormalizer(RegexPatternsProvider):
         - Clear {song name} in the of "song name" with track number       => for example "01 Early Man.mp3"
     """ 
     
-     def __str__(self):
+    def __str__(self):
         return "Class for clearing out the names of songs, albums and artists. All functions are class-method, so it serves simply as a namespace for functions that have something to do with name normalization for filesystem. No instance is needed."
    
     @classmethod    
@@ -658,48 +658,50 @@ class BroadcastFileNormalizer(RegexPatternsProvider):
 
         for artist in os.listdir(root):
             for album in os.listdir(os.path.join(root, artist)):
-                for song in os.listdir(os.path.join(root, artist, album)):
-                    src = os.path.join(root, artist, album, song)
-                    if song.endswith(tuple(ext)):
-                        if(BroadcastFileNormalizer.p1_song.match(song) or BroadcastFileNormalizer.p2_song.match(song) \
-                            or BroadcastFileNormalizer.p3_song.match(song) or BroadcastFileNormalizer.p4_song.match(song)):
-                            p1_match = BroadcastFileNormalizer.p1_song.match(song)
-                            p2_match = BroadcastFileNormalizer.p2_song.match(song)
-                            p3_match = BroadcastFileNormalizer.p3_song.match(song)
-                            p4_match = BroadcastFileNormalizer.p4_song.match(song)
-                            try:
-                                tracknumber, _, title = p1_match.groups()
-                            except AttributeError:
-                                pass
-                            try:
-                                tracknumber, _, title = p2_match.groups()
-                            except AttributeError:
-                                pass
-                            try:
-                                tracknumber, _, title = p3_match.groups()
-                            except AttributeError:
-                                pass
-                            try:
-                                tracknumber, _, title = p4_match.groups()
-                            except AttributeError:
-                                pass
-                            
-                            new_title = "".join([tracknumber, " ", artist, " -- ", album, " -- ", title])
-                            dst = os.path.join(basedir, dst_taildir, artist, album, new_title)
-                            dst_dir, dst_file = os.path.split(dst)
-                            if not os.path.exists(dst_dir):
-                                os.makedirs(dst_dir)
-                            if not os.path.exists(dst):
-                                print(f"Renaming for broadcast and moving from {src} to {dst}")
-                                shutil.move(src, dst)
-                            elif os.path.exists(dst):
-                                print(f"File on path {dst} already exists, removing duplicates")
-                                os.remove(src)
-                            BroadcastFileNormalizer.renamed.add(dst)
-                        else:
-                            print(f"File on path {src} does not match any pattern --> not renamed (and moved to set)")
-                            BroadcastFileNormalizer.not_renamed.add(src)
-
+                try:
+                    for song in os.listdir(os.path.join(root, artist, album)):
+                        src = os.path.join(root, artist, album, song)
+                        if song.endswith(tuple(ext)):
+                            if(BroadcastFileNormalizer.p1_song.match(song) or BroadcastFileNormalizer.p2_song.match(song) \
+                                or BroadcastFileNormalizer.p3_song.match(song) or BroadcastFileNormalizer.p4_song.match(song)):
+                                p1_match = BroadcastFileNormalizer.p1_song.match(song)
+                                p2_match = BroadcastFileNormalizer.p2_song.match(song)
+                                p3_match = BroadcastFileNormalizer.p3_song.match(song)
+                                p4_match = BroadcastFileNormalizer.p4_song.match(song)
+                                try:
+                                    tracknumber, _, title = p1_match.groups()
+                                except AttributeError:
+                                    pass
+                                try:
+                                    tracknumber, _, title = p2_match.groups()
+                                except AttributeError:
+                                    pass
+                                try:
+                                    tracknumber, _, title = p3_match.groups()
+                                except AttributeError:
+                                    pass
+                                try:
+                                    tracknumber, _, title = p4_match.groups()
+                                except AttributeError:
+                                    pass
+                                
+                                new_title = "".join([tracknumber, " ", artist, " -- ", album, " -- ", title])
+                                dst = os.path.join(basedir, dst_taildir, artist, album, new_title)
+                                dst_dir, dst_file = os.path.split(dst)
+                                if not os.path.exists(dst_dir):
+                                    os.makedirs(dst_dir)
+                                if not os.path.exists(dst):
+                                    print(f"Renaming for broadcast and moving from {src} to {dst}")
+                                    shutil.move(src, dst)
+                                elif os.path.exists(dst):
+                                    print(f"File on path {dst} already exists, removing duplicates")
+                                    os.remove(src)
+                                BroadcastFileNormalizer.renamed.add(dst)
+                            else:
+                                print(f"File on path {src} does not match any pattern --> not renamed (and moved to set)")
+                                BroadcastFileNormalizer.not_renamed.add(src)
+                except Exception as e:
+                    print(e, os.path.join(root, artist, album))
 
     def check_names_integrity(root:str) -> None:
         """ Check if all song name match the broadcast pattern before u move them to the server """
@@ -828,12 +830,11 @@ class FolderInfo(RegexPatternsProvider):
 
 
 if __name__  == "__main__":
-    p = r"Z:\Music\from bandcamp"
-    src = r"Z:\Music\test bc"
-    dst = r"Z:\Music\tagged"
-    # NameNormalizer.strip_dash_from_artist_album_song(p)
-    # NameNormalizer.titlecase_all(p)
-    Sorter.sort_audiofolders(p, dst)
-    # Deleter.delete_folders_without_audio(p)
+  
+    src = r"Y:\ambient\1] to be renamed"
+    n = NameNormalizer()
+    n(src)
+    n.strip_dash_from_artist_album_song(src)
+    # BroadcastFileNormalizer.normalize_names(src)
 
   

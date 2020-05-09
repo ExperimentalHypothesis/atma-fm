@@ -50,27 +50,27 @@ def parse_playlist_record(s):
         path = s
         return title, album, artist, path
     except IndexError:
-        # dopsat kdy to ma jinej string format..
-        # viz no
+        pass
 
-no = "/home/audio/bitnormed/Genesonics/14 Genesonics -- TRANSE (Changement, Volonte) -- Transe 1 [lame].mp3"
+def fill_database(f:str):
+    with open(f, encoding="utf-8") as log:
+        with engine.connect() as conn:
+            for line in log:
+                # print(parse_playlist_record(line))
+                try:
+                    title, album, artist, path = parse_playlist_record(line)
+                    q = songs.insert().values(artist=artist, album=album, title=title, path=path)
+                    conn.execute(q)
+                except Exception as e:
+                    print(e, line)
 
-parse_playlist_record(no)
 
-
-# with open("playlist.m3u", encoding="utf-8") as log:
-#     with engine.connect() as conn:
-#         for line in log:
-#             # print(parse_playlist_record(line))
-#             try:
-#                 title, album, artist, path = parse_playlist_record(line)
-#                 q = songs.insert().values(artist=artist, album=album, title=title, path=path)
-#                 conn.execute(q)
-#             except Exception as e:
-#                 print(e, line)
-
-# print(engine.table_names())
-
-# conn = engine.connect()
-# q = songs.insert().values(artist="xxx")
-# conn.execute(q)
+if __name__ == "__main__":
+    con = engine.connect()
+    from sqlalchemy import select
+    q = select([songs.]).where(songs.c.artist == "Steve Roach")
+    res = con.execute(q)
+    print(res)
+    x = res.fetchall()
+    for i in x:
+        print(i)

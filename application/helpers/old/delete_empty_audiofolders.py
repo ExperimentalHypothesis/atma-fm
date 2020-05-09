@@ -80,8 +80,9 @@ def delete_folders_without_audio(directory: str) -> None:
 
 
 if __name__ == "__main__":
-    source = r"Y:\ambient\testing folder"
+    source = r"C:\Users\nirvikalpa\Desktop\test"
     delete_folders_without_audio(source)
+
     # if not os.path.exists(source): print("directory doesnt exists, check the path")
 
     # # delete recursively bottom up
