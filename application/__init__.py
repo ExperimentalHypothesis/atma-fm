@@ -10,12 +10,10 @@ def create_app():
     """ Initialize app. """
     app = Flask(__name__, instance_relative_config=False)
     app.config.from_object("config.Config")
-    print(app.config)
-    
     db.init_app(app)
     mail.init_app(app)
 
     with app.app_context():
-        from application import routes
+        from application import routes  # noqa: F401
         db.create_all()
         return app

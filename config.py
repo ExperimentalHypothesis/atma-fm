@@ -7,7 +7,7 @@ load_dotenv(os.path.join(basedir, '.env'))
 
 class Config:
     """ Set app configuration vars. """
-    
+
     # general config
     SECRET_KEY = os.environ.get("SECRET_KEY")
     FLASK_ENV = os.environ.get("FLASK_ENV")
@@ -31,4 +31,3 @@ class Config:
     # icecast log paths
     LINUX_LOG_PATH = os.environ.get("LINUX_LOG_PATH")
     WINDOWS_LOG_PATH = os.environ.get("WINDOWS_LOG_PATH")
-

@@ -10,8 +10,8 @@ class RecordDB(db.Model):
     title = db.Column(db.String(256))
     artist = db.Column(db.String(256))
     album = db.Column(db.String(256))
-    started_at = db.Column(db.String(64)) 
-    added_at = db.Column(db.DateTime) # these two should be basically the same time.. 
+    started_at = db.Column(db.String(64))
+    added_at = db.Column(db.DateTime)  # these two should be basically the same time.
 
     def __repr__(self):
         return f"<{self.title} - {self.artist}>"

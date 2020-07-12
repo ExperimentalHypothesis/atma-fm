@@ -1,4 +1,4 @@
-import subprocess, re, collections, os
+import subprocess, re, collections
 from flask import current_app as app
 
 
