@@ -6,7 +6,6 @@ watchdog==0.10.2
 Flask==1.1.2
 Flask_Mail==0.9.1
 app==0.0.1
-bandcamp_dl==0.4
 beautifulsoup4==4.9.0
 discogs_client==2.2.2
 matplotlib==3.2.1

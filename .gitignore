@@ -1,4 +1,5 @@
 
+venv/
 .venv/
 .env
 app/static/css/style-working.css

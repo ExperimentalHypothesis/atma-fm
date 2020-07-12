@@ -2,7 +2,7 @@ from application import db
 
 
 class RecordDB(db.Model):
-    """ Datamodel for an audio record broadcasted realtime """
+    """ Datamodel for an audio record broadcasted realtime. """
 
     __tablename__ = "audio record"
 
@@ -17,9 +17,8 @@ class RecordDB(db.Model):
         return f"<{self.title} - {self.artist}>"
 
 
-
 class LogDB(db.Model):
-    """ Datamodel for recording logs from filesystem """
+    """ Datamodel for recording logs from filesystem. """
 
     __tablename__ = "access log"
 
@@ -31,9 +30,8 @@ class LogDB(db.Model):
         return f"<{self.message}>"
 
 
-
 class MessageDB(db.Model):
-    """ Data model for messages sent via contact form """
+    """ Data model for messages sent via contact form. """
 
     __tablename__ = "messages"
 
@@ -45,7 +43,3 @@ class MessageDB(db.Model):
 
     def __repr__(self):
         return f'Message {self.id}, {self.email}, {self.selection}, {self.text}'
-    
-
-    
-
