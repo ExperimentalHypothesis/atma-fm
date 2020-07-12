@@ -1,5 +1,5 @@
 
-# This is a filesystem watchdog responsible for writing from icecast/icegenerator log file to a database.\
+# This is a filesystem watchdog responsible for writing from icecast/icegenerator log file to a database.
 # Every time the log file changes, icecast log file is the only place where the song history is stored.
 
 
@@ -19,7 +19,7 @@ if not app.config["OS"] == "Windows_NT":
 
         def on_modified(self, event):
             """ Append currently played song to a database. """
-            if event.event_type == "modified" and event.src_path == "/var/log/icecast/song-history.log":  # TODO not harcoded path
+            if event.event_type == "modified" and event.src_path == app.config["LINUX_LOG_PATH"]:
                 title, artist, album, started_at = parse_record(get_last_n_records())
                 with app.app_context():
                     try:
@@ -37,11 +37,5 @@ if not app.config["OS"] == "Windows_NT":
         """ Get notified when the Icecast log changes. """
         event_handler = MyHandler()
         observer = Observer()
-        observer.schedule(event_handler, path='/var/log/icecast', recursive=False)  # TODO not hardcoded path
+        observer.schedule(event_handler, path="/var/log/icecast/", recursive=False)
         observer.start()
-        # try:
-        #     while True:
-        #         time.sleep(1)
-        # except KeyboardInterrupt:
-        #     observer.stop()
-        # observer.join()

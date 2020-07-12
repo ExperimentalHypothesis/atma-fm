@@ -1,6 +1,8 @@
-from application.notifier import app 
+from application.notifier import app
+
 
 def main():
+    """ Run the app. """
     if not app.config["OS"] == "Windows_NT":
         from application.notifier import notify
         notify()
@@ -8,4 +10,4 @@ def main():
 
 
 if __name__ == "__main__":
-	main()
+    main()
