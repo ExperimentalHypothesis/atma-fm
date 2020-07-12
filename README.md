@@ -1,7 +1,7 @@
 # Online Radio 
 Online radio station built on top of the Icecast server using Icegerator as the streaming client. It is a server-centric website bridging backend streaming Icecast server with frontend GUI. It is written in Python Flask with a little bit of vanilla Javascript.
 
-Online radio is broadcasting live 24/7, streaming mostly ambient/experimental/electronic music. All audio files are located on a Fedora VPS server, the code for the website is on the same Fedora VPS server, using NGINX as reverse proxy and Gunicord.
+Online radio is broadcasting live 24/7, streaming mostly ambient/experimental/electronic music. All audio files are located on a Fedora VPS server, the code for the website is on the same Fedora VPS server, using NGINX as reverse proxy and Gunicorn as web server.
 
 URL: www.atma-fm.eu
 
