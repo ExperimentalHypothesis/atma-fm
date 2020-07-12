@@ -75,7 +75,7 @@ def contact():
             return render_template("contact.html")
         except Exception as e:
             return str(e)
-        return render_template("contact.html")
+    return render_template("contact.html")
 
 
 @app.route("/archive")
