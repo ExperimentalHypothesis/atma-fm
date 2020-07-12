@@ -7,7 +7,7 @@ URL: www.atma-fm.eu
 
 ## Clone
 
-You can clone this repo and run it locally even if you do not have Icecast installed. It is recommended to run it on Linux machine although on Windows it should also be possible if you set up correct environment variables (more on that later). Most of the code was actually written on a Windows machine. Here is how you install it:
+You can clone this repo and run it locally even if you do not have Icecast installed. It is recommended to run it on Linux machine although on Windows it should also be possible if you set up correct environment variables (more on that later). Most of the code was actually written on a Windows machine. Follow these steps.
 
 ```
 git clone https://github.com/ExperimentalHypothesis/flask-online-radio.git
@@ -20,7 +20,7 @@ python -r requirements.txt
 
 To run it, you need to first make a .env file where you store environment variables. If you do not set it up, it will not run. You will get an error, most probably SQLAlchemy error because it will not find any path to the database. 
 
-Your .env file should look something like this
+Your .env file should look something like this.
 
 ```
 ENV = development
@@ -38,6 +38,8 @@ LINUX_LOG_PATH = "/some/path/somewhere"
 ```
 
 The LINUX_LOG_PATH normally points to logfile from Icegenerator. If you do not have it installed, it doesn't matter, the website will still work, the only thing is that you will have an empty playlist. You just have to specify some path, even if it is fictional.
+
+This file has to be located at the root of your application folder (at the same level as run.py file). Be sure you add this .env file to gitignore and never push it to remote repo.
 
 ## Run
 
