@@ -136,3 +136,13 @@ textarea {
     padding-top: 400px;
 
 }
+
+.main-navbar{
+    height: 40px; 
+    position: fixed; 
+    bottom:0%;
+    width:100%; 
+    background-color: #393838; 
+    opacity: 1;
+    
+}
