@@ -12,8 +12,9 @@ You can clone this repo and run it locally even if you do not have Icecast insta
 ```
 git clone https://github.com/ExperimentalHypothesis/flask-online-radio.git
 cd flask-online-radio
-python -m venv venv
-python -r requirements.txt
+python3.7 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
 ```
 
 ## Install
