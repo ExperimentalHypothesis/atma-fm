@@ -3,10 +3,8 @@ Online radio station built on top of the Icecast server using Ices as the stream
 
 Online radio is broadcasting live 24/7, streaming mostly ambient/experimental/electronic music. All audio files are located on a VPS server, the code for the website is on the same Fedora VPS server, using NGINX as reverse proxy and Gunicorn as web server.
 
-URLs: 
-https://atma.fm
-
-https://atma.fm/channel1-128k
-
-https://atma.fm/channel2-128k
+URLs:   
+https://atma.fm  
+https://atma.fm/channel1-128k  
+https://atma.fm/channel2-128k  
 
