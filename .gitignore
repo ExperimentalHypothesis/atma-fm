@@ -1,8 +1,7 @@
+__pycache__/
+application/__pycache__
 
 venv/
-.venv/
 .env
-app/static/css/style-working.css
-.vscode/
-__pycache__/
-atma.db
+
+

@@ -1,19 +1,19 @@
 from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_mail import Mail
+from .utils.contextFunctions import getCurrentSong
+from flask_restful import Api
 
-db = SQLAlchemy()
-mail = Mail()
+api = Api(prefix="/api")
 
 
 def create_app():
-    """ Initialize app. """
-    app = Flask(__name__, instance_relative_config=False)
+    app = Flask(__name__)
+    from application import resources
+
     app.config.from_object("config.Config")
-    db.init_app(app)
-    mail.init_app(app)
+    app.context_processor(getCurrentSong)
+    
+    api.init_app(app)
 
     with app.app_context():
-        from application import routes  # noqa: F401
-        db.create_all()
+        from application import routes
         return app
