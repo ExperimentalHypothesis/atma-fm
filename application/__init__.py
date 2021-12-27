@@ -7,7 +7,9 @@ api = Api(prefix="/api")
 
 def create_app():
     app = Flask(__name__)
-    from application import playlist
+    from application.resources import playlist
+    from application.resources import artists
+
 
     app.config.from_object("config.Config")
     app.context_processor(getCurrentSong)

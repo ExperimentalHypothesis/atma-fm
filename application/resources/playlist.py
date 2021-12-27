@@ -7,7 +7,8 @@ from application.utils.SongParser import SongParser
 
 class Playlist(Resource):
     """
-    GET endpoint that look like this # api/playlist?channel=1&songs=10
+    GET endpoint that look like this:
+        - api/playlist?channel=1&songs=10 => returns 10 last songs played on channel1
     """
 
     class PlaylistSchema(Schema):
