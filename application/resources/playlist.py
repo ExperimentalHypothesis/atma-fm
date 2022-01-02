@@ -5,6 +5,7 @@ from application import api
 from marshmallow import Schema, fields
 from application.utils.SongParser import SongParser
 
+
 class Playlist(Resource):
     """
     GET endpoint that look like this:

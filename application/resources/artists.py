@@ -6,6 +6,7 @@ from application import api
 
 from marshmallow import Schema, fields 
 
+
 class Artists(Resource):
     """
     GET endpoint looking like this: 

@@ -40,9 +40,4 @@ class Albums(Resource):
         
         return f"{artist} not found"
 
-
-
-
-
-
 api.add_resource(Albums, "/albums/<artist>")
