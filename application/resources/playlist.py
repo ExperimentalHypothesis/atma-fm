@@ -1,4 +1,3 @@
-
 from flask import request, abort
 from flask_restful import Resource
 from application import api
@@ -22,7 +21,7 @@ class Playlist(Resource):
         errs = self.schema.validate(request.args)
         if errs:
             abort(400, errs)
-        
+
         channel = int(request.args["channel"])
         songs = int(request.args["songs"])
         if channel > 2:
@@ -30,5 +29,6 @@ class Playlist(Resource):
 
         l = SongParser.getLastNSongs(songs, channel=channel)
         return {"songs": l}, 200
+
 
 api.add_resource(Playlist, "/playlist")
