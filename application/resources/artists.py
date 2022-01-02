@@ -29,14 +29,11 @@ class Artists(Resource):
         artistsAll = sorted(artistsChannel1 + artistsChannel2)
 
         if request.args.get("channel") == None:
-            return {"artists": artistsAll} # /api/artists
+            return {"artists": artistsAll} 
         elif int(request.args.get("channel")) == 1:
-            return {"artists": artistsChannel1} # /api/artists?channel=1
+            return {"artists": artistsChannel1} 
         elif int(request.args.get("channel")) == 2:
-            return {"artists": artistsChannel2} # /api/artists?channel=2
+            return {"artists": artistsChannel2} 
 
         
-
-
-
 api.add_resource(Artists, "/artists")

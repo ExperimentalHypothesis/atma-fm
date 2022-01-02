@@ -9,7 +9,7 @@ def create_app():
     app = Flask(__name__)
     from application.resources import playlist
     from application.resources import artists
-
+    from application.resources import albums
 
     app.config.from_object("config.Config")
     app.context_processor(getCurrentSong)
