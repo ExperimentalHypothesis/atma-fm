@@ -20,13 +20,13 @@ class Albums(Resource):
     def get(self, artist):
         val = {}
         
-        val[self.CHANNEL_1] = self.getAlbums(artist, self.CHANNEL_1)
-        val[self.CHANNEL_2] = self.getAlbums(artist, self.CHANNEL_2)
+        val[self.CHANNEL_1] = self._getAlbums(artist, self.CHANNEL_1)
+        val[self.CHANNEL_2] = self._getAlbums(artist, self.CHANNEL_2)
         
         return {artist: val}, 200
         
 
-    def getAlbums(self, artist: str, channel: str) -> List:
+    def _getAlbums(self, artist: str, channel: str) -> List:
         artists = os.listdir(channel)        
         for i in [i.lower() for i in artists]:
             if artist == i:
