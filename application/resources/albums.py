@@ -6,8 +6,6 @@ from application import api
 from marshmallow import fields, Schema
 from paramiko import channel
 
-from application.resources.playlist import Playlist
-
 
 class Albums(Resource):
     """
@@ -28,7 +26,7 @@ class Albums(Resource):
 
     def _getAlbums(self, artist: str, channel: str) -> List:
         artists = os.listdir(channel)
-        for i in [i.lower() for i in artists]:
+        for i in artists:
             if artist == i:
                 return [i for i in os.listdir(os.path.join(channel, artist))]
 
