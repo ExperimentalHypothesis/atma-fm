@@ -10,17 +10,15 @@ from paramiko import channel
 class Albums(Resource):
     """
     GET endpoint looking like this:
-        - api/albums/<artist_name> => return all albums from particular artist with channel where they are played
+        - api/albums/<artist_name> => return all albums from particular artist with channel where they are played on
     """
 
-    CHANNEL_1 = r"/audio/channel1"
-    CHANNEL_2 = r"/audio/channel2"
 
     def get(self, artist):
         val = {}
 
-        val[self.CHANNEL_1] = self._getAlbums(artist, self.CHANNEL_1)
-        val[self.CHANNEL_2] = self._getAlbums(artist, self.CHANNEL_2)
+        val["channel1"] = self._getAlbums(artist, "/audio/channel1")
+        val["channel2"] = self._getAlbums(artist, "/audio/channel2")
 
         return {artist: val}, 200
 

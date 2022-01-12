@@ -11,14 +11,25 @@ https://atma.fm/channel1-128k
 https://atma.fm/channel2-128k
 
 
-#### Public API endpoints
-For fun I have created a couple of endpoints. All of them are GET endpoints that return JSON format and status code 200 for success. They can be used to get info about currently played song, playlist, artists or albums for each channel. 
+#### API endpoints
+For fun I have created a couple of endpoints. All of them use GET method and all return JSON format and status code 200 for success. They can be used to query info about currently played song, playlists, artists or albums for each channel. 
 
-- /api/song => returns details about currently played song on both channels
-- /api/song/channel1 => returns details about currently played song on channel1
-- /api/song/channel2 => returns details about currently played song on channel
+ GET endpoint for current song:
+    -api/song => return song details from cue file for both channels 
+    -api/song/channel1 => return song details from cue file from channel1
+    -api/song/channel2 => return song details from cue file from channel2
 
-- /api/playlist?channel=1&songs=10 => return 10 last played songs on channel 1
-- /api/playlist?channel=2&songs=10 => return 10 last played songs on channel 1
+GET endpoint for playlist:
+    - api/playlist => returns last 10 songs played on both channels
+    - api/playlist/channel1 => returns last 10 songs played on channel1 
+    - api/playlist/channel2 => returns last 10 songs played on channel2 
+    - api/playlist/channel1?songs=N => returns last N songs played on channel1 (N must be integer)
+    - api/playlist/channel2?songs=N => returns last N songs played on channel1 (N must be integer)
 
-- /api/
+GET endpoints for artists:
+    - api/artists => return all artists for both channels
+    - api/artists/channel1 => return all artists played on channel1
+    - api/artists/channel2 => return all artists played on channel2
+
+GET endpoint for albums:
+    - api/albums/<artist_name> => return all albums of particular artist with channel where they are played on

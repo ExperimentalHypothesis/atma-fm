@@ -9,10 +9,10 @@ class Playlist(Resource):
     """
     GET endpoint that look like this:
         - api/playlist => returns last 10 songs played on both channels
-        - api/playlist/channel1 => returns last 10 songs played on channel1 (default)
-        - api/playlist/channel2 => returns last 10 songs played on channel2 (default)
-        - api/playlist/channel1?songs=45 => returns last 45 songs played on channel1
-        - api/playlist/channel2?songs=45 => returns 10 last songs played on channel1
+        - api/playlist/channel1 => returns last 10 (default value) songs played on channel1 
+        - api/playlist/channel2 => returns last 10 (default value) songs played on channel2 
+        - api/playlist/channel1?songs=N => returns last N songs played on channel1
+        - api/playlist/channel2?songs=N => returns last N songs played on channel1
     """
 
     class PlaylistSchema(Schema):
@@ -23,7 +23,6 @@ class Playlist(Resource):
 
     def get(self, channel=None):
         if channel == None:
-            print("none")
             ret = {}
             ret["channel1"] = SongParser.getLastNSongs(self.SONG_HISTORY_DEFAULT, "channel1")
             ret["channel2"] = SongParser.getLastNSongs(self.SONG_HISTORY_DEFAULT, "channel2")

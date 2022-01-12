@@ -5,7 +5,7 @@ from application.utils.SongParser import SongParser
 
 class Song(Resource):
     """
-        GET endpoint looking like this:
+    GET endpoint looking like this:
         -api/song => return song details from cue file for both channels (default)
         -api/song/channel1 => return song details from cue file from channel1
         -api/song/channel2 => return song details from cue file from channel2
