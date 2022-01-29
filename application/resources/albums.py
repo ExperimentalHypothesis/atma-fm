@@ -4,7 +4,6 @@ from typing import List
 from flask_restful import Resource
 from application import api
 from marshmallow import fields, Schema
-from paramiko import channel
 
 
 class Albums(Resource):

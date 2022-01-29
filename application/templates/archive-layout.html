@@ -10,13 +10,6 @@
   <title>atma.fm</title>
 </head>
 {% block content %}{% endblock %}
-<nav class="main-navbar">
-  <a href="{{ url_for('home') }}"><small class="menu-link">home</small></a>
-  <a href="{{ url_for('about') }}" style="margin-left:30px"><small class="menu-link">about</small></a>
-  <a href="{{ url_for('playlist') }}" style="margin-left:30px"><small class="menu-link">playlist</small></a>
-  <a href="{{ url_for('archive') }}" style="margin-left:30px"><small class="menu-link">archive</small></a>
-  <a href="{{ url_for('contact') }}" style="margin-left:30px"><small class="menu-link">contact</small></a>
-</nav>
 <script src="{{ url_for('static', filename='js/play.js')}}"></script>
 </body>
 </html>
