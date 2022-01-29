@@ -1,9 +1,67 @@
+<div id="support" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeSupport()">&times;</a>
+  <div class="overlay-content">
+    <p class="overlay-text">you can buy me a coffee to support my servers spinning.<br>
+      this is a 100% hobby project but it takes quite a bit of time, effort and money to keep it up. <br>
+      you should also consider supporting the artists via bandcamp, discogs, amazon or any other way.</p>
+  </div>
+</div>
+
+<div id="contact" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeContact()">&times;</a>
+  <div class="overlay-content">
+    <p class="overlay-text">
+    <p class="overlay-text">you can hit me up on facebook or contact me via this form.
+      <br>
+      i will probably reply.
+    </p>
+    </p>
+  </div>
+</div>
+
+<div id="archive" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeArchive()">&times;</a>
+  <div class="overlay-content">
+    <p class="overlay-text">
+    <h1 class="overlay-text">page under construction << </h1>
+        </p>
+  </div>
+</div>
+
+<!-- it is not 
+rigidly devoted to one particular subgenre and so the listening experience might sometimes be quite unpredictable
+(and unbearable for untrained ears.  -->
+<!-- bright, light & tranquil moods mix with dark & doomy ones, surrounding you by phantoms of all shapes and kind, both angelic and devilish.</p> -->
+
+<div id="about" class="overlay">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeAbout()">&times;</a>
+  <div class="overlay-content">
+    <p class="overlay-text">
+      atma.fm is an experimental radio project focusing on ambient & electroacoustic music, broadcasting bullshit-free
+      audio stream from the magic city prague. the playlist is quite diverse and is probably
+      best expressed with the soundwave-like word cloud on the main page.
+      there are currently two separated channels set up for the stream.
+      <br><br>
+      this is all a one-man show do-it-yourself kind of thing. i have built it from scratch on top of icecast
+      linux server mostly using python. as i was collecting marginal styles of music from a very young age,
+      the idea of building a web streamer came naturally as soon as i figured out how to type on a keyboard.
+      the fact that i have been working on it alone does not mean it has to stay this way forever. in fact, on the
+      contrary - i would like to involve more people and open it to the community.
+      feel free to contact me, if you wanna get involved.
+    </p>
+  </div>
+  </p>
+</div>
+</div>
+
+
+
+
 <nav class="main-navbar">
-  <a href="{{ url_for('home') }}"><small class="menu-link">home</small></a>
-  <a href="{{ url_for('about') }}"><small class="menu-link">about</small></a>
-  <a href="{{ url_for('channels') }}"><small class="menu-link">channels</small></a>
-  <a href="{{ url_for('playlists') }}"><small class="menu-link">playlists</small></a>
-  <a href="{{ url_for('archive') }}"><small class="menu-link">archive</small></a>
-  <a href="{{ url_for('contact') }}"><small class="menu-link">contact</small></a>
-  <a href="{{ url_for('support') }}"><small class="menu-link">support</small></a>
+  <small class="menu-link" onclick="openAbout()"> about</small>
+  <small class="menu-link" onclick="openChannels()">channels</small>
+  <small class="menu-link" onclick="openPlaylists()">playlists</small>
+  <small class="menu-link" onclick="openArchive()">archive</small>
+  <small class="menu-link" onclick="openContact()">contact</small>
+  <small class="menu-link" onclick="openSupport()">support</small>
 </nav>
