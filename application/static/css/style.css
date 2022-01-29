@@ -5,21 +5,22 @@ body {
 /* player box - global for each page the same */
 
 .player-box {
-    width: 330px;
-    height: 320px;
-    margin-top: 30px;
-    margin-left: 30px;
+    width: 24.0vw;
+    height: 43.0vh;
+    margin-top: 2.0vh;
+    margin-left: 2.0vw;
     background-color: rgb(20, 20, 20);
     border-radius: 5px;
     border: 1px solid rgb(30, 30, 30);
     text-align: center;
     color: rgb(231, 211, 211);
     font-family: 'Tomorrow', sans-serif;
-    font-size: 14px;
+    font-size: 2.2vw;
+    font-size: 2.2vh;
 }
 
 .player-txt {
-    margin-top: 30px;
+    margin-top: 2.0vh;
 }
 
 .player-button {
@@ -29,8 +30,15 @@ body {
 .player-button-txt {
     display: block;
     font-family: 'Tomorrow', sans-serif;
+    font-size: 1.8vw;
+    font-size: 1.8vh;
     border: none;
     text-align: center;
+}
+
+.player-button-icon {
+    font-size: 7.0vw !important;
+    font-size: 7.0vh !important;
 }
 
 /* global wrapper for each page, the content will come inside - except index.html becaue there is the logo pic */
