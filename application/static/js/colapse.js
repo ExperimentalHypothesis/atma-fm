@@ -27,3 +27,11 @@ function openAbout() {
 function closeAbout() {
     document.getElementById("about").style.height = "0%";
 }
+
+
+function openChannels() {
+    document.getElementById("channels").style.height = "50%";
+}
+function closeChannels() {
+    document.getElementById("channels").style.height = "0%";
+}

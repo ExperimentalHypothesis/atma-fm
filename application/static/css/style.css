@@ -180,7 +180,7 @@ img{
   
   .overlay-content {
     position: relative;
-    top: 25%;
+    top: 18%;
     width: 100%;
     margin-right: 2.0vw;
     text-align: center;
@@ -188,12 +188,10 @@ img{
   }
   
   .overlay a {
-    padding: 8px;
     text-decoration: none;
-
     color: #818181;
-    display: block;
-    transition: 0.1s;
+    /* display: block; */
+    /* transition: 0.1s; */
   }
   
   .overlay a:hover, .overlay a:focus {
@@ -213,6 +211,11 @@ img{
       font-size: 1.6vh;
       font-family: 'Tomorrow', sans-serif;
   }
+
+  .overlay-h {
+    color: rgb(191, 177, 177);
+    font-family: 'Tomorrow', sans-serif;
+}
 
   @media screen and (max-height: 450px) {
     .overlay {overflow-y: auto;}
