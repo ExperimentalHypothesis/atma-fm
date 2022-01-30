@@ -51,10 +51,10 @@
 		<audio id="player">
 			<source src="https://atma.fm:8443/channel1-128k">
 		</audio>
-		<hr class="player-hr">
-		<small> currently playing </small>
+		<hr class="player-hr", width=50% >
+		<small class="player-current" > currently playing </small>
 		<br>
-		<small>[ {{ author }} - {{ title }} ]</small>
+		<small >[ {{ author }} - {{ title }} ]</small>
 	</section>
 	{% block content %}{% endblock %}
 	<script src="{{ url_for('static', filename='js/play.js')}}"> </script>
