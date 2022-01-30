@@ -180,7 +180,7 @@ img{
   
   .overlay-content {
     position: relative;
-    top: 18%;
+    top: 5%;
     width: 100%;
     margin-right: 2.0vw;
     text-align: center;
@@ -189,7 +189,7 @@ img{
   
   .overlay a {
     text-decoration: none;
-    color: #818181;
+    color: #474649;
     /* display: block; */
     /* transition: 0.1s; */
   }
@@ -200,9 +200,9 @@ img{
   
   .overlay .closebtn {
     position: absolute;
-    top: 20px;
-    right: 45px;
-    font-size: 60px;
+    /* top: 20px; */
+    right: 40px;
+    font-size: 6.0vh;
   }
   
   .overlay-text {
@@ -210,6 +210,7 @@ img{
       font-size: 1.6vw;
       font-size: 1.6vh;
       font-family: 'Tomorrow', sans-serif;
+      margin-right: 2.0vw;
   }
 
   .overlay-h {
