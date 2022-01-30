@@ -44,7 +44,7 @@ body {
 .player-hr{
     margin-top: 2.0vw; 
     margin-bottom: 2.0.vw;
-    width:50%;
+    width:50% !important;
 }
 
 
