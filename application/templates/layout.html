@@ -34,7 +34,8 @@
 		<span class="player-txt">[ independent underground online radio ]</span>
 		<br>
 		<small> channel 1 </small>
-		<br><br>
+		<br>
+		<br>
 		<div class="player-button">
 			<button id="bt-txt" class="player-button-txt" onclick="toggle_play()">listen now</button>
 			<button class="button" style="border: none;" onclick="toggle_play()"><i id="bt-icon"
@@ -50,8 +51,9 @@
 		<audio id="player">
 			<source src="https://atma.fm:8443/channel1-128k">
 		</audio>
-		<hr width=50%>
-		<small> currently playing </small><br>
+		<hr class="player-hr">
+		<small> currently playing </small>
+		<br>
 		<small>[ {{ author }} - {{ title }} ]</small>
 	</section>
 	{% block content %}{% endblock %}

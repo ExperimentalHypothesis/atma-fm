@@ -41,6 +41,13 @@ body {
     font-size: 7.0vh !important;
 }
 
+.player-hr{
+    margin-top: 2.0vw; 
+    margin-bottom: 2.0.vw;
+    width:50%;
+}
+
+
 /* global wrapper for each page, the content will come inside - except index.html becaue there is the logo pic */
 
 .content-box {
