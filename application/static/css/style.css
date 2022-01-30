@@ -216,6 +216,7 @@ img{
   .overlay-h {
     color: rgb(191, 177, 177);
     font-family: 'Tomorrow', sans-serif;
+    margin-right: 2.0vw;
 }
 
   @media screen and (max-height: 450px) {
