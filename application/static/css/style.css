@@ -174,6 +174,8 @@ img{
 
 /* colapsible overlay*/
 .overlay {
+    overflow-x:hidden;
+    overflow-y:hidden;
     height: 0%;
     width: 70%;
     position: fixed;
@@ -182,12 +184,13 @@ img{
     right: 0;
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0, 0.9);
-    overflow-y: hidden;
+    /* overflow-y: hidden; */
     transition: 3s;
   }
   
   
   .overlay-content {
+    overflow:hidden;
     position: relative;
     top: 5%;
     width: 100%;
@@ -197,6 +200,7 @@ img{
   }
   
   .overlay a {
+    overflow:hidden;
     text-decoration: none;
     color: #474649;
     /* display: block; */
@@ -204,29 +208,37 @@ img{
   }
   
   .overlay a:hover, .overlay a:focus {
+    overflow:hidden;
     color: #b8adad;
   }
   
   .overlay .closebtn {
+    overflow:hidden;
     position: absolute;
     /* top: 20px; */
-    right: 40px;
+    right: 100px;
     font-size: 6.0vh;
   }
   
   .overlay-text {
+    overflow:hidden;
       color: rgb(191, 177, 177);
       font-size: 1.6vw;
       font-size: 1.6vh;
       font-family: 'Tomorrow', sans-serif;
-      margin-right: 2.0vw;
+      margin-right: 2.00vw;
   }
 
   .overlay-h {
+      overflow:hidden;
     color: rgb(191, 177, 177);
     font-family: 'Tomorrow', sans-serif;
     margin-right: 2.0vw;
 }
+
+body.modal-opened {
+    overflow: hidden;
+ }
 
   @media screen and (max-height: 450px) {
     .overlay {overflow-y: auto;}
