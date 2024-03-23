@@ -2,6 +2,8 @@ __pycache__/
 application/__pycache__
 
 venv/
+.venv
+.idea
 .env
 
 
