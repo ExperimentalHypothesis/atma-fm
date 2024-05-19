@@ -10,7 +10,19 @@ URLs for direct streaming server links:
 https://atma.fm/channel1-128k  
 https://atma.fm/channel2-128k
 
-
+#### Run locally with docker
+```sh
+    docker build -t atma-fm .
+    docker run -p 5555:5555 atma-fm
+    # app accessible in http://localhost:5555/
+```
+#### Run locally with docker-compose
+```sh
+    docker docker-compose up
+    # app accessible in http://localhost:5555/
+    # grafana accessible in http://localhost:3000/
+```
+------
 #### API endpoints
 For fun I have created a couple of endpoints. All of them use GET method and all return JSON format and status code 200 for success. They can be used to query info about currently played song, playlists, artists or albums for each channel. 
 
