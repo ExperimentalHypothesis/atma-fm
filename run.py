@@ -1,5 +1,5 @@
 from application import create_app
-from prometheus_client import Counter, generate_latest, CONTENT_TYPE_LATEST, make_wsgi_app
+from prometheus_client import Counter, make_wsgi_app
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
 from flask import request
 

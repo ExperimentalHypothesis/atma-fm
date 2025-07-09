@@ -1,7 +1,7 @@
 from flask import request, abort
 from flask_restful import Resource
 from application import api
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields # causing import error ?
 from application.utils.SongParser import SongParser
 
 
@@ -22,7 +22,7 @@ class Playlist(Resource):
     SONG_HISTORY_DEFAULT = 10
 
     def get(self, channel=None):
-        if channel == None:
+        if channel is None:
             ret = {}
             ret["channel1"] = SongParser.getLastNSongs(self.SONG_HISTORY_DEFAULT, "channel1")
             ret["channel2"] = SongParser.getLastNSongs(self.SONG_HISTORY_DEFAULT, "channel2")
@@ -37,11 +37,11 @@ class Playlist(Resource):
 
         if channel == "channel2":
             return self._getPlaylistForChannel(channel), 200
-
+        return None
 
     def _getPlaylistForChannel(self, channel):
             ret = {}
-            if request.args.get("songs") == None:
+            if request.args.get("songs") is None:
                 print("in if _getPla")
                 ret[channel] = SongParser.getLastNSongs(self.SONG_HISTORY_DEFAULT, channel)
                 return ret
@@ -50,6 +50,5 @@ class Playlist(Resource):
                 songs = int(request.args["songs"])
                 ret[channel] = SongParser.getLastNSongs(songs, channel), 200
                 return ret
-
 
 api.add_resource(Playlist, "/playlist", "/playlist/<channel>", endpoint="playlist")
