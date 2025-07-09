@@ -1,0 +1,245 @@
+[2025-07-09  13:16:37] INFO main/main Icecast 2.4.4 server started
+[2025-07-09  13:16:37] INFO yp/yp_update_thread YP update thread started
+[2025-07-09  13:16:37] INFO connection/get_ssl_certificate No SSL capability on any configured ports
+[2025-07-09  13:18:16] INFO main/main Icecast 2.4.4 server started
+[2025-07-09  13:18:16] INFO yp/yp_update_thread YP update thread started
+[2025-07-09  13:18:16] INFO connection/get_ssl_certificate No SSL capability on any configured ports
+[2025-07-09  13:19:47] INFO main/main Icecast 2.4.4 server started
+[2025-07-09  13:19:47] INFO yp/yp_update_thread YP update thread started
+[2025-07-09  13:19:47] INFO connection/get_ssl_certificate No SSL capability on any configured ports
+[2025-07-09  13:20:15] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:20:15] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:20:15] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:20:21] INFO fserve/fserve_client_create checking for file /healty (/usr/share/icecast/web/healty)
+[2025-07-09  13:20:21] WARN fserve/fserve_client_create req for file "/usr/share/icecast/web/healty" No such file or directory
+[2025-07-09  13:20:24] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:20:25] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:20:25] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:20:28] INFO fserve/fserve_client_create checking for file /admin (/usr/share/icecast/web/admin)
+[2025-07-09  13:20:28] WARN fserve/fserve_client_create req for file "/usr/share/icecast/web/admin" No such file or directory
+[2025-07-09  13:20:34] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:20:34] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:20:35] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:20:36] INFO admin/admin_handle_request Bad or missing password on admin command request (command: )
+[2025-07-09  13:20:50] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:23:00] INFO main/main Icecast 2.4.4 server started
+[2025-07-09  13:23:00] INFO yp/yp_update_thread YP update thread started
+[2025-07-09  13:23:00] INFO connection/get_ssl_certificate No SSL capability on any configured ports
+[2025-07-09  13:23:54] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:23:55] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:23:57] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:23:57] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:23:57] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:23:59] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:23:59] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:23:59] INFO fserve/fserve_client_create checking for file /icecast.png (/usr/share/icecast/web/icecast.png)
+[2025-07-09  13:24:00] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:27:08] INFO main/main Icecast 2.4.4 server started
+[2025-07-09  13:27:08] INFO yp/yp_update_thread YP update thread started
+[2025-07-09  13:27:08] INFO connection/get_ssl_certificate No SSL capability on any configured ports
+[2025-07-09  13:27:09] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:27:09] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:27:09] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:27:09] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:27:09] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:27:09] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:27:09] INFO connection/_handle_source_request Source (/channel2-128k.mp3) attempted to login with invalid or missing password
+[2025-07-09  13:27:09] WARN admin/admin_handle_request Admin command metadata on non-existent source /channel2-128k.mp3
+[2025-07-09  13:27:09] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:27:09] WARN format/format_get_type Unsupported or legacy stream type: "audio/mpeg". Falling back to generic minimal handler for best effort.
+[2025-07-09  13:27:09] INFO source/source_main listener count on /channel2-128k.mp3 now 0
+[2025-07-09  13:27:10] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:27:10] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:27:10] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:27:10] INFO admin/admin_handle_request Received admin command metadata on mount "/channel2-128k.mp3"
+[2025-07-09  13:27:10] INFO admin/command_metadata Metadata on mountpoint /channel2-128k.mp3 changed to "Herbst9 - Buried Under Time And Sand"
+[2025-07-09  13:30:22] INFO source/get_next_buffer End of Stream /channel2-128k.mp3
+[2025-07-09  13:30:22] INFO source/source_shutdown Source from 192.168.164.5 at "/channel2-128k.mp3" exiting
+[2025-07-09  13:30:47] INFO main/main Icecast 2.4.4 server started
+[2025-07-09  13:30:47] INFO yp/yp_update_thread YP update thread started
+[2025-07-09  13:30:47] INFO connection/get_ssl_certificate No SSL capability on any configured ports
+[2025-07-09  13:30:47] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:30:47] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:30:47] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:30:47] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:30:47] INFO connection/_handle_source_request Source logging in at mountpoint "/channel1-128k.mp3" from 192.168.164.4
+[2025-07-09  13:30:47] INFO connection/_handle_source_request Source (/channel1-128k.mp3) attempted to login with invalid or missing password
+[2025-07-09  13:30:47] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:30:47] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:30:47] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:30:47] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:30:47] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:30:48] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:30:48] INFO connection/_handle_source_request Source (/channel2-128k.mp3) attempted to login with invalid or missing password
+[2025-07-09  13:30:48] INFO connection/_handle_source_request Source logging in at mountpoint "/channel1-128k.mp3" from 192.168.164.4
+[2025-07-09  13:30:48] WARN format/format_get_type Unsupported or legacy stream type: "audio/mpeg". Falling back to generic minimal handler for best effort.
+[2025-07-09  13:30:48] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:30:48] INFO admin/admin_handle_request Received admin command metadata on mount "/channel1-128k.mp3"
+[2025-07-09  13:30:48] INFO admin/command_metadata Metadata on mountpoint /channel1-128k.mp3 changed to "Oophoi & Tau Ceti - An' Warth"
+[2025-07-09  13:30:48] INFO source/source_main listener count on /channel1-128k.mp3 now 0
+[2025-07-09  13:30:48] WARN admin/admin_handle_request Admin command metadata on non-existent source /channel2-128k.mp3
+[2025-07-09  13:30:48] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:30:48] WARN format/format_get_type Unsupported or legacy stream type: "audio/mpeg". Falling back to generic minimal handler for best effort.
+[2025-07-09  13:30:48] INFO source/source_main listener count on /channel2-128k.mp3 now 0
+[2025-07-09  13:30:48] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:30:48] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:30:48] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:30:49] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:30:49] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:30:49] INFO admin/admin_handle_request Received admin command metadata on mount "/channel1-128k.mp3"
+[2025-07-09  13:30:49] INFO admin/command_metadata Metadata on mountpoint /channel1-128k.mp3 changed to "Oophoi & Tau Ceti - An' Warth"
+[2025-07-09  13:30:49] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:30:49] INFO admin/admin_handle_request Received admin command metadata on mount "/channel2-128k.mp3"
+[2025-07-09  13:30:49] INFO admin/command_metadata Metadata on mountpoint /channel2-128k.mp3 changed to "Herbst9 - Buried Under Time And Sand"
+[2025-07-09  13:31:34] INFO source/get_next_buffer End of Stream /channel2-128k.mp3
+[2025-07-09  13:31:34] INFO source/source_shutdown Source from 192.168.164.5 at "/channel2-128k.mp3" exiting
+[2025-07-09  13:31:34] INFO source/get_next_buffer End of Stream /channel1-128k.mp3
+[2025-07-09  13:31:34] INFO source/source_shutdown Source from 192.168.164.4 at "/channel1-128k.mp3" exiting
+[2025-07-09  13:32:42] INFO main/main Icecast 2.4.4 server started
+[2025-07-09  13:32:42] INFO connection/get_ssl_certificate No SSL capability on any configured ports
+[2025-07-09  13:32:42] INFO yp/yp_update_thread YP update thread started
+[2025-07-09  13:32:42] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:32:42] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:32:42] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:32:42] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:32:42] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:32:42] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:32:42] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:32:42] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:32:42] INFO connection/_handle_source_request Source logging in at mountpoint "/channel1-128k.mp3" from 192.168.164.4
+[2025-07-09  13:32:42] INFO connection/_handle_source_request Source (/channel1-128k.mp3) attempted to login with invalid or missing password
+[2025-07-09  13:32:42] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:32:42] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:32:42] INFO connection/_handle_source_request Source (/channel2-128k.mp3) attempted to login with invalid or missing password
+[2025-07-09  13:32:42] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:32:42] WARN admin/admin_handle_request Admin command metadata on non-existent source /channel1-128k.mp3
+[2025-07-09  13:32:42] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:32:42] WARN format/format_get_type Unsupported or legacy stream type: "audio/mpeg". Falling back to generic minimal handler for best effort.
+[2025-07-09  13:32:42] INFO connection/_handle_source_request Source logging in at mountpoint "/channel1-128k.mp3" from 192.168.164.4
+[2025-07-09  13:32:42] WARN format/format_get_type Unsupported or legacy stream type: "audio/mpeg". Falling back to generic minimal handler for best effort.
+[2025-07-09  13:32:42] INFO source/source_main listener count on /channel1-128k.mp3 now 0
+[2025-07-09  13:32:42] INFO admin/admin_handle_request Received admin command metadata on mount "/channel2-128k.mp3"
+[2025-07-09  13:32:42] INFO admin/command_metadata Metadata on mountpoint /channel2-128k.mp3 changed to "Herbst9 - Buried Under Time And Sand"
+[2025-07-09  13:32:42] INFO source/source_main listener count on /channel2-128k.mp3 now 0
+[2025-07-09  13:32:43] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:32:43] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:32:43] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:32:43] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:32:43] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:32:43] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:32:43] INFO admin/admin_handle_request Received admin command metadata on mount "/channel2-128k.mp3"
+[2025-07-09  13:32:43] INFO admin/command_metadata Metadata on mountpoint /channel2-128k.mp3 changed to "Herbst9 - Buried Under Time And Sand"
+[2025-07-09  13:32:43] INFO admin/admin_handle_request Received admin command metadata on mount "/channel1-128k.mp3"
+[2025-07-09  13:32:43] INFO admin/command_metadata Metadata on mountpoint /channel1-128k.mp3 changed to "Oophoi & Tau Ceti - An' Warth"
+[2025-07-09  13:34:31] INFO source/get_next_buffer End of Stream /channel2-128k.mp3
+[2025-07-09  13:34:31] INFO source/source_shutdown Source from 192.168.164.5 at "/channel2-128k.mp3" exiting
+[2025-07-09  13:34:31] INFO source/get_next_buffer End of Stream /channel1-128k.mp3
+[2025-07-09  13:34:31] INFO source/source_shutdown Source from 192.168.164.4 at "/channel1-128k.mp3" exiting
+[2025-07-09  13:34:54] INFO main/main Icecast 2.4.4 server started
+[2025-07-09  13:34:54] INFO yp/yp_update_thread YP update thread started
+[2025-07-09  13:34:54] INFO connection/get_ssl_certificate No SSL capability on any configured ports
+[2025-07-09  13:34:54] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:34:54] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:34:54] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:34:54] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:34:54] INFO connection/_handle_source_request Source logging in at mountpoint "/channel1-128k.mp3" from 192.168.164.4
+[2025-07-09  13:34:54] INFO connection/_handle_source_request Source (/channel1-128k.mp3) attempted to login with invalid or missing password
+[2025-07-09  13:34:54] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:34:54] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:34:54] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:34:54] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:34:54] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:34:54] INFO connection/_handle_source_request Source logging in at mountpoint "/channel1-128k.mp3" from 192.168.164.4
+[2025-07-09  13:34:54] WARN format/format_get_type Unsupported or legacy stream type: "audio/mpeg". Falling back to generic minimal handler for best effort.
+[2025-07-09  13:34:54] INFO admin/admin_handle_request Received admin command metadata on mount "/channel1-128k.mp3"
+[2025-07-09  13:34:54] INFO admin/command_metadata Metadata on mountpoint /channel1-128k.mp3 changed to "Oophoi & Tau Ceti - An' Warth"
+[2025-07-09  13:34:54] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:34:54] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:34:54] INFO connection/_handle_source_request Source (/channel2-128k.mp3) attempted to login with invalid or missing password
+[2025-07-09  13:34:54] WARN admin/admin_handle_request Admin command metadata on non-existent source /channel2-128k.mp3
+[2025-07-09  13:34:54] INFO source/source_main listener count on /channel1-128k.mp3 now 0
+[2025-07-09  13:34:54] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:34:54] WARN format/format_get_type Unsupported or legacy stream type: "audio/mpeg". Falling back to generic minimal handler for best effort.
+[2025-07-09  13:34:55] INFO source/source_main listener count on /channel2-128k.mp3 now 0
+[2025-07-09  13:34:55] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:34:55] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:34:55] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:34:55] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:34:55] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:34:55] INFO admin/admin_handle_request Received admin command metadata on mount "/channel1-128k.mp3"
+[2025-07-09  13:34:55] INFO admin/command_metadata Metadata on mountpoint /channel1-128k.mp3 changed to "Oophoi & Tau Ceti - An' Warth"
+[2025-07-09  13:34:55] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:34:55] INFO admin/admin_handle_request Received admin command metadata on mount "/channel2-128k.mp3"
+[2025-07-09  13:34:55] INFO admin/command_metadata Metadata on mountpoint /channel2-128k.mp3 changed to "Herbst9 - Buried Under Time And Sand"
+[2025-07-09  13:36:48] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:36:49] INFO fserve/fserve_client_create checking for file /tunein.png (/usr/share/icecast/web/tunein.png)
+[2025-07-09  13:36:49] INFO fserve/fserve_client_create checking for file /tunein.png (/usr/share/icecast/web/tunein.png)
+[2025-07-09  13:36:59] INFO fserve/fserve_client_create checking for file /channel2-128k.mp3.m3u (/usr/share/icecast/web/channel2-128k.mp3.m3u)
+[2025-07-09  13:37:04] INFO source/source_main listener count on /channel2-128k.mp3 now 1
+[2025-07-09  13:37:09] INFO source/source_main listener count on /channel2-128k.mp3 now 2
+[2025-07-09  13:37:09] INFO source/source_main listener count on /channel2-128k.mp3 now 1
+[2025-07-09  13:42:07] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:42:07] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:42:07] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:42:07] INFO admin/admin_handle_request Received admin command metadata on mount "/channel2-128k.mp3"
+[2025-07-09  13:42:07] INFO admin/command_metadata Metadata on mountpoint /channel2-128k.mp3 changed to "Herbst9 - Buried Under Time And Sand"
+[2025-07-09  13:46:03] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:46:03] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:46:03] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:46:03] INFO admin/admin_handle_request Received admin command metadata on mount "/channel1-128k.mp3"
+[2025-07-09  13:46:03] INFO admin/command_metadata Metadata on mountpoint /channel1-128k.mp3 changed to "Oophoi & Tau Ceti - An' Warth"
+[2025-07-09  13:47:19] INFO source/get_next_buffer End of Stream /channel1-128k.mp3
+[2025-07-09  13:47:19] INFO source/source_shutdown Source from 192.168.164.4 at "/channel1-128k.mp3" exiting
+[2025-07-09  13:47:19] INFO source/get_next_buffer End of Stream /channel2-128k.mp3
+[2025-07-09  13:47:19] INFO source/source_shutdown Source from 192.168.164.5 at "/channel2-128k.mp3" exiting
+[2025-07-09  13:47:19] INFO source/source_clear_source 1 active listeners on /channel2-128k.mp3 released
+[2025-07-09  13:47:19] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:47:19] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:47:19] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:47:19] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:47:19] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:47:19] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:47:19] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:47:19] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:47:19] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:47:19] INFO connection/_handle_source_request Source logging in at mountpoint "/channel1-128k.mp3" from 192.168.164.3
+[2025-07-09  13:47:19] INFO connection/_handle_source_request Source (/channel1-128k.mp3) attempted to login with invalid or missing password
+[2025-07-09  13:47:19] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:47:19] INFO connection/_handle_source_request Source (/channel2-128k.mp3) attempted to login with invalid or missing password
+[2025-07-09  13:47:19] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:47:19] WARN admin/admin_handle_request Admin command metadata on non-existent source /channel1-128k.mp3
+[2025-07-09  13:47:19] INFO connection/_handle_source_request Source logging in at mountpoint "/channel2-128k.mp3" from 192.168.164.5
+[2025-07-09  13:47:19] WARN format/format_get_type Unsupported or legacy stream type: "audio/mpeg". Falling back to generic minimal handler for best effort.
+[2025-07-09  13:47:19] INFO connection/_handle_source_request Source logging in at mountpoint "/channel1-128k.mp3" from 192.168.164.3
+[2025-07-09  13:47:19] WARN format/format_get_type Unsupported or legacy stream type: "audio/mpeg". Falling back to generic minimal handler for best effort.
+[2025-07-09  13:47:19] INFO admin/admin_handle_request Received admin command metadata on mount "/channel2-128k.mp3"
+[2025-07-09  13:47:19] INFO admin/command_metadata Metadata on mountpoint /channel2-128k.mp3 changed to "Herbst9 - Buried Under Time And Sand"
+[2025-07-09  13:47:20] INFO source/source_main listener count on /channel2-128k.mp3 now 0
+[2025-07-09  13:47:20] INFO source/source_main listener count on /channel1-128k.mp3 now 0
+[2025-07-09  13:47:20] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:47:20] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:47:20] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-09  13:47:20] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-09  13:47:20] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:47:20] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-09  13:47:20] INFO admin/admin_handle_request Received admin command metadata on mount "/channel2-128k.mp3"
+[2025-07-09  13:47:20] INFO admin/command_metadata Metadata on mountpoint /channel2-128k.mp3 changed to "Herbst9 - Buried Under Time And Sand"
+[2025-07-09  13:47:20] INFO admin/admin_handle_request Received admin command metadata on mount "/channel1-128k.mp3"
+[2025-07-09  13:47:20] INFO admin/command_metadata Metadata on mountpoint /channel1-128k.mp3 changed to "Oophoi & Tau Ceti - An' Warth"
+[2025-07-09  13:47:50] INFO fserve/fserve_client_create checking for file /style.css (/usr/share/icecast/web/style.css)
+[2025-07-09  13:47:50] INFO fserve/fserve_client_create checking for file /tunein.png (/usr/share/icecast/web/tunein.png)
+[2025-07-09  13:47:51] INFO fserve/fserve_client_create checking for file /tunein.png (/usr/share/icecast/web/tunein.png)
+[2025-07-09  13:48:00] INFO fserve/fserve_client_create checking for file /channel2-128k.mp3.m3u (/usr/share/icecast/web/channel2-128k.mp3.m3u)
+[2025-07-09  13:48:06] INFO source/source_main listener count on /channel2-128k.mp3 now 1
+[2025-07-09  13:48:10] INFO source/source_main listener count on /channel2-128k.mp3 now 2
+[2025-07-09  13:48:10] INFO source/source_main listener count on /channel2-128k.mp3 now 1
+[2025-07-09  13:48:11] INFO source/source_main listener count on /channel2-128k.mp3 now 2
+[2025-07-09  13:48:12] INFO source/source_main listener count on /channel2-128k.mp3 now 1
+[2025-07-09  13:48:26] INFO fserve/fserve_client_create checking for file /channel1-128k.mp3.m3u (/usr/share/icecast/web/channel1-128k.mp3.m3u)
+[2025-07-09  13:48:31] INFO source/source_main listener count on /channel1-128k.mp3 now 1
+[2025-07-09  13:48:32] INFO source/source_main listener count on /channel2-128k.mp3 now 0
+[2025-07-09  13:50:02] INFO source/source_main listener count on /channel1-128k.mp3 now 2
+[2025-07-09  13:50:03] INFO source/source_main listener count on /channel1-128k.mp3 now 3
+[2025-07-09  13:50:03] INFO source/source_main listener count on /channel1-128k.mp3 now 2
+[2025-07-09  13:50:13] INFO source/source_main listener count on /channel1-128k.mp3 now 1
+[2025-07-09  13:50:18] INFO source/source_main listener count on /channel1-128k.mp3 now 0

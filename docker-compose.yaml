@@ -1,19 +1,64 @@
-version: "3"
-
 services:
-  atma-fm:
+  # Your existing Flask Application
+  web:
+    container_name: web
     build:
       context: .
     volumes:
       - .:/app
-      - /app/venv
+      - ./audio:/audio:ro
+      - ices-logs:/opt/ices/log:ro
     ports:
       - "5555:5555"
     environment:
       - FLASK_ENV=development
+    depends_on:
+      - icecast
 
+ # The Icecast Streaming Server for MP3
+  icecast:
+    image: deepcomp/icecast2
+    container_name: icecast
+    ports:
+      - "8000:8000"
+    environment:
+      ICECAST_SOURCE_PASSWORD: YourSecretSourcePassword
+      ICECAST_ADMIN_PASSWORD: YourSecretAdminPassword
+    volumes:
+      - ./logs/icecast:/var/log/icecast
+      - ./audio:/audio:ro
 
+  # The Ices Source Client for Channel 1
+  ices-ch1:
+    build:
+      context: ./ices
+    container_name: ices-ch1
+    volumes:
+      - ./audio:/audio:ro
+      - ./ices/ices-ch1.conf:/etc/ices.conf
+      - ices-logs:/var/log/ices
+    depends_on:
+      - icecast
+    restart: always
+
+  # The Ices Source Client for Channel 2
+  ices-ch2:
+    build:
+      context: ./ices
+    container_name: ices-ch2
+    volumes:
+      - ./audio:/audio:ro
+      - ./ices/ices-ch2.conf:/etc/ices.conf
+      - ices-logs:/var/log/ices
+
+    depends_on:
+      - icecast
+#        condition: service_healthy
+    restart: always
+
+  # Your existing monitoring stack
   prometheus:
+    container_name: prometheus
     image: bitnami/prometheus:2.51.0
     volumes:
       - ./monitor/prometheus.yaml:/etc/prometheus/prometheus.yml
@@ -21,10 +66,17 @@ services:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
       - "9090:9090"
+    depends_on:
+      - web
 
   grafana:
+    container_name: grafana
     image: grafana/grafana
     ports:
       - "3000:3000"
     depends_on:
       - prometheus
+
+
+volumes:
+  ices-logs:
