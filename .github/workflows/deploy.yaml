@@ -43,13 +43,13 @@ jobs:
 
             # Pull the latest Docker image from Docker Hub
             # This ensures your server has the image that was just built and pushed by GitHub Actions
-            docker compose pull atma-fm
+            docker compose pull web
 
             # Stop and remove the old 'atma-fm' service container, then start a new one with the updated image.
             # --no-deps: Only recreate the 'atma-fm' service, not its dependencies (prometheus, grafana)
             # --force-recreate: Ensures the container is recreated even if the image tag is the same ('latest')
             # --build: Not strictly necessary here if 'pull' succeeds, but good for local testing or if pull fails.
-            docker compose up -d --no-deps --force-recreate atma-fm
+            docker compose up -d --no-deps --force-recreate web
 
             # Optional: Clean up old unused Docker images to save disk space on your server
             # docker image prune -f
