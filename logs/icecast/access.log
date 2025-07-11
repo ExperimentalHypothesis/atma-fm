@@ -772,3 +772,93 @@
 192.168.164.4 - - [11/Jul/2025:19:40:52 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
 192.168.164.5 - - [11/Jul/2025:19:40:52 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 0
 192.168.164.4 - - [11/Jul/2025:19:40:52 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:46:05 +0000] "SOURCE /channel1-128k.mp3 HTTP/1.0" 200 19 "-" "ices/0.4 libshout/2.4.5" 5876
+192.168.164.5 - - [11/Jul/2025:19:46:05 +0000] "SOURCE /channel2-128k.mp3 HTTP/1.0" 200 19 "-" "ices/0.4 libshout/2.4.5" 5876
+192.168.164.3 - - [11/Jul/2025:19:46:21 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:46:21 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.3 - - [11/Jul/2025:19:46:21 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:46:21 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.3 - - [11/Jul/2025:19:46:21 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:46:21 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.3 - - [11/Jul/2025:19:46:21 +0000] "GET /admin/metadata HTTP/1.1" 400 371 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:46:21 +0000] "GET /admin/metadata HTTP/1.1" 400 371 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.3 - - [11/Jul/2025:19:46:21 +0000] "SOURCE /channel1-128k.mp3 HTTP/1.0" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:46:21 +0000] "SOURCE /channel2-128k.mp3 HTTP/1.0" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.3 - - [11/Jul/2025:19:46:22 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:46:22 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:46:22 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.3 - - [11/Jul/2025:19:46:22 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:46:22 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.3 - - [11/Jul/2025:19:46:22 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.1 - - [11/Jul/2025:19:47:50 +0000] "GET / HTTP/1.1" 200 3625 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 1
+192.168.164.1 - - [11/Jul/2025:19:47:50 +0000] "GET /style.css HTTP/1.1" 200 4170 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:47:50 +0000] "GET /tunein.png HTTP/1.1" 200 2334 "http://localhost:8000/style.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:47:50 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/style.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:47:50 +0000] "GET /tunein.png HTTP/1.1" 200 2334 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:47:50 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:47:53 +0000] "GET /channel2-128k.mp3.m3u HTTP/1.1" 200 295 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:48:20 +0000] "GET /channel2-128k.mp3 HTTP/1.1" 200 382628 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 20
+192.168.164.1 - - [11/Jul/2025:19:48:56 +0000] "GET /channel1-128k.m3u HTTP/1.1" 200 291 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:49:04 +0000] "GET /channel1-128k HTTP/1.1" 404 394 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 0
+192.168.164.1 - - [11/Jul/2025:19:49:10 +0000] "GET /channel1-128k HTTP/1.1" 404 394 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 0
+192.168.164.1 - - [11/Jul/2025:19:49:12 +0000] "GET /channel1-128k HTTP/1.1" 404 394 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 0
+192.168.164.1 - - [11/Jul/2025:19:49:16 +0000] "GET /channel1-128k HTTP/1.1" 404 394 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 0
+192.168.164.1 - - [11/Jul/2025:19:49:21 +0000] "GET /channel1-128k.mp3.m3u HTTP/1.1" 200 295 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:49:33 +0000] "GET /channel1-128k.mp3 HTTP/1.1" 200 169824 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 7
+192.168.164.1 - - [11/Jul/2025:19:49:49 +0000] "GET / HTTP/1.1" 200 3625 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 1
+192.168.164.1 - - [11/Jul/2025:19:49:49 +0000] "GET /style.css HTTP/1.1" 200 4170 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:49:49 +0000] "GET /tunein.png HTTP/1.1" 200 2334 "http://localhost:8000/style.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:49:49 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/style.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:49:49 +0000] "GET /tunein.png HTTP/1.1" 200 2334 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:49:49 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:49:52 +0000] "GET /channel1-128k.mp3 HTTP/1.1" 200 1711224 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 103
+192.168.164.1 - - [11/Jul/2025:19:50:24 +0000] "GET /channel2-128k.m3u HTTP/1.1" 200 291 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:50:32 +0000] "GET /channel2-128k HTTP/1.1" 404 394 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 0
+192.168.164.1 - - [11/Jul/2025:19:50:44 +0000] "GET /channel2-128k HTTP/1.1" 404 394 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 0
+192.168.164.1 - - [11/Jul/2025:19:52:00 +0000] "GET / HTTP/1.1" 200 3625 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:52:00 +0000] "GET /style.css HTTP/1.1" 200 4170 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:52:00 +0000] "GET /tunein.png HTTP/1.1" 200 2334 "http://localhost:8000/style.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:52:00 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/style.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:52:01 +0000] "GET /tunein.png HTTP/1.1" 200 2334 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 1
+192.168.164.1 - - [11/Jul/2025:19:52:01 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 1
+192.168.164.1 - - [11/Jul/2025:19:52:05 +0000] "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 394 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:52:05 +0000] "GET /style.css HTTP/1.1" 200 4170 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.3 - - [11/Jul/2025:19:53:39 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 1
+192.168.164.3 - - [11/Jul/2025:19:53:39 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.3 - - [11/Jul/2025:19:53:39 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:54:04 +0000] "SOURCE /channel2-128k.mp3 HTTP/1.0" 200 19 "-" "ices/0.4 libshout/2.4.5" 463
+192.168.164.3 - - [11/Jul/2025:19:54:04 +0000] "SOURCE /channel1-128k.mp3 HTTP/1.0" 200 19 "-" "ices/0.4 libshout/2.4.5" 463
+192.168.164.1 - - [11/Jul/2025:19:54:04 +0000] "GET /channel1-128k.mp3 HTTP/1.1" 200 4099624 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 253
+192.168.164.1 - - [11/Jul/2025:19:54:09 +0000] "GET / HTTP/1.1" 200 1431 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 1
+192.168.164.1 - - [11/Jul/2025:19:54:09 +0000] "GET /style.css HTTP/1.1" 200 4170 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:54:09 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/style.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:54:09 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.4 - - [11/Jul/2025:19:54:18 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:54:18 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.5 - - [11/Jul/2025:19:54:18 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.5 - - [11/Jul/2025:19:54:18 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:54:18 +0000] "SOURCE /channel1-128k.mp3 HTTP/1.0" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.5 - - [11/Jul/2025:19:54:19 +0000] "SOURCE /channel2-128k.mp3 HTTP/1.0" 401 360 "-" "ices/0.4 libshout/2.4.5" 1
+192.168.164.5 - - [11/Jul/2025:19:54:19 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 1
+192.168.164.4 - - [11/Jul/2025:19:54:19 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 1
+192.168.164.4 - - [11/Jul/2025:19:54:19 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.5 - - [11/Jul/2025:19:54:19 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:54:19 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:54:19 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.5 - - [11/Jul/2025:19:54:19 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:19:54:20 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 1
+192.168.164.5 - - [11/Jul/2025:19:54:20 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 1
+192.168.164.5 - - [11/Jul/2025:19:54:20 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.1 - - [11/Jul/2025:19:54:22 +0000] "GET /channel1-128k.mp3 HTTP/1.1" 200 63424 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 3
+192.168.164.1 - - [11/Jul/2025:19:54:24 +0000] "GET /channel1-128k.mp3.m3u HTTP/1.1" 200 295 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:54:38 +0000] "GET /channel1-128k.mp3 HTTP/1.1" 200 164224 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 7
+192.168.164.1 - - [11/Jul/2025:19:54:38 +0000] "GET /channel1-128k.mp3 HTTP/1.1" 200 312624 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 16
+192.168.164.1 - - [11/Jul/2025:19:54:43 +0000] "GET / HTTP/1.1" 200 3625 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:54:44 +0000] "GET /style.css HTTP/1.1" 200 4170 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 1
+192.168.164.1 - - [11/Jul/2025:19:54:44 +0000] "GET /tunein.png HTTP/1.1" 200 2334 "http://localhost:8000/style.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:54:44 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/style.css" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:54:44 +0000] "GET /tunein.png HTTP/1.1" 200 2334 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:54:44 +0000] "GET /icecast.png HTTP/1.1" 200 5365 "http://localhost:8000/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:55:29 +0000] "GET /channel2-128k.mp3.m3u HTTP/1.1" 200 295 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:55:42 +0000] "GET /channel1-128k.mp3.m3u HTTP/1.1" 200 295 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
+192.168.164.1 - - [11/Jul/2025:19:55:48 +0000] "GET /channel2-128k.mp3 HTTP/1.1" 200 235628 "-" "Music/1.4.6 (Macintosh; OS X 14.7.5) AppleWebKit/618.3.11.11.5" 11
