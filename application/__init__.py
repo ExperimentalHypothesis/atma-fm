@@ -1,5 +1,5 @@
 from flask import Flask
-from .utils.contextFunctions import getCurrentSong
+from .utils.contextFunctions import get_current_song
 from flask_restful import Api
 
 api = Api(prefix="/api")
@@ -10,7 +10,7 @@ def create_app():
     import application.resources
 
     app.config.from_object("config.Config")
-    app.context_processor(getCurrentSong)
+    app.context_processor(get_current_song)
 
     api.init_app(app)
 
