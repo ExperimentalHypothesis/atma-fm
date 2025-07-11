@@ -1924,3 +1924,9 @@
 [2025-07-11  20:29:52] INFO source/source_main listener count on /channel1-128k.mp3 now 1
 [2025-07-11  20:29:53] INFO source/source_main listener count on /channel1-128k.mp3 now 2
 [2025-07-11  20:29:54] INFO source/source_main listener count on /channel1-128k.mp3 now 1
+[2025-07-11  20:35:49] EROR connection/_handle_connection HTTP request parsing failed
+[2025-07-11  20:35:49] EROR admin/admin_handle_request Error parsing command string or unrecognised command: !POKE
+[2025-07-11  20:35:49] INFO admin/admin_handle_request Bad or missing password on mount modification admin request (command: metadata)
+[2025-07-11  20:35:49] INFO admin/admin_handle_request Received admin command metadata on mount "/channel1-128k.mp3"
+[2025-07-11  20:35:49] INFO admin/command_metadata Metadata on mountpoint /channel1-128k.mp3 changed to "Oophoi & Tau Ceti - An' Warth"
+[2025-07-11  20:37:32] INFO source/source_main listener count on /channel1-128k.mp3 now 0

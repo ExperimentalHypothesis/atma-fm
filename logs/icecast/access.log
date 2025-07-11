@@ -957,3 +957,7 @@
 192.168.164.1 - - [11/Jul/2025:20:29:32 +0000] "GET /channel1-128k.mp3.m3u HTTP/1.1" 200 295 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 0
 192.168.164.1 - - [11/Jul/2025:20:29:52 +0000] "GET /channel1-128k.mp3 HTTP/1.1" 200 521224 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 29
 192.168.164.1 - - [11/Jul/2025:20:29:54 +0000] "GET /channel1-128k.mp3 HTTP/1.1" 200 94224 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 2
+192.168.164.4 - - [11/Jul/2025:20:35:49 +0000] "GET /admin/.POKE HTTP/1.1" 400 370 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:20:35:49 +0000] "GET /admin/metadata HTTP/1.1" 401 360 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.4 - - [11/Jul/2025:20:35:49 +0000] "GET /admin/metadata HTTP/1.1" 200 396 "-" "ices/0.4 libshout/2.4.5" 0
+192.168.164.1 - - [11/Jul/2025:20:37:32 +0000] "GET /channel1-128k.mp3 HTTP/1.1" 200 7398024 "http://localhost:5555/" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36" 459
