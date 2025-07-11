@@ -42,14 +42,14 @@
 					class="fa fa-volume-up player-button-icon"></i></button>
 		</div>
 		<div class="player-button">
-			<button class="player-button-txt" onclick=location.href="http://144.91.73.167:7778/channel1-128k.m3u">download m3u</button>
+			<button class="player-button-txt" onclick=location.href="http://173.212.246.158:8000/channel1-128k.m3u">download m3u</button>
 			<button class="button" style="border: none;"
-				onclick=location.href="http://144.91.73.167:7778/channel1-128k.m3u">
+				onclick=location.href="{{ stream_base_url }}/channel1-128k.m3u">
 				<i class="fa fa-file-audio-o player-button-icon"
 					aria-hidden="true"></i></button>
 		</div>
 		<audio id="player">
-			<source src="https://atma.fm:8443/channel1-128k">
+                <source src="{{ stream_base_url }}/channel1-128k.mp3">
 		</audio>
 		<hr class="player-hr", width=50% >
 		<small class="player-current" > currently playing </small>
