@@ -36,7 +36,7 @@ services:
     volumes:
       - ./audio:/audio:ro
       - ./ices/ices-ch1.conf:/etc/ices.conf
-      - ices-logs:/var/log/ices
+      - ./logs/ices:/var/log/ices # <--- CHANGED: Bind mount host's ./logs/ices
     depends_on:
       - icecast
     restart: always
@@ -49,11 +49,9 @@ services:
     volumes:
       - ./audio:/audio:ro
       - ./ices/ices-ch2.conf:/etc/ices.conf
-      - ices-logs:/var/log/ices
-
+      - ./logs/ices:/var/log/ices # <--- CHANGED: Bind mount host's ./logs/ices
     depends_on:
       - icecast
-#        condition: service_healthy
     restart: always
 
   # Your existing monitoring stack
