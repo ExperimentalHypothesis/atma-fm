@@ -38,8 +38,10 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }} # GitHub Secret for your SSH private key
           script: |
             # Navigate to the root directory of your project on the server
-            # IMPORTANT: Replace '/home/nirvikalpa/atma-fm' with the actual path where your project is cloned on your server.
             cd /home/nirvikalpa/atma-fm
+
+            # Pull the latest code changes from your master branch
+            git pull origin master
 
             # Pull the latest Docker image from Docker Hub
             # This ensures your server has the image that was just built and pushed by GitHub Actions
