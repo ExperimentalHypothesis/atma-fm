@@ -25,21 +25,16 @@ def generate_playlist(channel: str = typer.Argument(None)):
     if not channel_dir.is_dir():
         typer.secho(f"Warning: Directory for '{channel}' not found. Skipping.", fg=typer.colors.YELLOW)
 
-    # Find all files recursively in the channel directory
     audio_files = [f for f in channel_dir.rglob('*') if f.is_file() and f.suffix == ".mp3"]
 
     if not audio_files:
         typer.secho(f"Warning: No audio files found in '{channel_dir}'. Playlist will be empty.", fg=typer.colors.YELLOW)
-        # Still create an empty playlist to prevent errors
-        playlist_file.write_text("\n") # Write just the blank line
+        playlist_file.write_text("\n")
 
     with open(playlist_file, "w") as f:
         for file_path in audio_files:
             container_path = f"/{file_path}"
             f.write(f"{container_path}\n")
-
-        # Ices0 requires a blank line at the end of the playlist
-        f.write("\n")
 
     typer.secho(f"Playlist for '{channel}' created successfully at {playlist_file} with {len(audio_files)}" , fg=typer.colors.GREEN)
 
