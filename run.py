@@ -5,7 +5,6 @@ from flask import request
 
 app = create_app()
 
-# Define Prometheus metrics
 REQUEST_COUNT = Counter('web_requests_total', 'Total number of web requests')
 
 

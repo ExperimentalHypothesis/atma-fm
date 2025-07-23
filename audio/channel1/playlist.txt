@@ -1,2 +1,0 @@
-/audio/channel1/01 - an-warth.mp3
-/audio/channel1/02 - baath-nag.mp3

@@ -8,5 +8,6 @@ venv/
 .env
 
 *.mp3
+audio/
 
 
