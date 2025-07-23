@@ -7,51 +7,48 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest # Use a fresh Ubuntu virtual machine provided by GitHub Actions
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # Action to pull your repository's code into the runner
+        uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
-        # Uses the Docker login action to authenticate with Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKER_USERNAME }} # GitHub Secret for Docker Hub username
-          password: ${{ secrets.DOCKER_PASSWORD }} # GitHub Secret for Docker Hub access token/password
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
-        # Builds your Docker image and pushes it to Docker Hub
+      - name: Build and push Docker image for Web App
         uses: docker/build-push-action@v5
         with:
-          context: . # The build context is the root of your repository (where Dockerfile is)
-          push: true # Instructs the action to push the image to the registry
-          # The tag for your Docker image. Replace 'your-docker-username' with your actual Docker Hub username.
+          context: .
+          file: ./Dockerfile # Explicitly point to the Dockerfile for the web app
+          push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/atma-fm-flask:latest
 
       - name: Deploy to Server
-        # Uses the SSH action to connect to your Ubuntu server and run commands
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }} # GitHub Secret for your server's IP/domain
-          username: ${{ secrets.SSH_USERNAME }} # GitHub Secret for your server's SSH username
-          key: ${{ secrets.SSH_PRIVATE_KEY }} # GitHub Secret for your SSH private key
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Navigate to the root directory of your project on the server
+            # Navigate to your project directory on the server
             cd /home/nirvikalpa/atma-fm
 
             # Pull the latest code changes from your master branch
+            # This ensures your server has the new docker-compose.prod.yaml file
             git pull origin master
 
-            # Pull the latest Docker image from Docker Hub
-            # This ensures your server has the image that was just built and pushed by GitHub Actions
-            docker compose pull web
+            # --- THIS IS THE CRITICAL CHANGE ---
+            # Use BOTH docker-compose files to run the commands.
+            # The 'prod' file will override the 'web' service to use the new image.
+            
+            # 1. Pull the new image for the 'web' service from Docker Hub
+            docker compose -f docker-compose.yaml -f docker-compose.prod.yaml pull web
 
-            # Stop and remove the old 'atma-fm' service container, then start a new one with the updated image.
-            # --no-deps: Only recreate the 'atma-fm' service, not its dependencies (prometheus, grafana)
-            # --force-recreate: Ensures the container is recreated even if the image tag is the same ('latest')
-            # --build: Not strictly necessary here if 'pull' succeeds, but good for local testing or if pull fails.
-            docker compose up -d --no-deps --force-recreate web
-
-            # Optional: Clean up old unused Docker images to save disk space on your server
-            # docker image prune -f
+            # 2. Restart the 'web' service using the new image
+            docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --no-deps --force-recreate web
+            
+            echo "Deployment successful!"
