@@ -10,4 +10,4 @@ venv/
 *.mp3
 audio/
 
-
+.DS_Store
