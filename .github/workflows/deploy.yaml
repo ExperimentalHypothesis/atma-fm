@@ -25,7 +25,7 @@ jobs:
           context: .
           file: ./Dockerfile # Explicitly point to the Dockerfile for the web app
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/atma-fm-flask:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/atma-fm-flask:${{ github.sha }}
 
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
@@ -34,21 +34,15 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            # Navigate to your project directory on the server
             cd /home/nirvikalpa/atma-fm
-
-            # Pull the latest code changes from your master branch
-            # This ensures your server has the new docker-compose.prod.yaml file
             git pull origin master
-
-            # --- THIS IS THE CRITICAL CHANGE ---
-            # Use BOTH docker-compose files to run the commands.
-            # The 'prod' file will override the 'web' service to use the new image.
+            IMAGE_TAG="${{ secrets.DOCKER_USERNAME }}/atma-fm-flask:${{ github.sha }}"
             
             # 1. Pull the new image for the 'web' service from Docker Hub
-            docker compose -f docker-compose.yaml -f docker-compose.prod.yaml pull web
+            docker compose -f docker-compose.yaml -f docker-compose.prod.yaml pull web --with-dependencies ${IMAGE_TAG}
 
             # 2. Restart the 'web' service using the new image
-            docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --no-deps --force-recreate web
+            IMAGE_VERSION_TAG="${{ github.sha }}" docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --no-deps --force-recreate web
             
-            echo "Deployment successful!"
+            echo "Deployment successful for commit ${{ github.sha }}!"
+
