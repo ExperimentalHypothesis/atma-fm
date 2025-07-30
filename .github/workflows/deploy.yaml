@@ -34,15 +34,16 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            set -e
             cd /home/nirvikalpa/atma-fm
             git pull origin master
             IMAGE_TAG="${{ secrets.DOCKER_USERNAME }}/atma-fm-flask:${{ github.sha }}"
-            
+          
             # 1. Pull the new image for the 'web' service from Docker Hub
-            docker compose -f docker-compose.yaml -f docker-compose.prod.yaml pull web --with-dependencies ${IMAGE_TAG}
-
+            docker compose -f docker-compose.yaml -f docker-compose.prod.yaml pull web # Removed --with-dependencies for compatibility
+          
             # 2. Restart the 'web' service using the new image
             IMAGE_VERSION_TAG="${{ github.sha }}" docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --no-deps --force-recreate web
-            
+          
             echo "Deployment successful for commit ${{ github.sha }}!"
 
