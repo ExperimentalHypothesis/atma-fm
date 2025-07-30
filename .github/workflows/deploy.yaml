@@ -34,16 +34,22 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            set -e
+            set -e # Exit immediately if any command fails
             cd /home/nirvikalpa/atma-fm
             git pull origin master
+            
+            # Define and export IMAGE_TAG for docker pull
             IMAGE_TAG="${{ secrets.DOCKER_USERNAME }}/atma-fm-flask:${{ github.sha }}"
-          
-            # 1. Pull the new image for the 'web' service from Docker Hub
-            docker compose -f docker-compose.yaml -f docker-compose.prod.yaml pull web # Removed --with-dependencies for compatibility
-          
-            # 2. Restart the 'web' service using the new image
-            IMAGE_VERSION_TAG="${{ github.sha }}" docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --no-deps --force-recreate web
-          
+            export IMAGE_TAG
+            docker pull "${IMAGE_TAG}"            
+            export IMAGE_VERSION_TAG="${{ github.sha }}"
+            echo "IMAGE_VERSION_TAG exported as: ${IMAGE_VERSION_TAG}"
+            
+            echo "Recreating and starting web service using image tag: ${IMAGE_VERSION_TAG}..."
+            # Ensure your docker-compose.prod.yaml uses this variable for the 'web' service image.
+            # Example: image: your_docker_username/atma-fm-flask:${IMAGE_VERSION_TAG}
+            docker compose -f docker-compose.yaml -f docker-compose.prod.yaml up -d --no-deps --force-recreate web
+            
             echo "Deployment successful for commit ${{ github.sha }}!"
+
 
