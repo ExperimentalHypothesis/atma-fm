@@ -5,7 +5,7 @@ services:
     # This OVERRIDES the 'build' instruction in the main docker-compose.yaml
     # It tells the server to use the image built by your GitHub Action.
     # IMPORTANT: Replace 'your-docker-hub-username' with your actual Docker Hub username.
-    image: lukaskotatko/atma-fm-flask:latest
+    image: lukaskotatko/atma-fm-flask:${IMAGE_VERSION_TAG}
     environment:
       - FLASK_ENV=production
     restart: always
